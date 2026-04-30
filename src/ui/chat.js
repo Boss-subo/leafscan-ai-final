@@ -11,7 +11,13 @@ export async function initChat() {
 
 export async function sendMessage(text, container) {
   if (!model) await initChat();
-  if (!model) return;
+  if (!model) {
+    const aiMsg = document.createElement('div');
+    aiMsg.className = 'chat-msg ai system-error';
+    aiMsg.textContent = "AI Pathologist is currently Offline. Please set your Gemini API Key in 'Settings' to enable biological intelligence.";
+    container.appendChild(aiMsg);
+    return;
+  }
 
   const userMsg = document.createElement('div');
   userMsg.className = 'chat-msg user';
