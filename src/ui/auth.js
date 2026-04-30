@@ -115,7 +115,7 @@ export function initAuth(onSuccess) {
     localStorage.setItem('sovereign_operator_id', userObj.id);
     authVault.style.display = 'none';
     updateUIWithProfile(userObj);
-    onSuccess(userObj.username);
+    onSuccess(userObj);
     showToast(`Welcome back, Operator ${userObj.username}`, "success");
 
     // Ask to enable biometrics if not already enabled

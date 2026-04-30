@@ -102,7 +102,7 @@ async function bootstrap() {
         if (authVault) {
           authVault.style.display = 'flex';
           initAuth((user) => {
-            state.operator = user;
+            state.currentUser = user;
             document.getElementById('app').style.display = 'flex';
             bootstrap();
           });
