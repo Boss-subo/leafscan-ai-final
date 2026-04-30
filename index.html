@@ -729,6 +729,29 @@
             <option>Spanish</option>
           </select>
         </div>
+
+        <!-- NEW: System Diagnostics -->
+        <div class="system-diagnostics glass-card" style="padding: 1rem; margin-bottom: 2rem; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border);">
+          <h4 style="font-size: 0.7rem; letter-spacing: 2px; color: var(--primary-light); margin-bottom: 1rem;">SYSTEM DIAGNOSTICS</h4>
+          <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.75rem;">
+            <div style="display: flex; justify-content: space-between;">
+              <span>Sovereign DB:</span>
+              <span id="diag-db" style="color: var(--primary);">ONLINE</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>Weather API:</span>
+              <span id="diag-weather" style="color: var(--text-muted);">CHECKING...</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>Gemini Intel:</span>
+              <span id="diag-gemini" style="color: var(--text-muted);">CHECKING...</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>Geolocation:</span>
+              <span id="diag-geo" style="color: var(--text-muted);">CHECKING...</span>
+            </div>
+          </div>
+        </div>
         <div class="modal-actions" style="display: flex; gap: 1rem; flex-wrap: wrap;">
           <button class="btn btn-secondary" id="test-api" style="flex: 1;">Test Key</button>
           <button class="btn btn-primary" id="save-config" style="flex: 2;">Save Settings</button>

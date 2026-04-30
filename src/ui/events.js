@@ -88,13 +88,41 @@ export function setupEventListeners(elements) {
     const modal = document.getElementById('config-modal');
     if (modal) {
       modal.style.display = 'flex';
-      // Pre-populate keys from state/localStorage
+      
+      // Pre-populate keys
       const gKey = document.getElementById('gemini-key');
       const wKey = document.getElementById('weather-key');
-      if (gKey) gKey.value = state.geminiKey || localStorage.getItem('gemini_key') || '';
-      if (wKey) wKey.value = localStorage.getItem('weather_key') || '';
+      if (gKey) gKey.value = state.geminiKey || '';
+      if (wKey) wKey.value = state.weatherKey || '';
+
+      // Run Diagnostics
+      updateDiagnostics();
     }
   });
+
+  async function updateDiagnostics() {
+    const dWeather = document.getElementById('diag-weather');
+    const dGemini = document.getElementById('diag-gemini');
+    const dGeo = document.getElementById('diag-geo');
+
+    if (dWeather) {
+      dWeather.textContent = state.weatherKey ? "CONNECTED" : "MISSING KEY";
+      dWeather.style.color = state.weatherKey ? "var(--primary)" : "var(--danger)";
+    }
+    if (dGemini) {
+      dGemini.textContent = state.geminiKey ? "CONNECTED" : "MISSING KEY";
+      dGemini.style.color = state.geminiKey ? "var(--primary)" : "var(--danger)";
+    }
+    if (dGeo) {
+      navigator.geolocation.getCurrentPosition(() => {
+        dGeo.textContent = "ACTIVE";
+        dGeo.style.color = "var(--primary)";
+      }, () => {
+        dGeo.textContent = "BLOCKED";
+        dGeo.style.color = "var(--danger)";
+      });
+    }
+  }
 
   document.getElementById('save-config')?.addEventListener('click', () => {
     const gKey = document.getElementById('gemini-key').value;
