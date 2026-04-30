@@ -144,6 +144,28 @@ export function setupEventListeners(elements) {
     }
   });
 
+  // --- Chat Interactions ---
+  const chatInput = document.getElementById('chat-input');
+  const chatBtn = document.getElementById('send-chat');
+  const chatContainer = document.getElementById('chat-messages');
+
+  if (chatBtn && chatInput) {
+    const triggerChat = () => {
+      const text = chatInput.value.trim();
+      if (text) {
+        console.log("Triggering AI Pathologist for:", text);
+        sendMessage(text, chatContainer);
+        chatInput.value = '';
+      }
+    };
+
+    chatBtn.onclick = triggerChat;
+    chatInput.onkeypress = (e) => {
+      if (e.key === 'Enter') triggerChat();
+    };
+    console.log("AI Pathologist Listeners Synchronized.");
+  }
+
   document.getElementById('sign-out-btn')?.addEventListener('click', () => {
     showToast("Terminating Secure Session...", "info");
     setTimeout(() => {
