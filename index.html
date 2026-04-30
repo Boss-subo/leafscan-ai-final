@@ -31,8 +31,8 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- Leaflet Map Assets -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- TFJS is loaded dynamically in main.js -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
     <!-- ===== PREMIUM LANDING SCREEN ===== -->
@@ -133,10 +133,18 @@
         
         <!-- Biometric Scanner Overlay -->
         <div id="biometric-overlay" class="biometric-overlay" style="display: none;">
-          <div class="scanner-ring"></div>
-          <div class="scanner-line"></div>
-          <i data-lucide="scan-face" class="scanner-icon"></i>
-          <p>Scanning Biometric Identity...</p>
+          <div class="biometric-scan-container">
+            <video id="auth-camera" autoplay playsinline muted></video>
+            <div class="scanner-ring"></div>
+            <div class="scanner-line"></div>
+            <canvas id="face-mesh-canvas"></canvas>
+          </div>
+          <div class="biometric-info">
+            <i data-lucide="scan-face" class="scanner-icon"></i>
+            <p id="bio-status">Initializing Biometric Mesh...</p>
+            <div class="progress-track"><div id="bio-progress" class="progress-fill"></div></div>
+          </div>
+          <button class="btn btn-secondary" id="cancel-bio-btn" style="margin-top: 2rem;">Abondon Scan</button>
         </div>
         
         <div class="auth-footer">
