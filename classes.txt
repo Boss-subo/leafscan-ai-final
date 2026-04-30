@@ -1,0 +1,73 @@
+Apple Black Rot
+Apple Cedar Rust
+Apple Healthy
+Apple Scab
+Banana Healthy
+Banana Sigatoka
+Blueberry___healthy
+Cherry Healthy
+Cherry Powdery Mildew
+Cherry_(including_sour)___Powdery_mildew
+Cherry_(including_sour)___healthy
+Citrus Greening
+Citrus Healthy
+Cocoa Healthy
+Cocoa Swollen Shoot
+Coffee Healthy
+Coffee Leaf Rust
+Corn (Maize) Cercospora Leaf Spot Gray
+Corn (Maize) Common Rust
+Corn (Maize) Healthy
+Corn (Maize) Northern Leaf Blight
+Corn Healthy
+Corn Smut
+Cotton Boll Rot
+Cotton Healthy
+Grape Black Rot
+Grape Esca (Black Measles)
+Grape Healthy
+Grape Leaf Blight (Isariopsis Spot)
+Mango Anthracnose
+Mango Healthy
+Oil Palm Ganoderma
+Oil Palm Healthy
+Peach Bacterial Spot
+Peach Healthy
+Pepper Bell Bacterial Spot
+Pepper Bell Healthy
+Potato Early Blight
+Potato Healthy
+Potato Late Blight
+Raspberry___healthy
+Rice Bacterial Leaf Blight
+Rice Blast
+Rice Brown Spot
+Rice Healthy
+Rice Hispa
+Rice Leaf Smut
+Rice Sheath Blight
+Rice Tungro
+Rubber Healthy
+Rubber Leaf Fall
+Soybean Healthy
+Soybean Rust
+Squash___Powdery_mildew
+Strawberry Healthy
+Strawberry Leaf Scorch
+Strawberry Leaf Spot
+Sugarcane Healthy
+Sugarcane Red Rot
+Tea Blight
+Tea Healthy
+Tomato Bacterial Spot
+Tomato Early Blight
+Tomato Healthy
+Tomato Late Blight
+Tomato Leaf Mold
+Tomato Mosaic Virus
+Tomato Septoria Leaf Spot
+Tomato Spider Mites Two Spotted Mite
+Tomato Target Spot
+Tomato Yellowleaf Curl Virus
+Wheat Healthy
+Wheat Rust
