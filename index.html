@@ -131,21 +131,7 @@
           </div>
         </div>
         
-        <!-- Biometric Scanner Overlay -->
-        <div id="biometric-overlay" class="biometric-overlay" style="display: none;">
-          <div class="biometric-scan-container">
-            <video id="auth-camera" autoplay playsinline muted></video>
-            <div class="scanner-ring"></div>
-            <div class="scanner-line"></div>
-            <canvas id="face-mesh-canvas"></canvas>
-          </div>
-          <div class="biometric-info">
-            <i data-lucide="scan-face" class="scanner-icon"></i>
-            <p id="bio-status">Initializing Biometric Mesh...</p>
-            <div class="progress-track"><div id="bio-progress" class="progress-fill"></div></div>
-          </div>
-          <button class="btn btn-secondary" id="cancel-bio-btn" style="margin-top: 2rem;">Abondon Scan</button>
-        </div>
+        <!-- Native System Biometrics will trigger here -->
         
         <div class="auth-footer">
           <p id="auth-toggle-text">Don't have an identity? <a href="#" id="toggle-auth-mode" style="color:var(--primary)">Register Now</a></p>
