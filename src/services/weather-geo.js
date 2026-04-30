@@ -8,19 +8,19 @@ export async function fetchWeather(lat, lng, elements) {
     if (!res.ok) return;
     const data = await res.json();
     state.currentWeather = data;
-    
+
     // Update Sidebar
     if (elements.tempMini) elements.tempMini.textContent = `${Math.round(data.main.temp)}°C`;
-    
+
     // Update Dashboard Cards
     const liveTemp = document.getElementById('live-temp');
     const liveHumid = document.getElementById('live-humidity');
     const liveWind = document.getElementById('live-wind');
-    
+
     if (liveTemp) liveTemp.textContent = `${Math.round(data.main.temp)}°C`;
     if (liveHumid) liveHumid.textContent = `${data.main.humidity}%`;
     if (liveWind) liveWind.textContent = `${(data.wind.speed * 3.6).toFixed(1)} km/h`;
-    
+
     return data;
   } catch (error) {
     console.error('Weather failed:', error);
@@ -56,7 +56,7 @@ export async function fetchLocationAndAQI(elements) {
       const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
       const data = await res.json();
       if (elements.currentLocText) elements.currentLocText.textContent = data.address.city || data.address.town || "Location Found";
-    } catch (e) {}
+    } catch (e) { }
   }, (error) => {
     state.location = { latitude: 22.5726, longitude: 88.3639 }; // Default
     if (elements.currentLocText) elements.currentLocText.textContent = "Kolkata (Default)";

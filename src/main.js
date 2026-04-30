@@ -7,6 +7,7 @@ import { initTelemetry, switchTab } from './ui/navigation.js';
 import { loadLocalModel } from './engines/ai-engine.js';
 import { setupEventListeners } from './ui/events.js';
 import { initAuth } from './ui/auth.js';
+import { seedUserData } from './core/seed-data.js';
 
 let elements = {};
 
@@ -16,7 +17,7 @@ function initElements() {
     currentLocText: document.getElementById('current-location'),
     tempMini: document.getElementById('weather-temp-mini'),
     aqiMini: document.getElementById('aqi-value-mini'),
-    
+
     // Scanner
     video: document.getElementById('video-preview'),
     imagePreview: document.getElementById('image-preview'),
@@ -25,11 +26,11 @@ function initElements() {
     captureBtn: document.getElementById('capture-btn'),
     uploadBtn: document.getElementById('upload-btn'),
     dropZone: document.getElementById('drop-zone'),
-    
+
     // Results
     resultPanel: document.getElementById('result-panel'),
     downloadPdf: document.getElementById('download-pdf'),
-    
+
     // Fleet
     dronePanel: document.getElementById('drone-fleet-command'),
     missionStatusText: document.getElementById('mission-status-text'),
@@ -43,16 +44,16 @@ function initElements() {
 
 async function bootstrap() {
   const els = initElements();
-  
+
   // Important: Initialize listeners before async loads so buttons aren't dead during load
   setupEventListeners(els);
-  
+
   // Start Services
   fetchLocationAndAQI(els);
   loadLocalModel();
   initCharts();
   initTelemetry();
-  
+
   switchTab('dashboard', els);
 }
 
@@ -80,7 +81,7 @@ async function bootstrap() {
     const targetText = s.textContent.replace('+', '');
     const target = parseInt(targetText);
     if (isNaN(target)) return; // Skip non-numeric stats like "Fleet"
-    
+
     let current = 0;
     const interval = setInterval(() => {
       if (current >= target) {
@@ -101,10 +102,26 @@ async function bootstrap() {
         const authVault = document.getElementById('auth-vault');
         if (authVault) {
           authVault.style.display = 'flex';
-          initAuth((user) => {
+          initAuth(async (user) => {
             state.currentUser = user;
-            document.getElementById('app').style.display = 'flex';
-            bootstrap();
+            
+            const splash = document.getElementById('splash-screen');
+            if (splash) {
+              splash.style.display = 'flex';
+              splash.style.opacity = '1';
+            }
+            
+            // Seed demo data for new users
+            await seedUserData(user.id);
+            
+            setTimeout(() => {
+              if (splash) splash.style.opacity = '0';
+              setTimeout(() => {
+                if (splash) splash.style.display = 'none';
+                document.getElementById('app').style.display = 'flex';
+                bootstrap();
+              }, 600);
+            }, 2000);
           });
         } else {
           document.getElementById('app').style.display = 'flex';
@@ -113,7 +130,7 @@ async function bootstrap() {
       }, 800);
     });
   }
-  
+
   // Refresh Icons for Landing
   if (window.lucide) window.lucide.createIcons();
 })();

@@ -15,7 +15,7 @@ export function setupEventListeners(elements) {
 
   // Action Buttons
   elements.analyzeBtn?.addEventListener('click', () => analyzeLeaf(elements));
-  
+
   elements.exportMissionBtn?.addEventListener('click', () => {
     if (!state.currentRiskPolygon) {
       showToast("No active risk zone detected. Scan a leaf first.", "error");
@@ -68,7 +68,7 @@ export function setupEventListeners(elements) {
       canvas.height = elements.video.videoHeight;
       canvas.getContext('2d').drawImage(elements.video, 0, 0);
       const data = canvas.toDataURL('image/jpeg');
-      
+
       state.currentImage = data;
       elements.imagePreview.src = data;
       elements.imagePreview.style.display = 'block';
@@ -99,11 +99,11 @@ export function setupEventListeners(elements) {
   document.getElementById('save-config')?.addEventListener('click', () => {
     const gKey = document.getElementById('gemini-key').value;
     const wKey = document.getElementById('weather-key').value;
-    
+
     state.geminiKey = gKey;
     localStorage.setItem('gemini_key', gKey);
     localStorage.setItem('weather_key', wKey);
-    
+
     document.getElementById('config-modal').style.display = 'none';
     showToast("Global Settings Synchronized", "success");
   });
