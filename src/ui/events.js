@@ -127,13 +127,21 @@ export function setupEventListeners(elements) {
   document.getElementById('save-config')?.addEventListener('click', () => {
     const gKey = document.getElementById('gemini-key').value;
     const wKey = document.getElementById('weather-key').value;
-
+    
     state.geminiKey = gKey;
+    state.weatherKey = wKey;
     localStorage.setItem('gemini_key', gKey);
     localStorage.setItem('weather_key', wKey);
-
+    
     document.getElementById('config-modal').style.display = 'none';
-    showToast("Global Settings Synchronized", "success");
+    showToast("Global Settings Synchronized. Re-initializing...", "success");
+    
+    // Force immediate refresh of all systems
+    if (typeof window.bootstrap === 'function') {
+      window.bootstrap();
+    } else {
+      location.reload(); // Fallback to refresh the page to apply keys
+    }
   });
 
   document.getElementById('sign-out-btn')?.addEventListener('click', () => {

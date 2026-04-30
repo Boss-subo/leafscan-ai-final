@@ -43,6 +43,7 @@ function initElements() {
 }
 
 async function bootstrap() {
+  window.bootstrap = bootstrap; // Make available for re-init
   const els = initElements();
 
   // Important: Initialize listeners before async loads so buttons aren't dead during load
