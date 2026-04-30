@@ -1,0 +1,157 @@
+{
+  "Healthy": { "organic": "Maintain current irrigation and nutrient balance.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Rice Healthy": { "organic": "Optimal water level maintained. Continue current nitrogen cycle.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Wheat Healthy": { "organic": "Peak leaf turgor detected. Monitor for rust spores in wind.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Corn Healthy": { "organic": "Vibrant growth detected. Check for early borer signs.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Grape Healthy": { "organic": "Elite canopy health. Pruning schedule is optimal.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Coffee Healthy": { "organic": "Peak health detected. Continue current fertilization cycle.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Tea Healthy": { "organic": "Peak health detected. Monitor for humidity shifts.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Cocoa Healthy": { "organic": "Peak health detected. Maintain mealybug vector monitoring.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Sugarcane Healthy": { "organic": "Optimal sucrose accumulation detected. Maintain drainage.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Cotton Healthy": { "organic": "Peak boll development. Monitor for aphids.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Soybean Healthy": { "organic": "Optimal nitrogen fixation. Monitor pod filling.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Banana Healthy": { "organic": "Peak leaf area index. Maintain high potassium levels.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Citrus Healthy": { "organic": "Elite fruit set. Monitor for psyllid vectors.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Mango Healthy": { "organic": "Optimal flowering. Maintain pruning for light penetration.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Strawberry Healthy": { "organic": "Peak berry quality. Maintain mulching to prevent rot.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Apple Healthy": { "organic": "Elite fruit set. Monitor for early scab signs.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Potato Healthy": { "organic": "Peak tuber development. Maintain soil moisture.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Tomato healthy": { "organic": "Vibrant growth. Maintain consistent watering to prevent blossom end rot.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Pepper Bell Healthy": { "organic": "Peak health. Maintain consistent moisture.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Rubber Healthy": { "organic": "Optimal latex flow detected. Maintain tapping panel hygiene.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Peach Healthy": { "organic": "Peak health detected. Monitor for spring frost.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Cherry Healthy": { "organic": "Vibrant canopy. Maintain standard pruning.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Oil Palm Healthy": { "organic": "Optimal frond production. Maintain nutrient cycle.", "chemical": "No intervention needed.", "yield_impact": 0 },
+  "Rice Blast": {
+    "organic": "Burn infected crop residues. Use silica-rich organic fertilizers to strengthen cell walls.",
+    "chemical": "Tricyclazole or Azoxystrobin application. Avoid excessive nitrogen.",
+    "yield_impact": 50
+  },
+  "Wheat Rust": {
+    "organic": "Plant rust-resistant varieties. Use sulfur-based organic dusts.",
+    "chemical": "Tebuconazole or Propiconazole sprays at first sign of pustules.",
+    "yield_impact": 35
+  },
+  "Corn Smut": {
+    "organic": "Remove and bury galls before they burst. Crop rotation with non-host crops.",
+    "chemical": "Seed treatment with Carboxin or Thiram.",
+    "yield_impact": 20
+  },
+  "Grape Black Rot": {
+    "organic": "Meticulous pruning of mummies and infected canes. Increase vine airflow.",
+    "chemical": "Mancozeb or Myclobutanil. Early season sprays are critical.",
+    "yield_impact": 40
+  },
+  "Sugarcane Red Rot": {
+    "organic": "Use disease-free setts. Ensure proper field drainage and crop rotation.",
+    "chemical": "Carbendazim or Mancozeb sett treatment.",
+    "yield_impact": 55
+  },
+  "Cotton Boll Rot": {
+    "organic": "Optimize plant density for airflow. Use organic copper sprays.",
+    "chemical": "Broad-spectrum fungicides like Pyraclostrobin.",
+    "yield_impact": 30
+  },
+  "Soybean Rust": {
+    "organic": "Early planting and use of tolerant varieties. Foliar organic oils.",
+    "chemical": "Folicur or Quadris applied at early flowering stage.",
+    "yield_impact": 45
+  },
+  "Banana Sigatoka": {
+    "organic": "De-leafing of infected parts. Improve drainage and use mineral oils.",
+    "chemical": "Mancozeb or Chlorothalonil. Systemic fungicides are often rotated.",
+    "yield_impact": 50
+  },
+  "Citrus Greening": {
+    "organic": "Aggressive control of the Asian Citrus Psyllid vector with organic oils.",
+    "chemical": "No cure. Use systemic insecticides (Imidacloprid) to manage vectors.",
+    "yield_impact": 75
+  },
+  "Mango Anthracnose": {
+    "organic": "Pruning to improve light and air. Post-harvest hot water treatment.",
+    "chemical": "Copper oxychloride or Azoxystrobin during flowering and fruit set.",
+    "yield_impact": 35
+  },
+  "Strawberry Leaf Spot": {
+    "organic": "Remove old infected leaves. Use straw mulch to prevent soil splashing.",
+    "chemical": "Captan or Thiophanate-methyl sprays every 10-14 days.",
+    "yield_impact": 25
+  },
+  "Coffee Leaf Rust": {
+    "organic": "Apply copper-based organic fungicides. Prune infected branches to improve aeration.",
+    "chemical": "Use systemic fungicides like Cyproconazole or Triadimefon.",
+    "yield_impact": 45
+  },
+  "Tea Blight": {
+    "organic": "Remove and destroy infected leaves. Use garlic-based antifungal sprays.",
+    "chemical": "Copper oxychloride or Hexaconazole.",
+    "yield_impact": 30
+  },
+  "Cocoa Swollen Shoot": {
+    "organic": "Identify and remove infected trees immediately (Rogueing).",
+    "chemical": "No direct cure for CSSV. Use systemic insecticides to control mealybug vectors.",
+    "yield_impact": 60
+  },
+  "Potato Early Blight": {
+    "organic": "Crop rotation and neem oil application.",
+    "chemical": "Mancozeb or Chlorothalonil application every 10 days.",
+    "yield_impact": 25
+  },
+  "Potato Late Blight": {
+    "organic": "Improve drainage. Use organic copper sprays.",
+    "chemical": "Chlorothalonil or Mancozeb.",
+    "yield_impact": 60
+  },
+  "Tomato Bacterial Spot": {
+    "organic": "Copper-based organic sprays and drip irrigation.",
+    "chemical": "Fixed copper fungicides mixed with Mancozeb.",
+    "yield_impact": 35
+  },
+  "Tomato Early Blight": {
+    "organic": "Mulching and crop rotation.",
+    "chemical": "Mancozeb or Chlorothalonil.",
+    "yield_impact": 25
+  },
+  "Tomato Late Blight": {
+    "organic": "Destroy infected plants. Use copper sprays.",
+    "chemical": "Systemic fungicides like Ridomil Gold.",
+    "yield_impact": 70
+  },
+  "Tomato Leaf Mold": {
+    "organic": "Increase ventilation. Avoid wetting foliage.",
+    "chemical": "DIFENOCONAZOLE or Azoxystrobin.",
+    "yield_impact": 20
+  },
+  "Tomato Septoria leaf spot": {
+    "organic": "Drip irrigation. Remove lower leaves.",
+    "chemical": "Copper oxychloride.",
+    "yield_impact": 30
+  },
+  "Tomato Spider mites": {
+    "organic": "Increase humidity. Use neem oil or predatory mites.",
+    "chemical": "Abamectin or Spiromesifen.",
+    "yield_impact": 40
+  },
+  "Tomato Target Spot": {
+    "organic": "Improve airflow. Use resistant varieties.",
+    "chemical": "Chlorothalonil.",
+    "yield_impact": 35
+  },
+  "Tomato Yellow Leaf Curl Virus": {
+    "organic": "Control whiteflies with yellow sticky traps and neem oil.",
+    "chemical": "No cure. Control vectors with systemic insecticides.",
+    "yield_impact": 80
+  },
+  "Tomato Mosaic Virus": {
+    "organic": "Destroy infected plants. Sanitize tools.",
+    "chemical": "No chemical treatment available.",
+    "yield_impact": 50
+  },
+  "Apple Scab": { "organic": "Remove fallen leaves. Apply sulfur or neem oil.", "chemical": "Captan or Myclobutanil sprays.", "yield_impact": 30 },
+  "Apple Black Rot": { "organic": "Prune cankers. Remove mummified fruit.", "chemical": "Copper-based fungicides.", "yield_impact": 40 },
+  "Apple Cedar Rust": { "organic": "Remove nearby cedar trees. Use resistant varieties.", "chemical": "Mancozeb or Myclobutanil.", "yield_impact": 35 },
+  "Cherry Powdery Mildew": { "organic": "Use sulfur-based organic dusts.", "chemical": "Myclobutanil or Triflumizole sprays.", "yield_impact": 25 },
+  "Oil Palm Ganoderma": { "organic": "Trenching to isolate infected roots.", "chemical": "No direct chemical cure. Hexaconazole pressure injection can slow spread.", "yield_impact": 70 },
+  "Rubber Leaf Fall": { "organic": "Remove infected leaves. Apply organic antifungal paste.", "chemical": "Copper oxychloride or Carbendazim.", "yield_impact": 40 },
+  "Peach Bacterial Spot": { "organic": "Prune to improve air circulation.", "chemical": "Fixed copper or Oxytetracycline sprays.", "yield_impact": 35 }
+}
