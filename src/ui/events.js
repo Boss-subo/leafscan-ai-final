@@ -124,47 +124,48 @@ export function setupEventListeners(elements) {
     }
   }
 
-  document.getElementById('save-config')?.addEventListener('click', () => {
+  document.getElementById('save-config')?.addEventListener('click', async () => {
     const gKey = document.getElementById('gemini-key').value;
     const wKey = document.getElementById('weather-key').value;
+    
+    showToast("Synchronizing Identity Vault...", "info");
     
     state.geminiKey = gKey;
     state.weatherKey = wKey;
     localStorage.setItem('gemini_key', gKey);
     localStorage.setItem('weather_key', wKey);
     
-    document.getElementById('config-modal').style.display = 'none';
-    showToast("Global Settings Synchronized. Re-initializing...", "success");
+    // Tiny delay to ensure localStorage and state are locked
+    await new Promise(r => setTimeout(r, 500));
     
-    // Force immediate refresh of all systems
+    document.getElementById('config-modal').style.display = 'none';
+    showToast("Sovereign Keys Synchronized", "success");
+    
     if (typeof window.bootstrap === 'function') {
       window.bootstrap();
     } else {
-      location.reload(); // Fallback to refresh the page to apply keys
+      location.reload();
     }
   });
 
-  // --- Chat Interactions ---
-  const chatInput = document.getElementById('chat-input');
-  const chatBtn = document.getElementById('send-chat');
-  const chatContainer = document.getElementById('chat-messages');
-
-  if (chatBtn && chatInput) {
-    const triggerChat = () => {
-      const text = chatInput.value.trim();
-      if (text) {
-        console.log("Triggering AI Pathologist for:", text);
-        sendMessage(text, chatContainer);
-        chatInput.value = '';
+  document.getElementById('test-api')?.addEventListener('click', async () => {
+    const gKey = document.getElementById('gemini-key').value;
+    const wKey = document.getElementById('weather-key').value;
+    
+    showToast("Testing Handshake...", "info");
+    
+    // Test Weather
+    try {
+      const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=22.57&lon=88.36&appid=${wKey}`);
+      if (res.ok) {
+        showToast("Weather API: AUTHENTICATED", "success");
+      } else {
+        showToast("Weather API: ACCESS DENIED (Invalid Key)", "error");
       }
-    };
-
-    chatBtn.onclick = triggerChat;
-    chatInput.onkeypress = (e) => {
-      if (e.key === 'Enter') triggerChat();
-    };
-    console.log("AI Pathologist Listeners Synchronized.");
-  }
+    } catch (e) {
+      showToast("Weather API: CONNECTION FAILED", "error");
+    }
+  });
 
   document.getElementById('sign-out-btn')?.addEventListener('click', () => {
     showToast("Terminating Secure Session...", "info");
