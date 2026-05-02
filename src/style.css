@@ -2131,21 +2131,56 @@ html, body {
     overflow-y: auto;
   }
 
-  .dashboard-grid-v2 { grid-template-columns: 1fr; gap: 1.5rem; }
-  .dashboard-layout { grid-template-columns: 1fr; gap: 1.5rem; }
-  .sensor-grid { grid-template-columns: 1fr 1fr; gap: 1rem; padding: 1rem; }
-  .analytics-layout { grid-template-columns: 1fr; gap: 1.5rem; }
-  
-  .profile-layout { grid-template-columns: 1fr !important; }
-  .scanner-actions { flex-direction: column; }
-  .top-bar { flex-direction: column; align-items: stretch; gap: 1rem; margin-bottom: 2rem; }
-  .top-bar h2 { font-size: 1.4rem; }
-  .quick-stats { flex-direction: column; width: 100%; gap: 1rem; }
-  .stat-card { width: 100%; padding: 1.25rem; }
-  .plots-layout { grid-template-columns: 1fr !important; }
-  .command-grid { grid-template-columns: 1fr !important; }
+  /* Universal Mobile First Stacking (Step 2 & 3) */
+  .dashboard-grid-v2, .dashboard-layout, .analytics-layout, .profile-layout, .plots-layout, .command-grid, .sensor-grid {
+    grid-template-columns: 1fr !important; /* Forces vertical stacking */
+    width: 100% !important;
+    gap: 1.5rem !important;
+    padding: 0 !important; /* Let parent content-area handle outer padding */
+  }
 
-  .toast { bottom: 80px; right: 1rem; left: 1rem; width: auto; }
+  .stat-card, .glass-card {
+    width: 100% !important; /* Step 3: Use 100% width, not px */
+    margin-bottom: 1.5rem;   /* Step 2: Add space between items */
+    padding: 1.5rem !important; /* Step 3: Increase breathing room */
+  }
+
+  .quick-stats {
+    flex-direction: column;
+    width: 100%;
+    gap: 1.25rem;
+  }
+
+  .top-bar {
+    padding: 1rem 0;
+    margin-bottom: 1.5rem;
+  }
+
+  .top-bar h2 {
+    font-size: 1.25rem; /* Step 4: Responsive Fonts */
+    letter-spacing: -0.5px;
+  }
+
+  /* Bottom Nav Optimization (Step 4 & 5) */
+  .nav-links li span { 
+    display: none; 
+  }
+  .nav-links li {
+    padding: 15px 0;
+    flex: 1;
+    min-width: 0;
+    border-top: 2px solid transparent;
+  }
+  .nav-links li.active {
+    border-top-color: var(--primary);
+  }
+  .nav-links li i { width: 24px; height: 24px; }
+
+  .content-area {
+    padding: 1rem 1.25rem 100px 1.25rem; /* Step 3: More breathing room at edges */
+  }
+
+  .toast { bottom: 90px; right: 1rem; left: 1rem; width: auto; }
   .glass-card:hover { transform: none; }
 
   .landing-stats { flex-direction: column; gap: 1.5rem; }
