@@ -853,6 +853,15 @@ body {
   box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
 }
 
+.message.animate-in {
+  animation: message-fade-in 0.4s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes message-fade-in {
+  from { opacity: 0; transform: translateY(10px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 .chat-input-area {
   padding: 1.5rem;
   display: flex;

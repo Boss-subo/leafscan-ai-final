@@ -34,16 +34,21 @@ export async function testGeminiKey(key) {
 
 export async function sendMessage(text, containerId) {
   const container = typeof containerId === 'string' ? document.getElementById(containerId) : containerId;
-  if (!container) return;
+  if (!container) {
+    console.error("Chat container missing!");
+    return;
+  }
 
   if (!state.geminiKey) {
     showToast("Gemini Key Missing. Check Settings.", "error");
     return;
   }
 
+  console.log("Sending message to AI Pathologist:", text);
+
   // Add User Message
   const userMsg = document.createElement('div');
-  userMsg.className = 'message user';
+  userMsg.className = 'message user animate-in';
   userMsg.textContent = text;
   container.appendChild(userMsg);
 
@@ -52,16 +57,19 @@ export async function sendMessage(text, containerId) {
   loadingMsg.className = 'message ai loading';
   loadingMsg.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
   container.appendChild(loadingMsg);
-  container.scrollTop = container.scrollHeight;
+  
+  // Smooth scroll to bottom
+  container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
 
   // Build Context-Aware Prompt
   let systemPrompt = "You are the LeafScan AI Pathologist. Be concise, professional, and prioritize organic/sustainable solutions.";
   if (state.lastDiagnosis) {
-    systemPrompt += ` The user just performed a scan. Result: ${state.lastDiagnosis.diseaseName} with ${state.lastDiagnosis.confidence}% confidence.`;
+    systemPrompt += ` CONTEXT: The user just scanned a plant. Detection: ${state.lastDiagnosis.diseaseName} (${state.lastDiagnosis.confidence}% confidence). Use this for follow-up questions.`;
   }
 
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${state.geminiKey}`, {
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${state.geminiKey}`;
+    const response = await fetch(apiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -73,21 +81,45 @@ export async function sendMessage(text, containerId) {
     });
 
     const data = await response.json();
-    loadingMsg.remove();
+    console.log("AI Pathologist Response received:", data);
 
-    if (!response.ok) throw new Error(data.error?.message || 'API Error');
+    if (loadingMsg && loadingMsg.parentNode) {
+      loadingMsg.remove();
+    }
 
-    const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text || "I apologize, but I couldn't generate a response. Please try again.";
+    if (!response.ok) {
+      const errMsg = data.error?.message || 'Handshake Error';
+      throw new Error(errMsg);
+    }
+
+    const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!aiText) {
+      throw new Error("Empty response from Intelligence Mesh.");
+    }
+
     const aiMsg = document.createElement('div');
-    aiMsg.className = 'message ai';
+    aiMsg.className = 'message ai animate-in';
     aiMsg.innerHTML = formatMarkdown(aiText);
     container.appendChild(aiMsg);
-    container.scrollTop = container.scrollHeight;
+    
+    // Ensure scroll after content is rendered
+    setTimeout(() => {
+      container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+    }, 100);
 
   } catch (e) {
-    if (loadingMsg) loadingMsg.remove();
-    console.error("Gemini Send Failed:", e);
+    console.error("AI Pathologist Failure:", e);
+    if (loadingMsg && loadingMsg.parentNode) {
+      loadingMsg.remove();
+    }
     showToast(`AI Engine Error: ${e.message}`, "error");
+    
+    // Add error message to chat so it doesn't "disappear"
+    const errDiv = document.createElement('div');
+    errDiv.className = 'message system';
+    errDiv.style.color = 'var(--danger)';
+    errDiv.textContent = `Error: ${e.message}`;
+    container.appendChild(errDiv);
   }
 }
 
@@ -103,8 +135,6 @@ export function toggleMic() {
 
   if (recognition) {
     recognition.stop();
-    recognition = null;
-    micBtn.classList.remove('listening');
     return;
   }
 
@@ -122,11 +152,17 @@ export function toggleMic() {
     const transcript = event.results[0][0].transcript;
     chatInput.value = transcript;
     micBtn.classList.remove('listening');
-    window.handleChat();
+    
+    // Manually trigger the chat handling
+    if (window.handleChat) {
+      window.handleChat();
+    }
   };
 
-  recognition.onerror = () => {
+  recognition.onerror = (event) => {
+    console.error("Speech Recognition Error:", event.error);
     micBtn.classList.remove('listening');
+    showToast(`Voice Error: ${event.error}`, "error");
     recognition = null;
   };
 
