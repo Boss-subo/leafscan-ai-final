@@ -136,27 +136,29 @@ async function checkBiometricEnrollment(userId) {
 
 async function enrollBiometrics(userId) {
   try {
-    if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
-      showToast("Biometrics require a secure HTTPS connection.", "warning");
+    if (!window.isSecureContext) {
+      showToast("Biometrics require a secure HTTPS context.", "warning");
       return;
     }
 
     const user = await db.users.get(userId);
     const enc = new TextEncoder();
+    
+    // Robust WebAuthn Configuration
     const options = {
       publicKey: {
         challenge: crypto.getRandomValues(new Uint8Array(32)),
-        rp: { name: "LeafScan AI", id: window.location.hostname },
+        rp: { name: "LeafScan AI" }, // Browser will automatically associate with the current domain
         user: {
-          id: enc.encode(String(userId)), // Ensure ID is a valid Uint8Array
+          id: enc.encode(String(userId)), 
           name: user.username,
           displayName: user.username
         },
         pubKeyCredParams: [{ alg: -7, type: "public-key" }],
         timeout: 60000,
         authenticatorSelection: { 
-          userVerification: "required",
-          residentKey: "preferred"
+          userVerification: "preferred", // More compatible than "required"
+          authenticatorAttachment: "platform" // Ensures it uses the device's built-in sensor
         }
       }
     };
@@ -167,13 +169,18 @@ async function enrollBiometrics(userId) {
       await db.credentials.add({
         userId: userId,
         credentialId: credId,
-        publicKey: "" // Simplified for demo
+        publicKey: "" 
       });
       showToast("Biometrics Registered Successfully!", "success");
     }
   } catch (err) {
     console.error("Biometric Enrollment Error:", err);
-    showToast(`Enrollment Failed: ${err.message}`, "error");
+    // Provide a clear explanation for common failures
+    let msg = err.message;
+    if (err.name === 'NotAllowedError') msg = "Enrollment cancelled or timed out.";
+    else if (err.name === 'SecurityError') msg = "Domain mismatch or insecure context.";
+    
+    showToast(`Enrollment Error: ${msg}`, "error");
   }
 }
 
