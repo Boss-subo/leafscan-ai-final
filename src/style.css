@@ -3,13 +3,14 @@
   --primary-light: #34d399;
   --primary-dark: #064e3b;
   --accent-gold: #f59e0b;
-  --bg-dark: #0a0f0d;
-  --bg-card: rgba(13, 21, 18, 0.75);
+  --bg-dark: #030806;
+  --bg-card: rgba(13, 21, 18, 0.7);
   --glass-border: rgba(255, 255, 255, 0.08);
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
   --glow-primary: rgba(16, 185, 129, 0.4);
   --premium-glass: rgba(255, 255, 255, 0.03);
+  --shadow-premium: 0 8px 32px 0 rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 /* --- RESPONSIVE LAYOUTS --- */
@@ -37,11 +38,11 @@
 
 .glass-card {
   background: var(--bg-card);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  box-shadow: var(--shadow-premium);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
@@ -56,14 +57,11 @@
   transition: transform 0.6s;
 }
 
-.glass-card:hover::before {
-  transform: translateX(100%);
-}
-
 .glass-card:hover {
-  border-color: var(--theme-border);
-  box-shadow: 0 12px 40px 0 rgba(16, 185, 129, 0.1);
-  transform: translateY(-2px);
+  background: rgba(20, 30, 25, 0.8);
+  border-color: rgba(16, 185, 129, 0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9), 0 0 20px rgba(16, 185, 129, 0.1);
 }
 
 * {
@@ -826,47 +824,87 @@ body {
 }
 
 /* Buttons */
-.btn {
-  padding: 0.85rem 1.5rem;
-  border-radius: 14px;
+.btn-full {
+  width: 100%;
+}
+
+/* --- ELITE COMPONENT UPGRADES --- */
+.glass-card {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--glass-border);
-  cursor: pointer;
+  box-shadow: var(--shadow-premium);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  background: rgba(20, 30, 25, 0.8);
+  border-color: rgba(16, 185, 129, 0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9), 0 0 20px rgba(16, 185, 129, 0.1);
+}
+
+.btn {
+  position: relative;
+  overflow: hidden;
   font-weight: 700;
-  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 12px 24px;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  gap: 8px;
+  cursor: pointer;
+  border: 1px solid transparent;
 }
 
 .btn-primary {
-  background: var(--primary);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: white;
-  border: none;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
 .btn-primary:hover {
-  background: var(--primary-light);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+  transform: scale(1.02);
+  box-shadow: 0 8px 25px rgba(16, 185, 129, 0.5);
+  filter: brightness(1.1);
 }
 
+.btn-primary:active { transform: scale(0.98); }
+
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
-  color: white;
+  background: rgba(255, 255, 255, 0.03);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
-.btn-full {
+.input-group input {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--glass-border);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 10px;
   width: 100%;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
 }
 
 /* Scanner */
