@@ -1,67 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
 :root {
   --primary: #10b981;
   --primary-light: #34d399;
   --primary-dark: #064e3b;
   --accent-gold: #f59e0b;
-  --bg-dark: #030806;
-  --bg-card: rgba(13, 21, 18, 0.7);
+  --bg-dark: #020617; /* Deep Midnight Blue-Black */
+  --bg-card: rgba(15, 23, 42, 0.6); /* Slate-Glass */
   --glass-border: rgba(255, 255, 255, 0.08);
   --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --glow-primary: rgba(16, 185, 129, 0.4);
-  --premium-glass: rgba(255, 255, 255, 0.03);
-  --shadow-premium: 0 8px 32px 0 rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
+  --text-muted: #64748b;
+  --glow-primary: rgba(16, 185, 129, 0.5);
+  --shadow-premium: 
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 10px 15px -3px rgba(0, 0, 0, 0.5),
+    0 4px 6px -4px rgba(0, 0, 0, 0.5);
+  --transition-spring: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-/* --- RESPONSIVE LAYOUTS --- */
-.dashboard-layout {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 2rem;
-  margin-bottom: 2rem;
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  line-height: 1.6;
 }
 
-.sensor-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-  padding: 1.5rem;
-  border-left: 4px solid var(--accent-gold);
-}
-
-.analytics-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  margin-top: 2rem;
-}
-
+/* --- ELITE COMMAND CENTER CARDS --- */
 .glass-card {
   background: var(--bg-card);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
-  border-radius: 20px;
+  border-radius: 24px; /* Mobbin Style: Large rounding */
   box-shadow: var(--shadow-premium);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: var(--transition-spring);
   position: relative;
   overflow: hidden;
 }
 
-.glass-card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.05), transparent);
-  transform: translateX(-100%);
-  transition: transform 0.6s;
+.glass-card:hover {
+  border-color: rgba(16, 185, 129, 0.4);
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(16, 185, 129, 0.2);
 }
 
-.glass-card:hover {
-  background: rgba(20, 30, 25, 0.8);
-  border-color: rgba(16, 185, 129, 0.3);
-  transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.9), 0 0 20px rgba(16, 185, 129, 0.1);
+.glass-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+  transition: 0.8s;
+  pointer-events: none;
+}
+
+.glass-card:hover::after {
+  left: 100%;
 }
 
 * {
@@ -99,8 +95,31 @@
   to { background-position: -200% 0; }
 }
 
+/* --- ELITE LAYOUT SYSTEM --- */
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.sensor-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border-left: 4px solid var(--accent-gold);
+}
+
+.analytics-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
 body {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   background-color: var(--bg-dark);
   color: var(--text-main);
   overflow-x: hidden;
@@ -2241,6 +2260,31 @@ html, body {
     border-radius: 0 0 10px 10px;
     box-shadow: 0 0 10px var(--primary);
   }
+
+  /* --- FLOATING ACTION BUTTON (SCANNER) --- */
+  .nav-scan-btn {
+    position: relative !important;
+    top: -20px !important;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
+    width: 60px !important;
+    height: 60px !important;
+    flex: none !important;
+    border-radius: 50% !important;
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4), 0 0 0 5px var(--bg-dark) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    z-index: 10001;
+  }
+
+  .nav-scan-btn i {
+    width: 26px !important;
+    height: 26px !important;
+    color: white !important;
+  }
+
+  .nav-scan-btn.active::after {
+    display: none !important;
+  }
+
   .landing-stats { flex-direction: column; gap: 1.5rem; }
   .landing-stat-divider { display: none; }
 
