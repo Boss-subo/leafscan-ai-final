@@ -4,7 +4,7 @@ import { db } from '../core/db.js';
 import { analyzeLeaf } from '../engines/analysis-logic.js';
 import { startAutonomousMission, exportMissionJSON } from '../engines/fleet-engine.js';
 import { switchTab } from './navigation.js';
-import { sendMessage, testGeminiKey, toggleMic } from './chat.js';
+import { sendMessage, testGeminiKey, toggleMic, syncAiModel } from './chat.js';
 import { exportToPDF } from '../services/pdf-export.js';
 import { showToast } from '../core/utils.js';
 
@@ -41,6 +41,16 @@ const bindChat = () => {
   if (micBtn && !micBtn.dataset.bound) {
     micBtn.dataset.bound = 'true';
     micBtn.addEventListener('click', () => toggleMic());
+  }
+
+  const syncBtn = document.getElementById('sync-ai-btn');
+  if (syncBtn && !syncBtn.dataset.bound) {
+    syncBtn.dataset.bound = 'true';
+    syncBtn.addEventListener('click', async () => {
+      syncBtn.classList.add('spinning');
+      await syncAiModel();
+      syncBtn.classList.remove('spinning');
+    });
   }
 };
 

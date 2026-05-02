@@ -15,10 +15,42 @@ export async function initChat() {
   }
 }
 
+export async function syncAiModel() {
+  if (!state.geminiKey) {
+    showToast("Please enter an API Key first", "error");
+    return;
+  }
+  
+  try {
+    showToast("Scanning AI Intelligence Mesh...", "info");
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${state.geminiKey}`);
+    const data = await res.json();
+    
+    if (!res.ok) throw new Error(data.error?.message || "Sync Failed");
+    
+    const validModel = data.models.find(m => m.supportedGenerationMethods.includes('generateContent'));
+    if (validModel) {
+      const modelId = validModel.name.split('/').pop();
+      state.activeGeminiModel = modelId;
+      localStorage.setItem('leafscan_active_model', modelId);
+      showToast(`AI Synced: Using ${modelId}`, "success");
+      console.log("Active Model Synced:", modelId);
+      return modelId;
+    } else {
+      throw new Error("No compatible models found for this key.");
+    }
+  } catch (e) {
+    console.error("Sync Error:", e);
+    showToast(`Sync Failed: ${e.message}`, "error");
+    return null;
+  }
+}
+
 export async function testGeminiKey(key) {
   if (!key) return false;
   try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${key}`, {
+    const model = state.activeGeminiModel || 'gemini-1.5-flash';
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -68,7 +100,8 @@ export async function sendMessage(text, containerId) {
   }
 
   try {
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${state.geminiKey}`;
+    const model = state.activeGeminiModel || localStorage.getItem('leafscan_active_model') || 'gemini-1.5-flash';
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${state.geminiKey}`;
     
     // Combine instructions for maximum compatibility across all API versions
     const fullPrompt = `${systemPrompt}\n\nUser Query: ${text}`;
