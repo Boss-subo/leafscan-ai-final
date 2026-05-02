@@ -128,7 +128,6 @@ export async function runXAIAnalysis(imgData, targetClassIdx) {
 }
 
 export async function runVMSAnalysis(imgData) {
-...
   return new Promise((resolve) => {
     const img = new Image();
     img.onload = () => {

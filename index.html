@@ -779,5 +779,16 @@
 
     <!-- AI/ML Libraries -->
     <script type="module" src="./src/main.js"></script>
+
+    <!-- PWA Registration -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('Sovereign PWA Locked & Loaded:', reg.scope))
+            .catch(err => console.log('PWA Failed to Initialize:', err));
+        });
+      }
+    </script>
 </body>
 </html>
