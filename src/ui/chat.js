@@ -15,15 +15,15 @@ export async function initChat() {
   }
 }
 
-export async function syncAiModel() {
-  if (!state.geminiKey) {
+export async function syncAiModel(keyOverride = null) {
+  const key = keyOverride || state.geminiKey;
+  if (!key) {
     showToast("Please enter an API Key first", "error");
-    return;
+    return null;
   }
   
   try {
-    showToast("Scanning AI Intelligence Mesh...", "info");
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${state.geminiKey}`);
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
     const data = await res.json();
     
     if (!res.ok) throw new Error(data.error?.message || "Sync Failed");
@@ -33,23 +33,28 @@ export async function syncAiModel() {
       const modelId = validModel.name.split('/').pop();
       state.activeGeminiModel = modelId;
       localStorage.setItem('leafscan_active_model', modelId);
-      showToast(`AI Synced: Using ${modelId}`, "success");
-      console.log("Active Model Synced:", modelId);
+      if (!keyOverride) showToast(`AI Synced: Using ${modelId}`, "success");
       return modelId;
     } else {
       throw new Error("No compatible models found for this key.");
     }
   } catch (e) {
-    console.error("Sync Error:", e);
-    showToast(`Sync Failed: ${e.message}`, "error");
+    if (!keyOverride) {
+      console.error("Sync Error:", e);
+      showToast(`Sync Failed: ${e.message}`, "error");
+    }
     return null;
   }
 }
 
 export async function testGeminiKey(key) {
   if (!key) return false;
+  
+  // Try to sync first to find a working model
+  const discoveredModel = await syncAiModel(key);
+  const model = discoveredModel || state.activeGeminiModel || 'gemini-1.5-flash';
+  
   try {
-    const model = state.activeGeminiModel || 'gemini-1.5-flash';
     const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
