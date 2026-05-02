@@ -127,6 +127,22 @@ export async function sendMessage(text, containerId) {
     container.appendChild(errDiv);
   }
 }
+
+export async function testGeminiKey(key) {
+  if (!key) return false;
+  const discoveredModel = await syncAiModel(key);
+  const model = discoveredModel || state.activeGeminiModel || 'gemini-1.5-flash';
+  
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contents: [{ parts: [{ text: 'hi' }] }] })
+    });
+    return res.ok;
+  } catch (e) {
+    return false;
+  }
 }
 
 let recognition;
