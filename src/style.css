@@ -2157,6 +2157,10 @@ html, body {
     box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
   }
 
+  .sidebar-header, .logo-area, .profile-section, .sidebar-footer, #sign-out-btn-main {
+    display: none !important;
+  }
+
   .nav-links {
     display: flex !important;
     flex-direction: row !important;
