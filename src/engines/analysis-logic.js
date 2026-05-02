@@ -86,7 +86,7 @@ export async function analyzeLeaf(elements) {
       const heatmapCanvas = document.getElementById('xai-heatmap');
       if (heatmapCanvas) {
         heatmapCanvas.style.opacity = '1';
-        XAIEngine.generateHeatmap(elements.imagePreview, heatmapCanvas);
+        XAIEngine.generateHeatmap(elements.imagePreview, heatmapCanvas, localResult.classIdx);
       }
 
       // Save to History

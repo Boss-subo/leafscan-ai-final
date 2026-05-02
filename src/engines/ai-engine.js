@@ -45,7 +45,11 @@ export async function runLocalInference(imgData) {
         const prediction = state.localModel.predict(tensor);
         const data = prediction.dataSync();
         const maxIdx = data.indexOf(Math.max(...data));
-        return { label: state.modelLabels[maxIdx], confidence: data[maxIdx] };
+        return { 
+          label: state.modelLabels[maxIdx], 
+          confidence: data[maxIdx],
+          classIdx: maxIdx 
+        };
       });
       resolve(result);
     };
@@ -53,7 +57,78 @@ export async function runLocalInference(imgData) {
   });
 }
 
+export async function runXAIAnalysis(imgData, targetClassIdx) {
+  if (!state.localModel) return null;
+
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = async () => {
+      const heatmap = tf.tidy(() => {
+        // 1. Preprocess Image
+        const tensor = tf.browser.fromPixels(img)
+          .resizeNearestNeighbor([224, 224])
+          .toFloat()
+          .expandDims()
+          .div(255.0);
+
+        // 2. Find the last convolutional layer
+        // For MobileNetV2, it's usually the last layer with 4D output before pooling
+        let lastConvLayer;
+        for (let i = state.localModel.layers.length - 1; i >= 0; i--) {
+          if (state.localModel.layers[i].outputShape.length === 4) {
+            lastConvLayer = state.localModel.layers[i];
+            break;
+          }
+        }
+
+        if (!lastConvLayer) return null;
+
+        // 3. Create a sub-model that outputs both the last conv layer and the final prediction
+        const subModel = tf.model({
+          inputs: state.localModel.inputs,
+          outputs: [lastConvLayer.output, state.localModel.outputs[0]]
+        });
+
+        const [convOut, predictions] = subModel.predict(tensor);
+        
+        // 4. Get weights of the final dense layer
+        const finalDenseLayer = state.localModel.layers.find(l => l.getClassName() === 'Dense');
+        if (!finalDenseLayer) return null;
+        
+        const weights = finalDenseLayer.getWeights()[0]; // [channels, classes]
+        const classWeights = weights.slice([0, targetClassIdx], [-1, 1]).reshape([-1]);
+
+        // 5. Compute CAM: Weighted sum of feature maps
+        // convOut shape: [1, h, w, channels]
+        const [h, w, channels] = convOut.shape.slice(1);
+        const reshapedConv = convOut.reshape([h * w, channels]);
+        const cam = reshapedConv.matMul(classWeights.reshape([channels, 1]));
+        
+        // 6. Normalize and Upsample
+        const normalizedCam = cam.sub(cam.min()).div(cam.max().sub(cam.min()));
+        return normalizedCam.reshape([h, w]);
+      });
+
+      if (!heatmap) {
+        resolve(null);
+        return;
+      }
+
+      // Convert heatmap to canvas data
+      const canvas = document.createElement('canvas');
+      canvas.width = 224;
+      canvas.height = 224;
+      await tf.browser.toPixels(heatmap.resizeBilinear([224, 224]), canvas);
+      
+      heatmap.dispose();
+      resolve(canvas.toDataURL());
+    };
+    img.src = imgData;
+  });
+}
+
 export async function runVMSAnalysis(imgData) {
+...
   return new Promise((resolve) => {
     const img = new Image();
     img.onload = () => {

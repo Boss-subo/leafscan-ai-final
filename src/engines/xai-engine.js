@@ -7,14 +7,47 @@ export const XAIEngine = {
   /**
    * Generates a "Pseudo-Saliency" heatmap highlighting pathogenic areas.
    */
-  async generateHeatmap(imgElement, outputCanvas) {
+  async generateHeatmap(imgElement, outputCanvas, targetClassIdx) {
+    const { runXAIAnalysis } = await import('./ai-engine.js');
+    const heatmapDataUrl = await runXAIAnalysis(imgElement.src, targetClassIdx);
+    
+    if (!heatmapDataUrl) {
+      console.warn("Real XAI failed, falling back to heuristic...");
+      return this.generateHeuristicHeatmap(imgElement, outputCanvas);
+    }
+
     const ctx = outputCanvas.getContext('2d');
     const width = 300;
     const height = 300;
     outputCanvas.width = width;
     outputCanvas.height = height;
 
-    // Draw image to small processing canvas
+    const heatmapImg = new Image();
+    heatmapImg.onload = () => {
+      // Draw the neural heatmap
+      ctx.clearRect(0, 0, width, height);
+      ctx.globalAlpha = 0.6;
+      ctx.drawImage(heatmapImg, 0, 0, width, height);
+      
+      // Add a professional "glow" to the spots
+      ctx.globalCompositeOperation = 'screen';
+      ctx.filter = 'blur(10px) brightness(1.5)';
+      ctx.drawImage(outputCanvas, 0, 0);
+      ctx.filter = 'none';
+      ctx.globalAlpha = 1.0;
+      ctx.globalCompositeOperation = 'source-over';
+    };
+    heatmapImg.src = heatmapDataUrl;
+  },
+
+  async generateHeuristicHeatmap(imgElement, outputCanvas) {
+    const ctx = outputCanvas.getContext('2d');
+    const width = 300;
+    const height = 300;
+    outputCanvas.width = width;
+    outputCanvas.height = height;
+
+    // ... (rest of old logic as fallback)
     const procCanvas = document.createElement('canvas');
     procCanvas.width = width;
     procCanvas.height = height;
@@ -30,28 +63,14 @@ export const XAIEngine = {
       const r = pixels[i];
       const g = pixels[i + 1];
       const b = pixels[i + 2];
-
-      // Disease Detection Heuristic:
-      // High Red/Brown variance on a green leaf usually indicates a lesion.
       const isGreen = (g > r && g > b);
       const intensity = isGreen ? 0 : Math.max(r, b) - g + 50;
       const normalized = Math.max(0, Math.min(255, intensity));
-
-      // Heatmap Color Gradient (Blue -> Green -> Red)
       if (normalized > 80) {
-        hPixels[i] = normalized;     // Red
-        hPixels[i + 1] = 255 - normalized; // Green
-        hPixels[i + 2] = 0;           // Blue
-        hPixels[i + 3] = 180;         // Alpha
-      } else {
-        hPixels[i + 3] = 0;           // Transparent
-      }
+        hPixels[i] = normalized; hPixels[i+1] = 255-normalized; hPixels[i+2] = 0; hPixels[i+3] = 180;
+      } else { hPixels[i+3] = 0; }
     }
-
     ctx.putImageData(heatmapData, 0, 0);
-    
-    // Apply Blur effect for "Heatmap" look
-    ctx.globalCompositeOperation = 'source-over';
     ctx.filter = 'blur(8px)';
     ctx.drawImage(outputCanvas, 0, 0);
     ctx.filter = 'none';
