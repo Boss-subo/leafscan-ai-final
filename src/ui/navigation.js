@@ -7,6 +7,7 @@ import { initMap } from './map.js';
 import { loadReminders } from './reminders.js';
 import { initChat } from './chat.js';
 import { initProfile } from './profile.js';
+import { loadPlots } from './plots.js';
 
 export async function switchTab(tabId, elements) {
   if (!tabId) return;
@@ -39,6 +40,7 @@ export async function switchTab(tabId, elements) {
         break;
       case 'plots':
         initMap();
+        await loadPlots();
         break;
       case 'reminders':
         await loadReminders();

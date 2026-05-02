@@ -27,6 +27,12 @@ import {
   serverTimestamp,
   updateDoc
 } from 'firebase/firestore';
+import {
+  getStorage,
+  ref,
+  uploadString,
+  getDownloadURL
+} from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAYb35NKb2bR7QmEMQtPAhdesx_aKzzX-w",
@@ -41,6 +47,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app);
 
 // ─── AUTH ────────────────────────────────────────────────────────────────────
 
@@ -105,13 +112,31 @@ export async function updateUserProfile(uid, data) {
   });
 }
 
+// ─── STORAGE ─────────────────────────────────────────────────────────────────
+
+export async function uploadImage(userId, base64Str) {
+  const storageRef = ref(storage, `scans/${userId}/${Date.now()}.jpg`);
+  await uploadString(storageRef, base64Str, 'data_url');
+  return await getDownloadURL(storageRef);
+}
+
 // ─── HISTORY ─────────────────────────────────────────────────────────────────
 
 export async function saveHistoryToCloud(userId, record) {
-  // Don't save full base64 image to Firestore (too large)
+  let finalImageUrl = null;
+  
+  if (record.image && record.image.startsWith('data:image')) {
+    try {
+      finalImageUrl = await uploadImage(userId, record.image);
+    } catch (e) {
+      console.error("Image upload failed:", e);
+    }
+  }
+
   const { image, ...safeRecord } = record;
   await addDoc(collection(db, 'users', userId, 'history'), {
     ...safeRecord,
+    image: finalImageUrl || record.image,
     timestamp: serverTimestamp()
   });
 }
@@ -121,6 +146,21 @@ export async function loadHistoryFromCloud(userId) {
     collection(db, 'users', userId, 'history'),
     orderBy('timestamp', 'desc')
   );
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+}
+
+// ─── PLOTS SYNC ──────────────────────────────────────────────────────────────
+
+export async function savePlotToCloud(userId, plot) {
+  await addDoc(collection(db, 'users', userId, 'plots'), {
+    ...plot,
+    timestamp: serverTimestamp()
+  });
+}
+
+export async function loadPlotsFromCloud(userId) {
+  const q = query(collection(db, 'users', userId, 'plots'), orderBy('timestamp', 'desc'));
   const snap = await getDocs(q);
   return snap.docs.map(d => ({ id: d.id, ...d.data() }));
 }
