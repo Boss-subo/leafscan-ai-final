@@ -6,6 +6,7 @@ import { loadInventory } from './inventory.js';
 import { initMap } from './map.js';
 import { loadReminders } from './reminders.js';
 import { initChat } from './chat.js';
+import { initProfile } from './profile.js';
 
 export async function switchTab(tabId, elements) {
   if (!tabId) return;
@@ -48,6 +49,9 @@ export async function switchTab(tabId, elements) {
       case 'command':
         initGlobalRiskChart();
         startSovereignIntelStream();
+        break;
+      case 'account':
+        await initProfile();
         break;
     }
   } catch (err) {

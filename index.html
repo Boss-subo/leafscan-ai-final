@@ -3,7 +3,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
     <title>LeafScan AI — Bharat-Agri Sovereign Diagnostic Platform</title>
     <meta name="description" content="India's most advanced AI-powered crop disease detection platform. Diagnose 100+ Indian crops with 99% accuracy. Powered by the Bharat-Agri Sovereign Engine.">
     
@@ -216,6 +217,10 @@
           <li data-tab="command">
             <i data-lucide="shield-check"></i>
             <span>Sovereign Center</span>
+          </li>
+          <li data-tab="account">
+            <i data-lucide="user-cog"></i>
+            <span>Account Profile</span>
           </li>
           <li data-tab="settings" id="config-btn">
             <i data-lucide="settings"></i>
@@ -703,6 +708,103 @@
               > GPS Lock: India/Kolkata Cluster...<br>
               > Priority Path: Jute & Coffee Pathogens...<br>
               > System Healthy.
+            </div>
+          </div>
+        </section>
+
+        <!-- Account Profile Tab -->
+        <section id="account-tab" class="tab-content">
+          <div class="top-bar">
+            <h2>Operator Profile</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Sovereign identity and biometric authorization management</p>
+          </div>
+
+          <div class="profile-layout" style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; margin-top: 2rem;">
+            <!-- Left Column: Avatar & Quick Stats -->
+            <div class="profile-sidebar">
+              <div class="glass-card" style="text-align: center; padding: 2rem;">
+                <div style="position: relative; display: inline-block;">
+                  <img id="profile-avatar-large" src="" style="width: 120px; height: 120px; border-radius: 30px; border: 2px solid var(--primary); padding: 5px; background: var(--bg-dark);">
+                  <button id="edit-avatar" style="position: absolute; bottom: 0; right: 0; background: var(--primary); border: none; border-radius: 50%; width: 32px; height: 32px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                    <i data-lucide="camera" size="14"></i>
+                  </button>
+                </div>
+                <h3 id="profile-display-name" style="margin-top: 1.5rem; font-size: 1.5rem;">Operator</h3>
+                <p id="profile-display-farm" style="color: var(--primary-light); font-size: 0.8rem; letter-spacing: 1px;">SOVEREIGN ESTATE</p>
+                
+                <div style="margin-top: 2rem; border-top: 1px solid var(--glass-border); padding-top: 2rem;">
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                    <span style="color: var(--text-muted); font-size: 0.75rem;">Security Level</span>
+                    <span style="color: var(--accent-gold); font-size: 0.75rem; font-weight: 800;">ELITE</span>
+                  </div>
+                  <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted); font-size: 0.75rem;">Biometrics</span>
+                    <span id="profile-biometric-status" style="color: var(--primary); font-size: 0.75rem; font-weight: 800;">ACTIVE</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="glass-card" style="margin-top: 1.5rem; padding: 1.5rem;">
+                <h4 style="font-size: 0.7rem; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 1rem;">TECHNICAL METADATA</h4>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--text-muted);">
+                  <div style="margin-bottom: 0.5rem;">IP: <span id="profile-ip" style="color: #fff;">--.---.--.--</span></div>
+                  <div>DEVICE: <span id="profile-device" style="color: #fff;">AUTHORIZED TERMINAL</span></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Details Form -->
+            <div class="profile-details">
+              <div class="glass-card" style="padding: 2.5rem;">
+                <form id="profile-form">
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div class="input-group">
+                      <label>First Name</label>
+                      <input type="text" id="profile-fname" placeholder="Enter first name...">
+                    </div>
+                    <div class="input-group">
+                      <label>Last Name</label>
+                      <input type="text" id="profile-lname" placeholder="Enter last name...">
+                    </div>
+                  </div>
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div class="input-group">
+                      <label>Date of Birth</label>
+                      <input type="date" id="profile-dob">
+                    </div>
+                    <div class="input-group">
+                      <label>Email Address</label>
+                      <input type="email" id="profile-email" placeholder="operator@sovereign.mesh">
+                    </div>
+                  </div>
+
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div class="input-group">
+                      <label>Mobile Number</label>
+                      <input type="tel" id="profile-mobile" placeholder="+91 XXXX XXX XXX">
+                    </div>
+                    <div class="input-group">
+                      <label>Farm/Estate Name</label>
+                      <input type="text" id="profile-farm" placeholder="Sovereign Estate">
+                    </div>
+                  </div>
+
+                  <div class="input-group" style="margin-bottom: 2rem;">
+                    <label>Physical Address</label>
+                    <textarea id="profile-address" style="width: 100%; padding: 1rem; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 12px; color: white; resize: none; height: 80px;" placeholder="Enter full estate address..."></textarea>
+                  </div>
+
+                  <div style="display: flex; gap: 1rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 2;">
+                      <i data-lucide="save"></i> Update Sovereign Identity
+                    </button>
+                    <button type="button" id="profile-sync-btn" class="btn" style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);">
+                      <i data-lucide="refresh-cw"></i> Sync Cloud
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </section>

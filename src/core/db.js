@@ -2,8 +2,8 @@ import Dexie from 'dexie';
 
 export const db = new Dexie('LeafScanSovereignDB');
 
-db.version(6).stores({
-  users: '++id, username, password, email, farmName, avatar',
+db.version(7).stores({
+  users: '++id, username, password, email, farmName, avatar, firstName, lastName, dob, address, mobile, ipAddress, biometricEnabled',
   credentials: '++id, userId, credentialId, publicKey',
   history: '++id, userId, diseaseName, timestamp',
   plots: '++id, userId, name, crop',

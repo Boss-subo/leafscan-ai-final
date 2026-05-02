@@ -1881,3 +1881,124 @@ body.field-mode h2, body.field-mode h3 {
   40% { transform: scale(1); opacity: 1; }
 }
 
+
+
+/* ====================================================
+   MOBILE-FIRST RESPONSIVE OVERHAUL
+   ==================================================== */
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: none;
+}
+
+.aura-blob {
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+@media (max-width: 768px) {
+  .main-layout {
+    flex-direction: column;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .sidebar {
+    width: 100%;
+    height: auto;
+    min-height: unset;
+    flex-direction: row;
+    padding: 0;
+    border-right: none;
+    border-top: 1px solid var(--glass-border);
+    overflow-x: auto;
+    overflow-y: hidden;
+    order: 2;
+    background: rgba(3, 12, 8, 0.97);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    scrollbar-width: none;
+  }
+  .sidebar::-webkit-scrollbar { display: none; }
+
+  .sidebar-header, .logo-area, .profile-section, .sidebar-footer {
+    display: none !important;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    width: 100%;
+    justify-content: space-around;
+    flex-grow: unset;
+  }
+
+  .nav-links li {
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 8px;
+    margin-bottom: 0;
+    border-radius: 0;
+    min-width: 56px;
+    text-align: center;
+  }
+
+  .nav-links li span { font-size: 0.5rem; }
+  .nav-links li svg { width: 20px; height: 20px; }
+
+  .nav-links li.active {
+    border-radius: 0;
+    border-top: 2px solid var(--primary);
+    background: rgba(16, 185, 129, 0.08);
+  }
+
+  #sign-out-btn { display: none !important; }
+
+  .content-area {
+    flex: 1;
+    padding: 1rem;
+    padding-bottom: 90px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    order: 1;
+    height: calc(100dvh - 70px);
+  }
+
+  .auth-card {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 0;
+    padding: 2rem 1.5rem;
+    min-height: 100dvh;
+    overflow-y: auto;
+  }
+
+  .dashboard-grid-v2 { grid-template-columns: 1fr; }
+  .profile-layout { grid-template-columns: 1fr !important; }
+  .scanner-actions { flex-direction: column; }
+  .top-bar { flex-direction: column; align-items: flex-start; gap: 0.5rem; margin-bottom: 1.5rem; }
+  .top-bar h2 { font-size: 1.4rem; }
+  .plots-layout { grid-template-columns: 1fr !important; }
+  .command-grid { grid-template-columns: 1fr !important; }
+
+  .toast { bottom: 80px; right: 1rem; left: 1rem; width: auto; }
+  .glass-card:hover { transform: none; }
+
+  .landing-stats { flex-direction: column; gap: 1.5rem; }
+  .landing-stat-divider { display: none; }
+
+  .splash-screen, #auth-vault, .landing-screen {
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+}
