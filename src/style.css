@@ -2122,7 +2122,7 @@ html, body {
   /* --- AUTH & LANDING --- */
   #auth-vault {
     padding: 1.5rem !important;
-    display: flex !important;
+    display: flex;
     align-items: center !important;
     justify-content: center !important;
     background: #030806 !important;
