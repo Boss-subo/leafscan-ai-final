@@ -19,6 +19,15 @@ export function getTreatment(label) {
   return null;
 }
 
+export function formatMarkdown(text) {
+  if (!text) return '';
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g, '<em>$1</em>')
+    .replace(/^\* (.*$)/gm, '<li>$1</li>')
+    .replace(/\n/g, '<br>');
+}
+
 export function showToast(message, type = 'info') {
   const toast = document.createElement('div');
   toast.className = `toast toast-${type}`;

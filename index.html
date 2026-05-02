@@ -35,6 +35,7 @@
     <!-- TFJS is loaded dynamically in main.js -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link rel="stylesheet" href="./src/style.css">
 </head>
 <body>
     <div class="aura-container">
@@ -577,11 +578,13 @@
             <div id="chat-messages" class="chat-messages" style="flex: 1; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
               <div class="message system">How can I help you today? You can ask follow-up questions about your scans.</div>
             </div>
-            <div class="chat-input-area" style="padding: 1.5rem; border-top: 1px solid var(--glass-border); display: flex; gap: 1rem;">
-              <button id="mic-btn" class="icon-btn" style="background: rgba(255,255,255,0.05); border-radius: 12px; padding: 0 1rem;"><i data-lucide="mic"></i></button>
-              <input type="text" id="chat-input" placeholder="Ask about your plant's health..." style="flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); padding: 0.75rem 1.25rem; border-radius: 12px; color: white;">
-              <button id="send-chat" style="padding: 0.75rem 1.5rem; border-radius: 12px; background: var(--primary); border: none; color: white; cursor: pointer;"><i data-lucide="send"></i></button>
-            </div>
+            <form id="chat-form" class="chat-input-area" style="padding: 1.5rem; border-top: 1px solid var(--glass-border); display: flex; gap: 1rem; align-items: center;">
+              <button type="button" id="mic-btn" class="icon-btn" style="background: rgba(255,255,255,0.05); border-radius: 12px; height: 50px; width: 50px; display: flex; align-items: center; justify-content: center;"><i data-lucide="mic"></i></button>
+              <input type="text" id="chat-input" placeholder="Ask about your plant's health..." style="flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); padding: 0.85rem 1.25rem; border-radius: 12px; color: white; height: 50px;">
+              <button type="submit" id="send-chat" style="height: 50px; width: 60px; border-radius: 12px; background: var(--primary); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+              </button>
+            </form>
           </div>
         </section>
 
@@ -765,6 +768,6 @@
     </div>
 
     <!-- AI/ML Libraries -->
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="./src/main.js"></script>
 </body>
 </html>

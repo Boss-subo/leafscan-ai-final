@@ -840,8 +840,18 @@ body {
 }
 
 .message.system { background: rgba(255,255,255,0.05); align-self: center; font-size: 0.875rem; color: var(--text-muted); }
-.message.ai { background: var(--card-bg); align-self: flex-start; border: 1px solid var(--glass-border); }
-.message.user { background: var(--primary); color: white; align-self: flex-end; }
+.message.ai { 
+  background: var(--bg-card); 
+  align-self: flex-start; 
+  border: 1px solid var(--theme-border);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+.message.user { 
+  background: linear-gradient(135deg, var(--primary), #059669); 
+  color: white; 
+  align-self: flex-end; 
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+}
 
 .chat-input-area {
   padding: 1.5rem;
@@ -1837,3 +1847,28 @@ body.field-mode h2, body.field-mode h3 {
 .toast-error { border-left: 4px solid var(--danger); }
 .toast-warning { border-left: 4px solid var(--accent-gold); }
 .toast-info { border-left: 4px solid var(--primary-light); }
+
+/* --- CHAT LOADING ANIMATION --- */
+.message.loading {
+  display: flex;
+  gap: 4px;
+  padding: 12px 16px;
+  width: fit-content;
+}
+
+.message.loading .dot {
+  width: 6px;
+  height: 6px;
+  background: var(--text-muted);
+  border-radius: 50%;
+  animation: chat-dot-pulse 1.4s infinite ease-in-out;
+}
+
+.message.ai.loading .dot:nth-child(2) { animation-delay: 0.2s; }
+.message.ai.loading .dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes chat-dot-pulse {
+  0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+  40% { transform: scale(1); opacity: 1; }
+}
+

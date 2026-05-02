@@ -1,4 +1,4 @@
-import './style.css';
+// LeafScan AI - Main Entry Point
 import { state } from './core/state.js';
 import { db } from './core/db.js';
 import { fetchLocationAndAQI } from './services/weather-geo.js';
@@ -38,6 +38,11 @@ function initElements() {
     droneVel: document.getElementById('drone-vel'),
     exportMissionBtn: document.getElementById('export-mission-btn'),
     downloadMissionJson: document.getElementById('download-mission-json'),
+    
+    // Chat
+    chatInput: document.getElementById('chat-input'),
+    sendChatBtn: document.getElementById('send-chat'),
+    chatMessages: document.getElementById('chat-messages'),
   };
   return elements;
 }

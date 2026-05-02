@@ -1,4 +1,5 @@
 import { state } from '../core/state.js';
+import { showToast } from '../core/utils.js';
 
 export async function fetchWeather(lat, lng, elements) {
   if (!state.weatherKey) {
@@ -9,7 +10,9 @@ export async function fetchWeather(lat, lng, elements) {
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${state.weatherKey}&units=metric`;
     const res = await fetch(url);
     if (!res.ok) {
-      console.error(`Weather API Error: ${res.status}`);
+      const errData = await res.json().catch(() => ({}));
+      console.error(`Weather API Error: ${res.status} - ${errData.message || 'Unknown Error'}`);
+      if (res.status === 401) showToast("Weather API Key Invalid", "error");
       return;
     }
     const data = await res.json();
@@ -36,7 +39,10 @@ export async function fetchAQI(lat, lng, elements) {
   try {
     const url = `https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lng}&appid=${state.weatherKey}`;
     const res = await fetch(url);
-    if (!res.ok) return;
+    if (!res.ok) {
+      console.error(`AQI API Error: ${res.status}`);
+      return;
+    }
     const data = await res.json();
     if (data.list && data.list.length > 0) {
       const aqi = data.list[0].main.aqi;

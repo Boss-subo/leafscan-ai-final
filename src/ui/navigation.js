@@ -5,6 +5,7 @@ import { loadHistory } from './history.js';
 import { loadInventory } from './inventory.js';
 import { initMap } from './map.js';
 import { loadReminders } from './reminders.js';
+import { initChat } from './chat.js';
 
 export async function switchTab(tabId, elements) {
   if (!tabId) return;
@@ -40,6 +41,9 @@ export async function switchTab(tabId, elements) {
         break;
       case 'reminders':
         await loadReminders();
+        break;
+      case 'chat':
+        initChat();
         break;
       case 'command':
         initGlobalRiskChart();

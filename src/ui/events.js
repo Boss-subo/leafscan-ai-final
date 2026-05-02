@@ -1,13 +1,54 @@
+// LeafScan AI - Neural Event Listeners
 import { state } from '../core/state.js';
 import { db } from '../core/db.js';
 import { analyzeLeaf } from '../engines/analysis-logic.js';
 import { startAutonomousMission, exportMissionJSON } from '../engines/fleet-engine.js';
 import { switchTab } from './navigation.js';
-import { sendMessage } from './chat.js';
+import { sendMessage, testGeminiKey, toggleMic } from './chat.js';
 import { exportToPDF } from '../services/pdf-export.js';
 import { showToast } from '../core/utils.js';
 
+// --- ELITE CHAT ENGINE (Top-Level Global Bridge) ---
+export const handleChat = async () => {
+  const input = document.getElementById('chat-input');
+  const messages = document.getElementById('chat-messages');
+  
+  if (!input || !messages) return;
+
+  const text = input.value.trim();
+  if (text) {
+    input.value = '';
+    await sendMessage(text, messages);
+  }
+};
+
+// Bind to Window IMMEDIATELY on module load
+window.handleChat = handleChat;
+
+// Aggressive Top-Level Binding (Retries for DOM readiness)
+const bindChat = () => {
+  const chatForm = document.getElementById('chat-form');
+  const micBtn = document.getElementById('mic-btn');
+
+  if (chatForm && !chatForm.dataset.bound) {
+    chatForm.dataset.bound = 'true';
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      handleChat();
+    });
+  }
+
+  if (micBtn && !micBtn.dataset.bound) {
+    micBtn.dataset.bound = 'true';
+    micBtn.addEventListener('click', () => toggleMic());
+  }
+};
+
+// Polling for DOM readiness because chat tab might be late
+setInterval(bindChat, 1000);
+
 export function setupEventListeners(elements) {
+  console.log("LeafScan AI: Establishing Neural Listeners...");
   // Sidebar Navigation
   document.querySelectorAll('.nav-links li').forEach(li => {
     li.addEventListener('click', () => switchTab(li.dataset.tab, elements));
@@ -139,31 +180,45 @@ export function setupEventListeners(elements) {
     await new Promise(r => setTimeout(r, 500));
     
     document.getElementById('config-modal').style.display = 'none';
-    showToast("Sovereign Keys Synchronized", "success");
+    showToast("Sovereign Keys Synchronized. Reloading Engine...", "success");
     
-    if (typeof window.bootstrap === 'function') {
-      window.bootstrap();
-    } else {
+    setTimeout(() => {
       location.reload();
-    }
+    }, 1000);
   });
 
   document.getElementById('test-api')?.addEventListener('click', async () => {
     const gKey = document.getElementById('gemini-key').value;
     const wKey = document.getElementById('weather-key').value;
     
-    showToast("Testing Handshake...", "info");
+    showToast("Testing Handshake with Global Mesh...", "info");
     
     // Test Weather
     try {
       const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=22.57&lon=88.36&appid=${wKey}`);
       if (res.ok) {
         showToast("Weather API: AUTHENTICATED", "success");
+        const dWeather = document.getElementById('diag-weather');
+        if (dWeather) { dWeather.textContent = "VERIFIED"; dWeather.style.color = "var(--primary)"; }
       } else {
         showToast("Weather API: ACCESS DENIED (Invalid Key)", "error");
+        const dWeather = document.getElementById('diag-weather');
+        if (dWeather) { dWeather.textContent = "FAILED"; dWeather.style.color = "var(--danger)"; }
       }
     } catch (e) {
       showToast("Weather API: CONNECTION FAILED", "error");
+    }
+
+    // Test Gemini
+    const geminiOk = await testGeminiKey(gKey);
+    if (geminiOk) {
+      showToast("Gemini Intel: AUTHENTICATED", "success");
+      const dGemini = document.getElementById('diag-gemini');
+      if (dGemini) { dGemini.textContent = "VERIFIED"; dGemini.style.color = "var(--primary)"; }
+    } else {
+      showToast("Gemini Intel: AUTHENTICATION FAILED", "error");
+      const dGemini = document.getElementById('diag-gemini');
+      if (dGemini) { dGemini.textContent = "FAILED"; dGemini.style.color = "var(--danger)"; }
     }
   });
 
@@ -176,4 +231,19 @@ export function setupEventListeners(elements) {
       // localStorage.removeItem('sovereign_operator');
     }, 1000);
   });
+
+  document.getElementById('clear-cache-btn')?.addEventListener('click', async () => {
+    showToast("Purging System & Service Worker Cache...", "info");
+    localStorage.clear();
+    if ('caches' in window) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map(key => caches.delete(key)));
+    }
+    setTimeout(() => {
+      location.reload(true);
+    }, 1000);
+  });
+
+  // Final Refresh
+  if (window.lucide) lucide.createIcons();
 }
