@@ -2044,145 +2044,162 @@ html, body {
 }
 
 @media (max-width: 768px) {
+  /* --- GLOBAL MOBILE RESET --- */
   .main-layout {
     flex-direction: column;
     height: 100dvh;
     overflow: hidden;
   }
 
-  .sidebar {
+  .content-area {
+    padding: 1rem 1rem 100px 1rem !important;
+    height: calc(100dvh - 70px);
+    overflow-y: auto;
+  }
+
+  /* --- HEADER & TOP BAR --- */
+  .top-bar {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 1.5rem !important;
+    margin-bottom: 2rem !important;
+    padding: 0.5rem 0 !important;
+  }
+
+  .top-bar h2 {
+    font-size: 1.5rem !important;
+    text-align: left;
     width: 100%;
-    height: auto;
-    min-height: unset;
-    flex-direction: row;
-    padding: 0;
-    border-right: none;
-    border-top: 1px solid var(--glass-border);
-    overflow-x: auto;
-    overflow-y: hidden;
-    order: 2;
-    background: rgba(3, 12, 8, 0.97);
-    backdrop-filter: blur(20px);
-    box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+  }
+
+  .quick-stats {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 1rem !important;
+  }
+
+  .stat-card {
+    width: 100% !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem !important;
+  }
+
+  /* --- DASHBOARD & GRIDS --- */
+  .dashboard-grid-v2, .dashboard-layout, .analytics-layout, .plots-layout {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1.5rem !important;
+    width: 100% !important;
+  }
+
+  .glass-card {
+    width: 100% !important;
+    margin-bottom: 0 !important;
+    padding: 1.5rem !important;
+    border-radius: 16px !important;
+  }
+
+  .sensor-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1rem !important;
+    padding: 1.25rem !important;
+  }
+
+  /* --- BUTTONS & ACTIONS --- */
+  .scanner-actions {
+    flex-direction: column !important;
+    gap: 1rem !important;
+  }
+
+  .btn {
+    width: 100% !important;
+    padding: 1rem !important;
+    justify-content: center !important;
+  }
+
+  /* --- AUTH & LANDING --- */
+  #auth-vault {
+    padding: 1.5rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: #030806 !important;
+  }
+
+  .auth-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 2.5rem 1.5rem !important;
+    border-radius: 24px !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .auth-header h2 { font-size: 1.75rem !important; }
+  .auth-header p { font-size: 0.8rem !important; line-height: 1.4; }
+
+  /* --- BOTTOM NAV (MODERN APP STYLE) --- */
+  .sidebar {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 1000;
-    scrollbar-width: none;
-  }
-  .sidebar::-webkit-scrollbar { display: none; }
-
-  .sidebar-header, .logo-area, .profile-section, .sidebar-footer {
-    display: none !important;
+    width: 100% !important;
+    height: 75px !important;
+    background: rgba(3, 12, 8, 0.98) !important;
+    backdrop-filter: blur(25px) !important;
+    flex-direction: row !important;
+    padding: 0 !important;
+    border-top: 1px solid var(--glass-border);
+    z-index: 10000;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
   }
 
   .nav-links {
-    display: flex;
-    flex-direction: row;
-    padding: 0;
-    width: 100%;
-    justify-content: space-around;
-    flex-grow: unset;
-  }
-
-  .nav-links li {
-    flex-direction: column;
-    gap: 4px;
-    padding: 10px 8px;
-    margin-bottom: 0;
-    border-radius: 0;
-    min-width: 56px;
-    text-align: center;
-  }
-
-  .nav-links li span { display: none; }
-  .nav-links li i { width: 24px; height: 24px; }
-  .nav-links li {
-    padding: 12px 0;
-    flex: 1;
-    min-width: 0;
-  }
-
-  .nav-links li.active {
-    border-radius: 0;
-    border-top: 2px solid var(--primary);
-    background: rgba(16, 185, 129, 0.08);
-  }
-
-  #sign-out-btn { display: none !important; }
-
-  .content-area {
-    flex: 1;
-    padding: 1rem;
-    padding-bottom: 90px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    order: 1;
-    height: calc(100dvh - 70px);
-  }
-
-  .auth-card {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 0;
-    padding: 2rem 1.5rem;
-    min-height: 100dvh;
-    overflow-y: auto;
-  }
-
-  /* Universal Mobile First Stacking (Step 2 & 3) */
-  .dashboard-grid-v2, .dashboard-layout, .analytics-layout, .profile-layout, .plots-layout, .command-grid, .sensor-grid {
-    grid-template-columns: 1fr !important; /* Forces vertical stacking */
+    display: flex !important;
+    flex-direction: row !important;
     width: 100% !important;
-    gap: 1.5rem !important;
-    padding: 0 !important; /* Let parent content-area handle outer padding */
+    height: 100% !important;
+    padding: 0 10px !important;
+    justify-content: space-around !important;
+    align-items: center !important;
   }
 
-  .stat-card, .glass-card {
-    width: 100% !important; /* Step 3: Use 100% width, not px */
-    margin-bottom: 1.5rem;   /* Step 2: Add space between items */
-    padding: 1.5rem !important; /* Step 3: Increase breathing room */
-  }
-
-  .quick-stats {
-    flex-direction: column;
-    width: 100%;
-    gap: 1.25rem;
-  }
-
-  .top-bar {
-    padding: 1rem 0;
-    margin-bottom: 1.5rem;
-  }
-
-  .top-bar h2 {
-    font-size: 1.25rem; /* Step 4: Responsive Fonts */
-    letter-spacing: -0.5px;
-  }
-
-  /* Bottom Nav Optimization (Step 4 & 5) */
-  .nav-links li span { 
-    display: none; 
-  }
   .nav-links li {
-    padding: 15px 0;
     flex: 1;
-    min-width: 0;
-    border-top: 2px solid transparent;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding: 10px 0 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    border: none !important;
   }
-  .nav-links li.active {
-    border-top-color: var(--primary);
+
+  .nav-links li span { display: none !important; }
+  .nav-links li i { width: 22px !important; height: 22px !important; color: var(--text-muted); }
+
+  .nav-links li.active i {
+    color: var(--primary-light) !important;
+    filter: drop-shadow(0 0 8px var(--primary));
   }
-  .nav-links li i { width: 24px; height: 24px; }
 
-  .content-area {
-    padding: 1rem 1.25rem 100px 1.25rem; /* Step 3: More breathing room at edges */
+  .nav-links li.active::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 25px;
+    height: 3px;
+    background: var(--primary);
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 0 10px var(--primary);
   }
-
-  .toast { bottom: 90px; right: 1rem; left: 1rem; width: auto; }
-  .glass-card:hover { transform: none; }
-
+}
   .landing-stats { flex-direction: column; gap: 1.5rem; }
   .landing-stat-divider { display: none; }
 
