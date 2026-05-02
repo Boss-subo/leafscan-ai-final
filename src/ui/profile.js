@@ -1,84 +1,107 @@
+import { db as localDb } from '../core/db.js';
 import { state } from '../core/state.js';
-import { db } from '../core/db.js';
 import { showToast } from '../core/utils.js';
+import { getUserProfile, updateUserProfile } from '../services/firebase.js';
 
 export async function initProfile() {
-  const user = await db.users.get(state.currentUser.id);
-  if (!user) return;
+  const uid = state.currentUser?.id || state.currentUser?.uid;
+  if (!uid) return;
 
-  // Fill Form
-  document.getElementById('profile-fname').value = user.firstName || '';
-  document.getElementById('profile-lname').value = user.lastName || '';
-  document.getElementById('profile-dob').value = user.dob || '';
-  document.getElementById('profile-email').value = user.email || '';
-  document.getElementById('profile-mobile').value = user.mobile || '';
-  document.getElementById('profile-farm').value = user.farmName || '';
-  document.getElementById('profile-address').value = user.address || '';
+  let user = state.currentUser;
 
-  // Technical Metadata
-  document.getElementById('profile-display-name').innerText = `${user.firstName || 'Operator'} ${user.lastName || ''}`;
-  document.getElementById('profile-display-farm').innerText = (user.farmName || 'Sovereign Estate').toUpperCase();
-  document.getElementById('profile-avatar-large').src = user.avatar || `https://api.dicebear.com/7.x/bottts/svg?seed=${user.username}`;
-  
+  // Try fetching fresh data from cloud
+  try {
+    const cloudProfile = await getUserProfile(uid);
+    if (cloudProfile) user = cloudProfile;
+  } catch(e) {
+    console.warn("Cloud profile load failed, using local state.");
+  }
+
+  // Fill Form Fields
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+  set('profile-fname', user.firstName);
+  set('profile-lname', user.lastName);
+  set('profile-dob', user.dob);
+  set('profile-email', user.email);
+  set('profile-mobile', user.mobile);
+  set('profile-farm', user.farmName);
+  set('profile-address', user.address);
+
+  // Update display elements
+  const fullName = [user.firstName, user.lastName].filter(Boolean).join(' ') || user.username || 'Operator';
+  const farm = user.farmName || 'Sovereign Estate';
+
+  const setText = (id, val) => { const el = document.getElementById(id); if (el) el.innerText = val; };
+  setText('profile-display-name', fullName);
+  setText('profile-display-farm', farm.toUpperCase());
+
+  const avatarEl = document.getElementById('profile-avatar-large');
+  if (avatarEl) avatarEl.src = user.avatar || `https://api.dicebear.com/7.x/bottts/svg?seed=${user.username || uid}`;
+
   // Biometric Status
-  const creds = await db.credentials.where('userId').equals(user.id).toArray();
+  const creds = await localDb.credentials.where('userId').equals(uid).toArray();
   const bioStatus = document.getElementById('profile-biometric-status');
   if (bioStatus) {
-    bioStatus.innerText = creds.length > 0 ? "ACTIVE" : "DISABLED";
+    bioStatus.innerText = creds.length > 0 ? "ACTIVE" : "NOT ENROLLED";
     bioStatus.style.color = creds.length > 0 ? "var(--primary)" : "var(--danger)";
   }
 
-  // IP Address Fetch
-  fetchIP();
+  // Fetch IP
+  fetchIP(uid);
 
-  // Bind Form Submit
+  // Bind Save Form
   const form = document.getElementById('profile-form');
   if (form && !form.dataset.bound) {
     form.dataset.bound = 'true';
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      await saveProfile();
+      await saveProfile(uid);
     });
   }
 }
 
-async function fetchIP() {
+async function fetchIP(uid) {
   const ipEl = document.getElementById('profile-ip');
   if (!ipEl) return;
   try {
     const res = await fetch('https://api.ipify.org?format=json');
     const data = await res.json();
     ipEl.innerText = data.ip;
-    // Save IP to DB automatically
-    await db.users.update(state.currentUser.id, { ipAddress: data.ip });
+    await updateUserProfile(uid, { ipAddress: data.ip });
   } catch (e) {
-    ipEl.innerText = "LOCAL_NODE";
+    ipEl.innerText = 'LOCAL_NODE';
   }
 }
 
-async function saveProfile() {
+async function saveProfile(uid) {
+  const get = (id) => document.getElementById(id)?.value || '';
   const updates = {
-    firstName: document.getElementById('profile-fname').value,
-    lastName: document.getElementById('profile-lname').value,
-    dob: document.getElementById('profile-dob').value,
-    email: document.getElementById('profile-email').value,
-    mobile: document.getElementById('profile-mobile').value,
-    farmName: document.getElementById('profile-farm').value,
-    address: document.getElementById('profile-address').value
+    firstName: get('profile-fname'),
+    lastName: get('profile-lname'),
+    dob: get('profile-dob'),
+    email: get('profile-email'),
+    mobile: get('profile-mobile'),
+    farmName: get('profile-farm'),
+    address: get('profile-address')
   };
 
   try {
-    await db.users.update(state.currentUser.id, updates);
-    
-    // Update State & Global UI
-    state.currentUser = { ...state.currentUser, ...updates };
-    document.getElementById('user-profile-name').innerText = updates.firstName ? `${updates.firstName} ${updates.lastName}` : state.currentUser.username;
-    document.getElementById('user-farm-name').innerText = updates.farmName;
-    document.getElementById('profile-display-name').innerText = `${updates.firstName} ${updates.lastName}`;
-    document.getElementById('profile-display-farm').innerText = updates.farmName.toUpperCase();
+    // Save to cloud
+    await updateUserProfile(uid, updates);
 
-    showToast("Sovereign Identity Synchronized.", "success");
+    // Update local state
+    state.currentUser = { ...state.currentUser, ...updates };
+
+    // Update global UI
+    const fullName = [updates.firstName, updates.lastName].filter(Boolean).join(' ') || state.currentUser.username;
+    document.getElementById('user-profile-name')?.innerText !== undefined && (document.getElementById('user-profile-name').innerText = fullName);
+    document.getElementById('user-farm-name')?.innerText !== undefined && (document.getElementById('user-farm-name').innerText = updates.farmName);
+    document.getElementById('profile-display-name')?.innerText !== undefined && (document.getElementById('profile-display-name').innerText = fullName);
+    document.getElementById('profile-display-farm')?.innerText !== undefined && (document.getElementById('profile-display-farm').innerText = updates.farmName.toUpperCase());
+
+    showToast("Profile saved to Cloud!", "success");
   } catch (e) {
-    showToast("Update Failed: Database write error.", "error");
+    console.error(e);
+    showToast("Save failed: " + e.message, "error");
   }
 }

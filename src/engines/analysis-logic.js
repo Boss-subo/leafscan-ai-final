@@ -5,6 +5,7 @@ import { showToast, getTreatment } from '../core/utils.js';
 import { runLocalInference, runVMSAnalysis } from './ai-engine.js';
 import { XAIEngine } from './xai-engine.js';
 import { EconomicEngine } from './economic-engine.js';
+import { saveHistoryToCloud } from '../services/firebase.js';
 
 export async function analyzeLeaf(elements) {
   const image = state.currentImage;
@@ -89,15 +90,26 @@ export async function analyzeLeaf(elements) {
         XAIEngine.generateHeatmap(elements.imagePreview, heatmapCanvas, localResult.classIdx);
       }
 
-      // Save to History
+      // Save to Local DB
+      const uid = state.currentUser?.id || state.currentUser?.uid;
       await db.history.add({
-        userId: state.currentUser?.id,
+        userId: uid,
         timestamp: new Date(),
         image: image,
         diseaseName: localResult.label,
         confidence: confidence,
         vms: vmsData
       });
+
+      // Save to Cloud (cross-device sync)
+      try {
+        await saveHistoryToCloud(uid, {
+          userId: uid,
+          diseaseName: localResult.label,
+          confidence: confidence,
+          vms: vmsData
+        });
+      } catch(e) { console.warn('Cloud history save failed:', e); }
 
       showToast(`Sovereign Diagnosis Complete: ${localResult.label}`, "success");
     }

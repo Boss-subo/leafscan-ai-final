@@ -1,24 +1,34 @@
-import { db } from '../core/db.js';
+import { db as localDb } from '../core/db.js';
 import { state } from '../core/state.js';
 import { showToast } from '../core/utils.js';
+import {
+  cloudRegister,
+  cloudLogin,
+  cloudLogout,
+  getUserProfile,
+  updateUserProfile,
+  saveHistoryToCloud,
+  loadHistoryFromCloud
+} from '../services/firebase.js';
 
 let isRegisterMode = false;
 
 export function initAuth(onSuccess) {
   const authVault = document.getElementById('auth-vault');
   const loginBtn = document.getElementById('login-btn');
-  const googleBtn = document.getElementById('google-login');
   const biometricBtn = document.getElementById('biometric-btn');
   const usernameInput = document.getElementById('login-username');
   const passwordInput = document.getElementById('login-password');
+  const emailInput = document.getElementById('login-email');
   const farmInput = document.getElementById('login-farm');
   const farmGroup = document.getElementById('farm-name-group');
+  const emailGroup = document.getElementById('email-group');
   const toggleLink = document.getElementById('toggle-auth-mode');
   const strengthBar = document.getElementById('strength-bar');
   const strengthText = document.getElementById('strength-text');
   const strengthContainer = document.getElementById('password-strength');
 
-  // Password Strength Logic
+  // Password Strength
   passwordInput?.addEventListener('input', (e) => {
     if (!isRegisterMode) return;
     const val = e.target.value;
@@ -40,38 +50,65 @@ export function initAuth(onSuccess) {
     e.preventDefault();
     isRegisterMode = !isRegisterMode;
     document.querySelector('.auth-card h2').innerText = isRegisterMode ? "Register Identity" : "Sovereign Access";
-    loginBtn.innerText = isRegisterMode ? "Create Profile" : "Authenticate Identity";
-    farmGroup.style.display = isRegisterMode ? 'block' : 'none';
+    loginBtn.innerText = isRegisterMode ? "Create Cloud Profile" : "Authenticate Identity";
+    if (farmGroup) farmGroup.style.display = isRegisterMode ? 'block' : 'none';
+    if (emailGroup) emailGroup.style.display = isRegisterMode ? 'block' : 'none';
   });
 
   loginBtn?.addEventListener('click', async () => {
-    const user = usernameInput.value.trim();
-    const pass = passwordInput.value.trim();
-    const farm = farmInput.value.trim();
+    const username = usernameInput?.value.trim();
+    const password = passwordInput?.value.trim();
+    const email = emailInput?.value.trim();
+    const farm = farmInput?.value.trim();
 
-    if (!user || !pass) { showToast("Credentials required.", "error"); return; }
+    if (!password) { showToast("Password required.", "error"); return; }
 
-    if (isRegisterMode) {
-      const existing = await db.users.where('username').equals(user).first();
-      if (existing) { showToast("Identity exists.", "error"); return; }
-      const userId = await db.users.add({ username: user, password: pass, farmName: farm || "Sovereign Estate" });
-      finalizeAuth({ id: userId, username: user, farmName: farm || "Sovereign Estate" });
-    } else {
-      const profile = await db.users.where('username').equals(user).first();
-      if (profile && profile.password === pass) { finalizeAuth(profile); }
-      else { showToast("Invalid Signature.", "error"); }
+    loginBtn.innerText = isRegisterMode ? "Creating..." : "Authenticating...";
+    loginBtn.disabled = true;
+
+    try {
+      let userObj;
+
+      if (isRegisterMode) {
+        if (!email || !username) { showToast("Email and username required.", "error"); return; }
+        userObj = await cloudRegister(email, password, username, farm);
+        showToast("Cloud Identity Created!", "success");
+      } else {
+        // Login with email
+        const loginEmail = email || username; // support email in username field too
+        if (!loginEmail) { showToast("Email required.", "error"); return; }
+        userObj = await cloudLogin(loginEmail, password);
+        showToast(`Welcome back, ${userObj.username || 'Operator'}!`, "success");
+      }
+
+      finalizeAuth(userObj);
+    } catch (err) {
+      console.error("Auth error:", err);
+      let msg = "Authentication failed.";
+      if (err.code === 'auth/email-already-in-use') msg = "Email already registered. Please login.";
+      else if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') msg = "Invalid email or password.";
+      else if (err.code === 'auth/user-not-found') msg = "No account found. Please register.";
+      else if (err.code === 'auth/invalid-email') msg = "Invalid email format.";
+      else if (err.code === 'auth/weak-password') msg = "Password too weak (min 6 characters).";
+      showToast(msg, "error");
+    } finally {
+      loginBtn.innerText = isRegisterMode ? "Create Cloud Profile" : "Authenticate Identity";
+      loginBtn.disabled = false;
     }
   });
 
-  // REAL BIOMETRIC LOGIN (WebAuthn)
+  // Biometric Login
   biometricBtn?.addEventListener('click', async () => {
     try {
-      const credentials = await db.credentials.toArray();
+      if (!window.isSecureContext) {
+        showToast("Biometrics require HTTPS.", "warning");
+        return;
+      }
+      const credentials = await localDb.credentials.toArray();
       if (credentials.length === 0) {
         showToast("No biometric data found. Please login with password first.", "warning");
         return;
       }
-
       const options = {
         publicKey: {
           challenge: crypto.getRandomValues(new Uint8Array(32)),
@@ -80,122 +117,91 @@ export function initAuth(onSuccess) {
             id: base64ToUint8Array(c.credentialId),
             type: 'public-key'
           })),
-          userVerification: 'required'
+          userVerification: 'preferred'
         }
       };
-
       const assertion = await navigator.credentials.get(options);
       if (assertion) {
         const credId = uint8ArrayToBase64(new Uint8Array(assertion.rawId));
-        const storedCred = await db.credentials.where('credentialId').equals(credId).first();
-        const user = await db.users.get(storedCred.userId);
-        finalizeAuth(user);
+        const storedCred = await localDb.credentials.where('credentialId').equals(credId).first();
+        if (storedCred) {
+          const profile = await getUserProfile(storedCred.userId);
+          if (profile) finalizeAuth(profile);
+        }
       }
     } catch (err) {
       console.error(err);
-      showToast("Biometric Authentication Failed", "error");
+      showToast("Biometric Authentication Failed: " + err.message, "error");
     }
-  });
-
-  googleBtn?.addEventListener('click', () => {
-    const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-    if (!clientId) { showToast("Google Client ID missing.", "warning"); return; }
-    google.accounts.id.initialize({
-      client_id: clientId,
-      callback: (res) => {
-        const payload = parseJwt(res.credential);
-        finalizeAuth({ id: payload.sub, username: payload.name, farmName: 'Google Estate', avatar: payload.picture });
-      }
-    });
-    google.accounts.id.prompt();
   });
 
   function finalizeAuth(userObj) {
     state.currentUser = userObj;
-    localStorage.setItem('sovereign_operator_id', userObj.id);
+    localStorage.setItem('leafscan_uid', userObj.id || userObj.uid);
     authVault.style.display = 'none';
     updateUIWithProfile(userObj);
     onSuccess(userObj);
-    showToast(`Welcome back, Operator ${userObj.username}`, "success");
 
-    // Ask to enable biometrics if not already enabled
-    checkBiometricEnrollment(userObj.id);
+    // Offer biometrics after login
+    setTimeout(() => checkBiometricEnrollment(userObj.id || userObj.uid), 2500);
   }
 }
 
 async function checkBiometricEnrollment(userId) {
-  const existing = await db.credentials.where('userId').equals(userId).first();
-  if (!existing) {
+  const existing = await localDb.credentials.where('userId').equals(userId).first();
+  if (!existing && window.isSecureContext) {
     setTimeout(() => {
-      if (confirm("Would you like to enable Real Biometrics (Fingerprint/Face ID) for faster login next time?")) {
+      if (confirm("Enable Biometric Login (Fingerprint/Face ID) for next time?")) {
         enrollBiometrics(userId);
       }
-    }, 2000);
+    }, 500);
   }
 }
 
 async function enrollBiometrics(userId) {
   try {
-    if (!window.isSecureContext) {
-      showToast("Biometrics require a secure HTTPS context.", "warning");
-      return;
-    }
-
-    const user = await db.users.get(userId);
     const enc = new TextEncoder();
-    
-    // Robust WebAuthn Configuration
+    const profile = await getUserProfile(userId);
     const options = {
       publicKey: {
         challenge: crypto.getRandomValues(new Uint8Array(32)),
-        rp: { name: "LeafScan AI" }, // Browser will automatically associate with the current domain
+        rp: { name: "LeafScan AI" },
         user: {
-          id: enc.encode(String(userId)), 
-          name: user.username,
-          displayName: user.username
+          id: enc.encode(String(userId)),
+          name: profile?.email || profile?.username || userId,
+          displayName: profile?.username || 'Operator'
         },
         pubKeyCredParams: [{ alg: -7, type: "public-key" }],
         timeout: 60000,
-        authenticatorSelection: { 
-          userVerification: "preferred", // More compatible than "required"
-          authenticatorAttachment: "platform" // Ensures it uses the device's built-in sensor
+        authenticatorSelection: {
+          userVerification: "preferred",
+          authenticatorAttachment: "platform"
         }
       }
     };
-
     const credential = await navigator.credentials.create(options);
     if (credential) {
       const credId = uint8ArrayToBase64(new Uint8Array(credential.rawId));
-      await db.credentials.add({
-        userId: userId,
-        credentialId: credId,
-        publicKey: "" 
-      });
-      showToast("Biometrics Registered Successfully!", "success");
+      await localDb.credentials.add({ userId, credentialId: credId, publicKey: "" });
+      showToast("Biometrics Registered!", "success");
     }
   } catch (err) {
-    console.error("Biometric Enrollment Error:", err);
-    // Provide a clear explanation for common failures
+    console.error("Biometric Enrollment:", err);
     let msg = err.message;
-    if (err.name === 'NotAllowedError') msg = "Enrollment cancelled or timed out.";
-    else if (err.name === 'SecurityError') msg = "Domain mismatch or insecure context.";
-    
-    showToast(`Enrollment Error: ${msg}`, "error");
+    if (err.name === 'NotAllowedError') msg = "Cancelled or timed out.";
+    showToast("Enrollment Error: " + msg, "error");
   }
 }
 
 function updateUIWithProfile(user) {
+  const username = user.username || user.displayName || 'Operator';
+  const farm = user.farmName || 'Sovereign Estate';
   const profileName = document.getElementById('user-profile-name');
   const farmName = document.getElementById('user-farm-name');
   const avatar = document.getElementById('user-avatar');
-  if (profileName) profileName.innerText = user.username;
-  if (farmName) farmName.innerText = user.farmName;
-  if (avatar) avatar.src = user.avatar || `https://api.dicebear.com/7.x/bottts/svg?seed=${user.username}`;
-}
-
-function parseJwt(t) {
-  const base64 = t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-  return JSON.parse(decodeURIComponent(window.atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')));
+  if (profileName) profileName.innerText = username;
+  if (farmName) farmName.innerText = farm;
+  if (avatar) avatar.src = user.avatar || `https://api.dicebear.com/7.x/bottts/svg?seed=${username}`;
 }
 
 function uint8ArrayToBase64(buffer) {
@@ -207,8 +213,7 @@ function uint8ArrayToBase64(buffer) {
 
 function base64ToUint8Array(base64) {
   const binary_string = window.atob(base64);
-  const len = binary_string.length;
-  const bytes = new Uint8Array(len);
-  for (let i = 0; i < len; i++) bytes[i] = binary_string.charCodeAt(i);
+  const bytes = new Uint8Array(binary_string.length);
+  for (let i = 0; i < binary_string.length; i++) bytes[i] = binary_string.charCodeAt(i);
   return bytes;
 }
