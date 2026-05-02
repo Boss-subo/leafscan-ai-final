@@ -8,7 +8,8 @@ import {
   getUserProfile,
   updateUserProfile,
   saveHistoryToCloud,
-  loadHistoryFromCloud
+  loadHistoryFromCloud,
+  cloudGoogleLogin
 } from '../services/firebase.js';
 
 let isRegisterMode = false;
@@ -16,6 +17,7 @@ let isRegisterMode = false;
 export function initAuth(onSuccess) {
   const authVault = document.getElementById('auth-vault');
   const loginBtn = document.getElementById('login-btn');
+  const googleBtn = document.getElementById('google-login');
   const biometricBtn = document.getElementById('biometric-btn');
   const usernameInput = document.getElementById('login-username');
   const passwordInput = document.getElementById('login-password');
@@ -94,6 +96,20 @@ export function initAuth(onSuccess) {
     } finally {
       loginBtn.innerText = isRegisterMode ? "Create Cloud Profile" : "Authenticate Identity";
       loginBtn.disabled = false;
+    }
+  });
+
+  googleBtn?.addEventListener('click', async () => {
+    try {
+      googleBtn.disabled = true;
+      const userObj = await cloudGoogleLogin();
+      showToast(`Sovereign Sync Complete: Welcome ${userObj.username}!`, "success");
+      finalizeAuth(userObj);
+    } catch (err) {
+      console.error(err);
+      showToast("Google Authentication Failed.", "error");
+    } finally {
+      googleBtn.disabled = false;
     }
   });
 

@@ -9,7 +9,9 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
   onAuthStateChanged,
-  signOut
+  signOut,
+  GoogleAuthProvider,
+  signInWithPopup
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -66,6 +68,26 @@ export async function cloudLogin(email, password) {
 
 export async function cloudLogout() {
   await signOut(auth);
+}
+
+export async function cloudGoogleLogin() {
+  const provider = new GoogleAuthProvider();
+  const cred = await signInWithPopup(auth, provider);
+  
+  // Check if profile exists, if not create one
+  const profile = await getUserProfile(cred.user.uid);
+  if (!profile) {
+    await setDoc(doc(db, 'users', cred.user.uid), {
+      uid: cred.user.uid,
+      username: cred.user.displayName,
+      email: cred.user.email,
+      avatar: cred.user.photoURL,
+      farmName: 'Google Estate',
+      createdAt: serverTimestamp()
+    });
+  }
+  
+  return await getUserProfile(cred.user.uid);
 }
 
 // ─── USER PROFILE ─────────────────────────────────────────────────────────────
