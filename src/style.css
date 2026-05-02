@@ -2199,7 +2199,6 @@ html, body {
     border-radius: 0 0 10px 10px;
     box-shadow: 0 0 10px var(--primary);
   }
-}
   .landing-stats { flex-direction: column; gap: 1.5rem; }
   .landing-stat-divider { display: none; }
 
@@ -2207,4 +2206,16 @@ html, body {
     -webkit-transform: translateZ(0);
     backface-visibility: hidden;
   }
+}
+
+/* --- Build Integrity Stamp --- */
+body::after {
+  content: "BUILD v1.0.8-RESPONSIVE-FIX";
+  position: fixed;
+  bottom: 85px;
+  right: 10px;
+  font-size: 8px;
+  color: rgba(255,255,255,0.1);
+  pointer-events: none;
+  z-index: 10001;
 }
