@@ -299,8 +299,8 @@
 
 
           <!-- NEW: Green IoT Sensor Hub -->
-          <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem; margin-bottom: 2rem;">
-            <div class="glass-card env-station" style="border-left: 4px solid var(--accent-gold); display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; padding: 1.5rem;">
+          <div class="dashboard-layout">
+            <div class="glass-card env-station sensor-grid">
               <div class="env-stat-item">
                 <small><i data-lucide="thermometer"></i> AIR TEMP</small>
                 <h4 id="live-temp">--°C</h4>
@@ -551,7 +551,7 @@
           <div class="top-bar">
             <h2>Growth Analytics</h2>
           </div>
-          <div class="analytics-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2rem;">
+          <div class="analytics-layout">
             <div class="glass-card chart-container" style="height: 400px;">
               <h3>7-Day Disease Risk</h3>
               <div class="chart-wrapper" style="height: 300px;"><canvas id="riskChart"></canvas></div>
