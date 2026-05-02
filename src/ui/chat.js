@@ -72,14 +72,15 @@ export async function sendMessage(text, containerId) {
     ${state.lastDiagnosis ? `CONTEXT: User scanned a plant. Result: ${state.lastDiagnosis.diseaseName}.` : ''}`;
   const fullPrompt = `${systemPrompt}\n\nUser: ${text}`;
 
-  // Candidate Models (Priority Order)
+  // Candidate Models (Priority Order for May 2026)
   const candidates = [
     state.activeGeminiModel,
     localStorage.getItem('leafscan_active_model'),
-    'gemini-1.5-flash',
-    'gemini-1.5-pro',
-    'gemini-pro',
-    'gemini-1.0-pro'
+    'gemini-2.5-flash',
+    'gemini-2.5-pro',
+    'gemini-2.0-flash',
+    'gemini-flash-latest',
+    'gemini-pro-latest'
   ].filter(Boolean);
 
   let success = false;
