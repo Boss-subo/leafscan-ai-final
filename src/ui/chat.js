@@ -17,151 +17,116 @@ export async function initChat() {
 
 export async function syncAiModel(keyOverride = null) {
   const key = keyOverride || state.geminiKey;
-  if (!key) {
-    showToast("Please enter an API Key first", "error");
-    return null;
-  }
+  if (!key) return null;
   
-  try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${key}`);
-    const data = await res.json();
-    
-    if (!res.ok) throw new Error(data.error?.message || "Sync Failed");
-    
-    const validModel = data.models.find(m => m.supportedGenerationMethods.includes('generateContent'));
-    if (validModel) {
-      const modelId = validModel.name.split('/').pop();
-      state.activeGeminiModel = modelId;
-      localStorage.setItem('leafscan_active_model', modelId);
-      if (!keyOverride) showToast(`AI Synced: Using ${modelId}`, "success");
-      return modelId;
-    } else {
-      throw new Error("No compatible models found for this key.");
-    }
-  } catch (e) {
-    if (!keyOverride) {
-      console.error("Sync Error:", e);
-      showToast(`Sync Failed: ${e.message}`, "error");
-    }
-    return null;
-  }
-}
+  const endpoints = [
+    'https://generativelanguage.googleapis.com/v1/models',
+    'https://generativelanguage.googleapis.com/v1beta/models'
+  ];
 
-export async function testGeminiKey(key) {
-  if (!key) return false;
-  
-  // Try to sync first to find a working model
-  const discoveredModel = await syncAiModel(key);
-  const model = discoveredModel || state.activeGeminiModel || 'gemini-1.5-flash';
-  
-  try {
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: 'hi' }] }]
-      })
-    });
-    return res.ok;
-  } catch (e) {
-    console.error("Gemini Test Failed:", e);
-    return false;
+  for (const endpoint of endpoints) {
+    try {
+      const res = await fetch(`${endpoint}?key=${key}`);
+      const data = await res.json();
+      if (res.ok && data.models) {
+        const validModel = data.models.find(m => m.supportedGenerationMethods.includes('generateContent'));
+        if (validModel) {
+          const modelId = validModel.name.split('/').pop();
+          state.activeGeminiModel = modelId;
+          localStorage.setItem('leafscan_active_model', modelId);
+          console.log(`[AI Sync] Found working model: ${modelId} via ${endpoint}`);
+          return modelId;
+        }
+      }
+    } catch (e) {
+      console.warn(`[AI Sync] Failed on ${endpoint}`, e);
+    }
   }
+  return null;
 }
 
 export async function sendMessage(text, containerId) {
   const container = typeof containerId === 'string' ? document.getElementById(containerId) : containerId;
-  if (!container) {
-    console.error("Chat container missing!");
-    return;
-  }
+  if (!container) return;
 
   if (!state.geminiKey) {
     showToast("Gemini Key Missing. Check Settings.", "error");
     return;
   }
 
-  console.log("Sending message to AI Pathologist:", text);
-
-  // Add User Message
+  // UI: Add User Message
   const userMsg = document.createElement('div');
   userMsg.className = 'message user animate-in';
   userMsg.textContent = text;
   container.appendChild(userMsg);
 
-  // Add Loading
+  // UI: Add Loading
   const loadingMsg = document.createElement('div');
   loadingMsg.className = 'message ai loading';
   loadingMsg.innerHTML = '<span class="dot"></span><span class="dot"></span><span class="dot"></span>';
   container.appendChild(loadingMsg);
-  
-  // Smooth scroll to bottom
   container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
 
-  // Build Context-Aware Prompt
-  let systemPrompt = "You are the LeafScan AI Pathologist. Be concise, professional, and prioritize organic/sustainable solutions.";
-  if (state.lastDiagnosis) {
-    systemPrompt += ` CONTEXT: The user just scanned a plant. Detection: ${state.lastDiagnosis.diseaseName} (${state.lastDiagnosis.confidence}% confidence). Use this for follow-up questions.`;
+  // Prompt Construction
+  const systemPrompt = `You are the LeafScan AI Pathologist. Be concise, professional, and prioritize organic/sustainable solutions. 
+    ${state.lastDiagnosis ? `CONTEXT: User scanned a plant. Result: ${state.lastDiagnosis.diseaseName}.` : ''}`;
+  const fullPrompt = `${systemPrompt}\n\nUser: ${text}`;
+
+  // Candidate Models (Priority Order)
+  const candidates = [
+    state.activeGeminiModel,
+    localStorage.getItem('leafscan_active_model'),
+    'gemini-1.5-flash',
+    'gemini-1.5-pro',
+    'gemini-pro'
+  ].filter(Boolean);
+
+  let success = false;
+  for (const model of [...new Set(candidates)]) {
+    try {
+      console.log(`[AI Pathologist] Attempting Handshake with ${model}...`);
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${state.geminiKey}`;
+      
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contents: [{ parts: [{ text: fullPrompt }] }] })
+      });
+
+      const data = await response.json();
+      if (!response.ok) continue; // Try next model if this one fails
+
+      const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!aiText) continue;
+
+      // Success!
+      if (loadingMsg) loadingMsg.remove();
+      const aiMsg = document.createElement('div');
+      aiMsg.className = 'message ai animate-in';
+      aiMsg.innerHTML = formatMarkdown(aiText);
+      container.appendChild(aiMsg);
+      
+      state.activeGeminiModel = model; // Remember the working one
+      localStorage.setItem('leafscan_active_model', model);
+      
+      setTimeout(() => container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' }), 100);
+      success = true;
+      break; 
+    } catch (e) {
+      console.warn(`[AI Pathologist] Model ${model} failed, trying next...`);
+    }
   }
 
-  try {
-    const model = state.activeGeminiModel || localStorage.getItem('leafscan_active_model') || 'gemini-1.5-flash';
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${state.geminiKey}`;
-    
-    // Combine instructions for maximum compatibility across all API versions
-    const fullPrompt = `${systemPrompt}\n\nUser Query: ${text}`;
-
-    const response = await fetch(apiUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ 
-          parts: [{ text: fullPrompt }] 
-        }]
-      })
-    });
-
-    const data = await response.json();
-    console.log("AI Pathologist Response received:", data);
-
-    if (loadingMsg && loadingMsg.parentNode) {
-      loadingMsg.remove();
-    }
-
-    if (!response.ok) {
-      const errMsg = data.error?.message || 'Handshake Error';
-      throw new Error(errMsg);
-    }
-
-    const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (!aiText) {
-      throw new Error("Empty response from Intelligence Mesh.");
-    }
-
-    const aiMsg = document.createElement('div');
-    aiMsg.className = 'message ai animate-in';
-    aiMsg.innerHTML = formatMarkdown(aiText);
-    container.appendChild(aiMsg);
-    
-    // Ensure scroll after content is rendered
-    setTimeout(() => {
-      container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
-    }, 100);
-
-  } catch (e) {
-    console.error("AI Pathologist Failure:", e);
-    if (loadingMsg && loadingMsg.parentNode) {
-      loadingMsg.remove();
-    }
-    showToast(`AI Engine Error: ${e.message}`, "error");
-    
-    // Add error message to chat so it doesn't "disappear"
+  if (!success) {
+    if (loadingMsg) loadingMsg.remove();
+    showToast("AI Intelligence Mesh connection failed. Please click 'Sync AI'.", "error");
     const errDiv = document.createElement('div');
     errDiv.className = 'message system';
     errDiv.style.color = 'var(--danger)';
-    errDiv.textContent = `Error: ${e.message}`;
+    errDiv.textContent = "Error: All available AI models failed to respond. Check your API key and quota.";
     container.appendChild(errDiv);
   }
+}
 }
 
 let recognition;
