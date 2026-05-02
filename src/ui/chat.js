@@ -78,52 +78,62 @@ export async function sendMessage(text, containerId) {
     localStorage.getItem('leafscan_active_model'),
     'gemini-1.5-flash',
     'gemini-1.5-pro',
-    'gemini-pro'
+    'gemini-pro',
+    'gemini-1.0-pro'
   ].filter(Boolean);
 
   let success = false;
+  let lastError = "Handshake failed";
+
   for (const model of [...new Set(candidates)]) {
-    try {
-      console.log(`[AI Pathologist] Attempting Handshake with ${model}...`);
-      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${state.geminiKey}`;
-      
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ contents: [{ parts: [{ text: fullPrompt }] }] })
-      });
+    // Try both stable and beta endpoints
+    for (const version of ['v1', 'v1beta']) {
+      try {
+        console.log(`[AI Pathologist] Handshake: ${model} via ${version}...`);
+        const apiUrl = `https://generativelanguage.googleapis.com/${version}/models/${model}:generateContent?key=${state.geminiKey}`;
+        
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [{ parts: [{ text: fullPrompt }] }] })
+        });
 
-      const data = await response.json();
-      if (!response.ok) continue; // Try next model if this one fails
+        const data = await response.json();
+        if (!response.ok) {
+          lastError = data.error?.message || `Error ${response.status}`;
+          continue; 
+        }
 
-      const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!aiText) continue;
+        const aiText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!aiText) continue;
 
-      // Success!
-      if (loadingMsg) loadingMsg.remove();
-      const aiMsg = document.createElement('div');
-      aiMsg.className = 'message ai animate-in';
-      aiMsg.innerHTML = formatMarkdown(aiText);
-      container.appendChild(aiMsg);
-      
-      state.activeGeminiModel = model; // Remember the working one
-      localStorage.setItem('leafscan_active_model', model);
-      
-      setTimeout(() => container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' }), 100);
-      success = true;
-      break; 
-    } catch (e) {
-      console.warn(`[AI Pathologist] Model ${model} failed, trying next...`);
+        // Success!
+        if (loadingMsg) loadingMsg.remove();
+        const aiMsg = document.createElement('div');
+        aiMsg.className = 'message ai animate-in';
+        aiMsg.innerHTML = formatMarkdown(aiText);
+        container.appendChild(aiMsg);
+        
+        state.activeGeminiModel = model;
+        localStorage.setItem('leafscan_active_model', model);
+        
+        setTimeout(() => container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' }), 100);
+        success = true;
+        break; 
+      } catch (e) {
+        lastError = e.message;
+      }
     }
+    if (success) break;
   }
 
   if (!success) {
     if (loadingMsg) loadingMsg.remove();
-    showToast("AI Intelligence Mesh connection failed. Please click 'Sync AI'.", "error");
+    showToast(`AI Handshake Failed: ${lastError}`, "error");
     const errDiv = document.createElement('div');
     errDiv.className = 'message system';
     errDiv.style.color = 'var(--danger)';
-    errDiv.textContent = "Error: All available AI models failed to respond. Check your API key and quota.";
+    errDiv.textContent = `Critical Error: ${lastError}. Please verify your Gemini API Key in Settings and ensure 'Generative Language API' is enabled in Google AI Studio.`;
     container.appendChild(errDiv);
   }
 }
