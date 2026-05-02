@@ -129,11 +129,24 @@ export async function sendMessage(text, containerId) {
 
   if (!success) {
     if (loadingMsg) loadingMsg.remove();
+    
+    // Diagnostic: Try to list models to see what IS available
+    let availableModels = [];
+    try {
+      const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${state.geminiKey}`);
+      const listData = await listRes.json();
+      availableModels = listData.models?.map(m => m.name.split('/').pop()) || [];
+    } catch (e) {}
+
     showToast(`AI Handshake Failed: ${lastError}`, "error");
     const errDiv = document.createElement('div');
     errDiv.className = 'message system';
     errDiv.style.color = 'var(--danger)';
-    errDiv.textContent = `Critical Error: ${lastError}. Please verify your Gemini API Key in Settings and ensure 'Generative Language API' is enabled in Google AI Studio.`;
+    errDiv.innerHTML = `
+      <strong>Critical Connection Error:</strong> ${lastError}<br><br>
+      <strong>Available Models for your Key:</strong> ${availableModels.length > 0 ? availableModels.join(', ') : 'None Found'}<br><br>
+      <em>Note: If the list above is empty, your API Key is restricted or 'Generative Language API' is disabled in Google AI Studio.</em>
+    `;
     container.appendChild(errDiv);
   }
 }
