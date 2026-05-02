@@ -74,7 +74,7 @@ export function initAuth(onSuccess) {
 
       const options = {
         publicKey: {
-          challenge: new Uint8Array(32),
+          challenge: crypto.getRandomValues(new Uint8Array(32)),
           timeout: 60000,
           allowCredentials: credentials.map(c => ({
             id: base64ToUint8Array(c.credentialId),
@@ -136,19 +136,28 @@ async function checkBiometricEnrollment(userId) {
 
 async function enrollBiometrics(userId) {
   try {
+    if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+      showToast("Biometrics require a secure HTTPS connection.", "warning");
+      return;
+    }
+
     const user = await db.users.get(userId);
+    const enc = new TextEncoder();
     const options = {
       publicKey: {
-        challenge: new Uint8Array(32),
-        rp: { name: "LeafScan AI" },
+        challenge: crypto.getRandomValues(new Uint8Array(32)),
+        rp: { name: "LeafScan AI", id: window.location.hostname },
         user: {
-          id: new Uint8Array([userId]),
+          id: enc.encode(String(userId)), // Ensure ID is a valid Uint8Array
           name: user.username,
           displayName: user.username
         },
         pubKeyCredParams: [{ alg: -7, type: "public-key" }],
         timeout: 60000,
-        authenticatorSelection: { userVerification: "required" }
+        authenticatorSelection: { 
+          userVerification: "required",
+          residentKey: "preferred"
+        }
       }
     };
 
@@ -163,8 +172,8 @@ async function enrollBiometrics(userId) {
       showToast("Biometrics Registered Successfully!", "success");
     }
   } catch (err) {
-    console.error(err);
-    showToast("Biometric Enrollment Failed", "error");
+    console.error("Biometric Enrollment Error:", err);
+    showToast(`Enrollment Failed: ${err.message}`, "error");
   }
 }
 
