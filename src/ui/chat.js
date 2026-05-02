@@ -69,14 +69,17 @@ export async function sendMessage(text, containerId) {
 
   try {
     const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=${state.geminiKey}`;
+    
+    // Combine instructions for maximum compatibility across all API versions
+    const fullPrompt = `${systemPrompt}\n\nUser Query: ${text}`;
+
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: text }] }],
-        systemInstruction: {
-          parts: [{ text: systemPrompt }]
-        }
+        contents: [{ 
+          parts: [{ text: fullPrompt }] 
+        }]
       })
     });
 
