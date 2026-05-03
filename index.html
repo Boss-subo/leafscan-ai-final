@@ -74,6 +74,8 @@
           <span>Geo: <strong id="diag-geo">--</strong></span>
         </div>
         <button id="save-config" class="btn btn-primary btn-full">SYNC KEYS</button>
+        <button id="test-api" class="btn btn-secondary btn-full">TEST HANDSHAKE</button>
+        <button id="clear-cache-btn" class="btn btn-secondary btn-full" style="color: var(--accent-gold);">PURGE CACHE</button>
         <button onclick="document.getElementById('config-modal').style.display='none'" class="btn btn-secondary btn-full">CLOSE</button>
       </div>
     </div>
@@ -135,7 +137,7 @@
               <small id="user-farm-name">Sovereign Farm</small>
             </div>
           </div>
-          <button id="sign-out-btn-main" class="logout-btn">
+          <button id="sign-out-btn" class="logout-btn">
             <i data-lucide="log-out"></i>
           </button>
         </div>
@@ -180,9 +182,12 @@
           <div class="dashboard-grid">
             <div class="scanner-stack">
               <div class="glass-card scanner-panel">
-                <div class="metric-header">
-                  <i data-lucide="camera"></i>
-                  <span>Diagnostic Scanner</span>
+                <div class="metric-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                  <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <i data-lucide="camera"></i>
+                    <span>Diagnostic Scanner</span>
+                  </div>
+                  <button id="sync-ai-btn" class="icon-btn" title="Sync Elite Weights"><i data-lucide="refresh-cw"></i></button>
                 </div>
                 <div class="scanner-viewport">
                   <video id="video-preview" autoplay playsinline></video>
@@ -200,13 +205,20 @@
                   <div class="scan-line"></div>
                 </div>
                 <div class="scanner-controls">
+                  <input type="file" id="file-input" accept="image/*" style="display: none;">
                   <button class="btn btn-primary" id="capture-btn">CAPTURE MATRIX</button>
                   <button class="btn btn-secondary" id="upload-btn">BULK UPLOAD</button>
+                  <button class="btn btn-primary" id="analyze-btn" style="display: none; width: 100%; margin-top: 1rem;">
+                    <i data-lucide="microscope"></i> DECODE PATHOGEN
+                  </button>
                 </div>
               </div>
               
               <div id="result-panel" class="glass-card result-panel" style="display: none; margin-top: 2rem;">
-                <h3 id="disease-name">Results</h3>
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                  <h3 id="disease-name">Results</h3>
+                  <button id="download-pdf" class="icon-btn" title="Download Report"><i data-lucide="download"></i></button>
+                </div>
                 <div id="result-content" style="margin-top: 1rem; font-size: 0.9rem;"></div>
               </div>
             </div>
