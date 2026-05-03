@@ -526,15 +526,19 @@ body {
 .analytics-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
+  gap: 1.5rem;
+  max-height: 450px; /* Anchor the grid */
 }
 
 .chart-large {
-  min-height: 280px; /* Compressed for zero-scroll visibility */
+  height: 320px !important; /* Fixed height to stop the scaling loop */
+  position: relative;
+  overflow: hidden;
 }
 
 .sustainability-card {
   margin-top: 1.5rem;
+  height: 120px;
   background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%);
 }
 

@@ -41,10 +41,9 @@ export async function switchTab(tabId, elements) {
       case 'plots':
         initMap();
         await loadPlots();
-        // Force Leaflet to recalculate container size after DOM transition
-        setTimeout(() => {
-          if (state.map) state.map.invalidateSize();
-        }, 300);
+        // Double-Handshake: Force Leaflet to refresh twice during DOM transitions
+        setTimeout(() => { if (state.map) state.map.invalidateSize(); }, 100);
+        setTimeout(() => { if (state.map) state.map.invalidateSize(); }, 500);
         break;
       case 'reminders':
         await loadReminders();
