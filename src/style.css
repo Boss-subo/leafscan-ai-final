@@ -521,9 +521,116 @@ body {
     font-size: 2rem;
   }
 
-  .hero-section {
-    flex-direction: column;
-    text-align: center;
-    gap: 1.5rem;
+/* ANALYTICS GRID */
+.analytics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.chart-large {
+  min-height: 400px;
+}
+
+/* HISTORY GRID */
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem;
+  color: var(--text-muted);
+}
+
+.empty-state i {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+/* CHAT INTERFACE */
+.chat-interface {
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.chat-viewport {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.message {
+  max-width: 80%;
+  padding: 1rem 1.5rem;
+  border-radius: 18px;
+  font-size: 0.95rem;
+}
+
+.message.system {
+  align-self: center;
+  background: rgba(255,255,255,0.05);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.chat-input-row {
+  padding: 1.5rem;
+  background: rgba(0,0,0,0.2);
+  border-top: 1px solid var(--glass-border);
+  display: flex;
+  gap: 1rem;
+}
+
+.chat-input-row input {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 0.75rem 1.25rem;
+  color: white;
+  outline: none;
+}
+
+/* PLOTS & MAP */
+.plots-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+}
+
+.map-vault {
+  height: 600px;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+#plot-map {
+  height: 100%;
+  width: 100%;
+}
+
+/* --- MOBILE OVERRIDES (CONT.) --- */
+@media (max-width: 768px) {
+  .analytics-grid, .plots-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .chat-interface {
+    height: calc(100vh - 250px);
   }
 }
+

@@ -202,11 +202,94 @@
           </div>
         </section>
 
-        <!-- Placeholder for other tabs (to be re-bound) -->
-        <section id="analytics-tab" class="tab-content" style="display: none;"><h1>Analytics</h1></section>
-        <section id="history-tab" class="tab-content" style="display: none;"><h1>History</h1></section>
-        <section id="chat-tab" class="tab-content" style="display: none;"><h1>Consult</h1></section>
-        <section id="plots-tab" class="tab-content" style="display: none;"><h1>Plots</h1></section>
+        <!-- Analytics Tab -->
+        <section id="analytics-tab" class="tab-content" style="display: none;">
+          <header class="view-header">
+            <div class="header-left">
+              <h1>Growth Intelligence</h1>
+              <p>Predictive modeling and field health trends</p>
+            </div>
+          </header>
+
+          <div class="analytics-grid">
+            <div class="glass-card chart-large">
+              <h3>7-Day Pathogen Risk</h3>
+              <canvas id="riskChart"></canvas>
+            </div>
+            <div class="glass-card chart-large">
+              <h3>Air Quality Index</h3>
+              <canvas id="pollutantChart"></canvas>
+            </div>
+          </div>
+
+          <div class="glass-card sustainability-card" style="margin-top: 2rem;">
+            <div class="card-header">
+              <h3>Sustainability Score</h3>
+              <span id="sustainability-score" class="score-badge">--</span>
+            </div>
+            <div class="progress-track">
+              <div id="sustainability-bar" class="progress-fill"></div>
+            </div>
+            <p id="sustainability-advice">Processing historical scan data...</p>
+          </div>
+        </section>
+
+        <!-- History Tab -->
+        <section id="history-tab" class="tab-content" style="display: none;">
+          <header class="view-header">
+            <div class="header-left">
+              <h1>Diagnostic Logs</h1>
+              <p>Historical audit of biological scans</p>
+            </div>
+            <button class="btn btn-secondary" id="clear-history">Clear Archives</button>
+          </header>
+
+          <div class="history-grid" id="history-grid">
+            <div class="empty-state" id="empty-history">
+              <i data-lucide="folder-open"></i>
+              <p>No historical data found in Sovereign Vault.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Consult (Chat) Tab -->
+        <section id="chat-tab" class="tab-content" style="display: none;">
+          <header class="view-header">
+            <div class="header-left">
+              <h1>AI Pathologist</h1>
+              <p>Direct encrypted handshake with Gemini Specialist</p>
+            </div>
+          </header>
+
+          <div class="glass-card chat-interface">
+            <div id="chat-messages" class="chat-viewport">
+              <div class="message system">System Online. How can I assist with your diagnostics today?</div>
+            </div>
+            <form id="chat-form" class="chat-input-row">
+              <button type="button" id="mic-btn" class="icon-btn"><i data-lucide="mic"></i></button>
+              <input type="text" id="chat-input" placeholder="Query the specialist...">
+              <button type="submit" class="send-btn"><i data-lucide="send"></i></button>
+            </form>
+          </div>
+        </section>
+
+        <!-- Plots Tab -->
+        <section id="plots-tab" class="tab-content" style="display: none;">
+          <header class="view-header">
+            <div class="header-left">
+              <h1>Field Mapping</h1>
+              <p>Tactical satellite monitoring and heatmaps</p>
+            </div>
+            <button class="btn btn-primary" id="add-plot-btn"><i data-lucide="plus"></i> New Plot</button>
+          </header>
+
+          <div class="plots-container">
+            <div id="plots-grid" class="plots-list"></div>
+            <div class="glass-card map-vault">
+              <div id="plot-map"></div>
+            </div>
+          </div>
+        </section>
 
       </main>
     </div>
