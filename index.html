@@ -1,905 +1,235 @@
 <!DOCTYPE html>
-<!-- Build Sync: v1.0.2 -->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-
-    <title>LeafScan AI — Bharat-Agri Sovereign Diagnostic Platform</title>
-    <meta name="description" content="India's most advanced AI-powered crop disease detection platform. Diagnose 100+ Indian crops with 99% accuracy. Powered by the Bharat-Agri Sovereign Engine.">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://leafscan-ai.netlify.app/">
-    <meta property="og:title" content="LeafScan AI — Professional Plant Pathology">
-    <meta property="og:description" content="AI-powered crop protection and sovereign food security. Diagnose 100+ Indian crops with 99% accuracy.">
-    <meta property="og:image" content="https://leafscan-ai.netlify.app/og-image.jpg">
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://leafscan-ai.netlify.app/">
-    <meta property="twitter:title" content="LeafScan AI — Professional Plant Pathology">
-    <meta property="twitter:description" content="AI-powered crop protection and sovereign food security. Diagnose 100+ Indian crops with 99% accuracy.">
-    <meta property="twitter:image" content="https://leafscan-ai.netlify.app/og-image.jpg">
-
-    <!-- Theme & Mobile -->
-    <meta name="theme-color" content="#10b981">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="LeafScan AI">
-
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LeafScan AI | Elite OS</title>
+    <link rel="stylesheet" href="src/style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Leaflet Map Assets -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <!-- TFJS is loaded dynamically in main.js -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <link rel="stylesheet" href="./src/style.css">
-    <style>
-      @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-      .spinning i { animation: spin 1s linear infinite; }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="aura-container">
-      <div class="aura-blob"></div>
-      <div class="aura-blob"></div>
-      <div class="aura-blob"></div>
+
+    <!-- Elite Splash Screen -->
+    <div id="splash-screen" class="splash-screen">
+      <div class="logo-container">
+        <img src="/logo_3d.png" class="logo-main" alt="LeafScan Logo">
+      </div>
+      <div class="splash-loader">
+        <div class="loader-bar"></div>
+      </div>
+      <p class="splash-text">Sovereign Intelligence System</p>
     </div>
 
-    <!-- ===== ELITE SPLASH SCREEN ===== -->
-    <div id="splash-screen" class="splash-screen" style="display: none;">
-      <div class="splash-content">
-        <div class="splash-logo">
-          <i data-lucide="shield-check"></i>
-        </div>
-        <div class="splash-loader">
-          <div class="loader-bar"></div>
-        </div>
-        <p>INITIALIZING SOVEREIGN MESH</p>
-      </div>
-    </div>
-    <!-- ===== PREMIUM LANDING SCREEN ===== -->
-    <div id="landing-screen" class="landing-screen">
-      <div class="aura-container">
-        <div class="aura-blob"></div>
-        <div class="aura-blob"></div>
-        <div class="aura-blob"></div>
-      </div>
-      <div class="landing-particles" id="landing-particles"></div>
-      <div class="landing-content">
-        <div class="landing-badge">BHARAT-AGRI OS v1.0.8 (STABLE)</div>
-        <h1 class="landing-title">
-          <span class="landing-title-line">Leaf<span class="text-gradient">Scan</span></span>
-          <span class="landing-title-sub">OS</span>
-        </h1>
-        <p class="landing-tagline">The world's first autonomous agricultural intelligence operating system.<br>Engineered for high-stakes crop protection and sovereign food security.</p>
-        
-        <div class="landing-stats" style="flex-wrap: wrap; max-width: 800px; margin-top: 1rem;">
-          <div class="landing-stat" style="min-width: 200px;">
-            <i data-lucide="shield-check" style="color: var(--primary); margin-bottom: 0.5rem; width: 32px; height: 32px;"></i>
-            <span class="landing-stat-label" style="font-weight: 800; color: #fff; font-size: 0.8rem; letter-spacing: 1px;">SOVEREIGN DATA MOAT</span>
-            <span style="font-size: 0.6rem; color: var(--text-muted); text-align: center; margin-top: 4px;">Zero-Cloud Private AI</span>
-          </div>
-          <div class="landing-stat-divider"></div>
-          <div class="landing-stat" style="min-width: 200px;">
-            <i data-lucide="navigation" style="color: var(--accent-gold); margin-bottom: 0.5rem; width: 32px; height: 32px;"></i>
-            <span class="landing-stat-label" style="font-weight: 800; color: #fff; font-size: 0.8rem; letter-spacing: 1px;">AUTONOMOUS FLEET</span>
-            <span style="font-size: 0.6rem; color: var(--text-muted); text-align: center; margin-top: 4px;">MAVLink Drone Command</span>
-          </div>
-          <div class="landing-stat-divider"></div>
-          <div class="landing-stat" style="min-width: 200px;">
-            <i data-lucide="globe" style="color: var(--primary-light); margin-bottom: 0.5rem; width: 32px; height: 32px;"></i>
-            <span class="landing-stat-label" style="font-weight: 800; color: #fff; font-size: 0.8rem; letter-spacing: 1px;">GLOBAL PATHOGEN MESH</span>
-            <span style="font-size: 0.6rem; color: var(--text-muted); text-align: center; margin-top: 4px;">100+ Regional Specialists</span>
-          </div>
-        </div>
-        <button class="landing-cta" id="enter-app-btn">
-          <span>Enter Diagnostic Platform</span>
-          <i data-lucide="arrow-right"></i>
-        </button>
-        <p class="landing-footer-text">Protected under Patent Application • Proprietary Technology</p>
-      </div>
-    </div>
-
-    <!-- ===== SOVEREIGN AUTH VAULT ===== -->
-    <div id="auth-vault" class="modal" style="display: none;">
-      <div class="auth-card glass-card">
+    <!-- Elite Auth Vault -->
+    <div id="auth-vault" style="display: none;">
+      <div class="auth-card">
         <div class="auth-header">
-          <div class="auth-logo">
-            <i data-lucide="shield-lock"></i>
-          </div>
-          <h2>Sovereign Access</h2>
-          <p>Establish secure handshake with the Intelligence Mesh</p>
+          <h2>Identity Verification</h2>
+          <p>Accessing Secure Sovereign Agricultural Node</p>
         </div>
-
-        <div class="auth-body">
-          <div class="input-group" id="email-group">
-            <label><i data-lucide="mail"></i> Email Address</label>
-            <input type="email" id="login-email" placeholder="your@email.com">
+        <form class="auth-form" id="login-form">
+          <div class="input-group">
+            <i data-lucide="mail"></i>
+            <input type="email" id="email" placeholder="Operator Identity" required>
           </div>
           <div class="input-group">
-            <label><i data-lucide="user"></i> Username (Display Name)</label>
-            <input type="text" id="login-username" placeholder="Enter username...">
+            <i data-lucide="lock"></i>
+            <input type="password" id="password" placeholder="Access Cipher" required>
           </div>
-          <div class="input-group" id="farm-name-group" style="display: none;">
-            <label><i data-lucide="map"></i> Sovereign Farm Identity</label>
-            <input type="text" id="login-farm" placeholder="Enter Farm/Plot Name...">
-          </div>
-          <div class="input-group">
-            <label><i data-lucide="key-round"></i> Access Key</label>
-            <input type="password" id="login-password" placeholder="••••••••">
-            <div id="password-strength" style="height: 4px; background: rgba(255,255,255,0.05); margin-top: 8px; border-radius: 2px; overflow: hidden; display: none;">
-              <div id="strength-bar" style="height: 100%; width: 0%; transition: all 0.3s ease;"></div>
-            </div>
-            <small id="strength-text" style="font-size: 0.6rem; color: var(--text-muted); margin-top: 5px; display: none;"></small>
-          </div>
-          
-          <div class="auth-options">
-            <label class="checkbox-container">
-              <input type="checkbox" id="remember-me">
-              <span class="checkmark"></span>
-              Remember Operator
-            </label>
-            <a href="#" class="forgot-link">Forgot Key?</a>
-          </div>
-
-          <button class="btn btn-primary btn-full" id="login-btn">
-            Authenticate Identity
+          <button type="submit" class="btn btn-primary btn-full">UNLEASH SYSTEM</button>
+          <button type="button" id="google-auth-btn" class="btn btn-secondary btn-full">
+            <i data-lucide="globe"></i> Authenticate with Google
           </button>
-
-          <div class="auth-divider">
-            <span>OR SECURE CONNECT</span>
-          </div>
-
-          <div class="social-login">
-            <button class="social-btn google-btn" id="google-login">
-              <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" width="18" height="18">
-              Sovereign Google Sync
-            </button>
-            <button class="social-btn biometric-btn" id="biometric-btn">
-              <i data-lucide="fingerprint"></i>
-              Sovereign Biometric
-            </button>
-          </div>
-        </div>
-        
-        <!-- Native System Biometrics will trigger here -->
-        
-        <div class="auth-footer">
-          <p id="auth-toggle-text">Don't have an identity? <a href="#" id="toggle-auth-mode" style="color:var(--primary)">Register Now</a></p>
-          <p style="margin-top:1rem">Protected by SHA-512 Zero-Knowledge Proofs</p>
-        </div>
+        </form>
       </div>
     </div>
 
+    <!-- ===== MAIN APPLICATION SUITE ===== -->
     <div id="app" class="main-layout" style="display: none;">
-      <!-- Sidebar -->
+      
+      <!-- Elite Sidebar (Desktop) / Bottom Nav (Mobile) -->
       <aside class="sidebar">
-          <div class="logo-area" style="display: flex; flex-direction: column; align-items: center; padding: 1.5rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); width: 100%;">
-            <img src="/logo_3d.png" id="main-logo" style="width: 70px; height: 70px; filter: drop-shadow(0 0 15px var(--primary)); margin-bottom: 0.5rem;">
-            <span class="logo-text" style="font-size: 1.4rem; font-weight: 800; letter-spacing: 1px; color: #fff;">LeafScan AI</span>
-            <p style="font-size: 0.6rem; color: var(--accent-gold); letter-spacing: 2px; margin-top: 0.25rem;">PROPRIETARY ENGINE</p>
-          </div>
-
-        <div class="sidebar-header" style="margin-bottom: 2rem;">
-          <div class="logo">
+        <div class="sidebar-brand">
+          <div class="brand-logo">
             <i data-lucide="leaf"></i>
-            <span>LeafScan <small>OS</small></span>
+          </div>
+          <div class="brand-info">
+            <span class="brand-name">LeafScan <small>PRO</small></span>
+            <span class="brand-status">Sovereign Engine v1.1</span>
           </div>
         </div>
 
-        <!-- NEW: Operator Profile Section -->
-        <div class="profile-section glass-card" style="margin-bottom: 2rem; padding: 1rem; border: 1px solid var(--theme-border);">
-          <div style="display: flex; align-items: center; gap: 12px;">
-            <img id="user-avatar" src="" style="width: 45px; height: 45px; border-radius: 12px; background: var(--bg-dark); border: 1px solid var(--primary-light);">
-            <div style="overflow: hidden;">
-              <div id="user-profile-name" style="font-weight: 800; font-size: 0.9rem; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Operator</div>
-              <div id="user-farm-name" style="font-size: 0.65rem; color: var(--primary-light); text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Sovereign Estate</div>
-            </div>
-          </div>
-        </div>
-
-        <ul class="nav-links">
-          <li class="active nav-scan-btn" data-tab="dashboard">
-            <i data-lucide="scan"></i>
-            <span>Scanner</span>
-          </li>
-          <li data-tab="analytics">
-            <i data-lucide="bar-chart-3"></i>
-            <span>Analytics</span>
-          </li>
-          <li data-tab="history">
-            <i data-lucide="history"></i>
-            <span>History</span>
-          </li>
-          <li data-tab="chat">
-            <i data-lucide="message-square"></i>
-            <span>AI Pathologist</span>
-          </li>
-          <li data-tab="plots">
-            <i data-lucide="map"></i>
-            <span>Farm Plots</span>
-          </li>
-          <li data-tab="command">
-            <i data-lucide="shield-check"></i>
-            <span>Sovereign Center</span>
-          </li>
-          <li data-tab="account">
-            <i data-lucide="user-cog"></i>
-            <span>Account Profile</span>
-          </li>
-          <li data-tab="settings" id="config-btn">
-            <i data-lucide="settings"></i>
-            <span>Settings</span>
-          </li>
-          <li id="sign-out-btn" style="margin-top: auto; border-top: 1px solid var(--glass-border); padding-top: 1rem; color: var(--danger);">
-            <i data-lucide="log-out"></i>
-            <span>Sign Out</span>
-          </li>
-        </ul>
+        <nav class="sidebar-nav">
+          <ul class="nav-links">
+            <li class="active nav-scan-btn" data-tab="dashboard">
+              <i data-lucide="scan"></i>
+              <span>Scanner</span>
+            </li>
+            <li data-tab="analytics">
+              <i data-lucide="bar-chart-3"></i>
+              <span>Analytics</span>
+            </li>
+            <li data-tab="history">
+              <i data-lucide="history"></i>
+              <span>History</span>
+            </li>
+            <li data-tab="chat">
+              <i data-lucide="messages-square"></i>
+              <span>Consult</span>
+            </li>
+            <li data-tab="plots">
+              <i data-lucide="map"></i>
+              <span>Plots</span>
+            </li>
+          </ul>
+        </nav>
 
         <div class="sidebar-footer">
-          <div class="weather-mini glass-card" style="padding: 1rem; margin-bottom: 1rem; width: 100%;">
-            <div class="stat" style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
-              <i data-lucide="thermometer" size="16"></i>
-              <span id="weather-temp-mini">--°C</span>
-            </div>
-            <div class="stat" style="display: flex; align-items: center; gap: 0.5rem;">
-              <i data-lucide="wind" size="16"></i>
-              <span id="aqi-value-mini">--</span>
+          <div class="operator-badge">
+            <img id="user-avatar" src="" alt="Avatar">
+            <div class="operator-info">
+              <span id="user-profile-name">Operator</span>
+              <small id="user-farm-name">Sovereign Farm</small>
             </div>
           </div>
-          <button class="settings-btn" id="config-btn" style="width: 100%; display: flex; align-items: center; gap: 0.5rem; padding: 0.75rem; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: white; cursor: pointer;">
-            <i data-lucide="settings"></i>
-            <span>Settings</span>
+          <button id="sign-out-btn-main" class="logout-btn">
+            <i data-lucide="log-out"></i>
           </button>
         </div>
       </aside>
 
-      <!-- Main Content -->
-      <main class="content-area">        <!-- Dashboard Tab -->
+      <!-- Main Content Engine -->
+      <main class="content-area">
+        
+        <!-- Dashboard View -->
         <section id="dashboard-tab" class="tab-content active">
-          <div class="top-bar" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <div class="loc-header" style="display: flex; align-items: center; gap: 15px;">
-              <div class="loc-info">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                  <span id="current-location" style="font-size: 1.5rem; font-weight: 800; color: #fff;">Detecting...</span>
-                  <button class="icon-btn" onclick="toggleLocationSearch()" title="Set Location Manually" style="background: rgba(255,255,255,0.05); padding: 5px;">
-                    <i data-lucide="search" size="16"></i>
-                  </button>
-                </div>
-                <div id="loc-search-box" style="display: none; margin-top: 10px; animation: slideDown 0.3s ease;">
-                  <input type="text" id="manual-loc-input" placeholder="Enter City/Village Name..." 
-                         style="background: rgba(0,0,0,0.3); border: 1px solid var(--primary); color: #fff; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; width: 200px;">
-                  <button class="btn btn-primary" onclick="handleManualLocation()" style="padding: 5px 15px; font-size: 0.7rem;">SET</button>
-                </div>
-                <div style="display: flex; gap: 10px; margin-top: 5px;">
-                  <small style="color: var(--primary-light); display: flex; align-items: center; gap: 5px;">
-                    <span class="live-indicator"></span> SATELLITE SYNC
-                  </small>
-                  <small id="edge-compute-indicator" style="color: var(--accent-gold); display: flex; align-items: center; gap: 5px; font-weight: 800; border: 1px solid rgba(245, 158, 11, 0.3); padding: 2px 8px; border-radius: 4px; background: rgba(245, 158, 11, 0.1);">
-                    <i data-lucide="cpu" size="12"></i> EDGE COMPUTE: READY
-                  </small>
-                </div>
-              </div>
+          <header class="view-header">
+            <div class="header-left">
+              <h1>System Overview</h1>
+              <p>Real-time diagnostic telemetry</p>
             </div>
-            <div class="header-actions" style="display: flex; gap: 15px;">
-              <button class="btn btn-secondary" id="capture-btn">
-                <i data-lucide="camera"></i> Capture
-              </button>
-              <button class="btn btn-secondary" id="upload-btn">
-                <i data-lucide="upload"></i> Upload
+          </header>
+
+          <div class="hero-section glass-card">
+            <div class="hero-content">
+              <div class="hero-badge">
+                <span class="live-indicator"></span>
+                SATELLITE SYNC: ACTIVE
+              </div>
+              <h2 id="current-location">Detecting...</h2>
+            </div>
+            <div class="hero-actions">
+              <button class="btn btn-secondary" id="manual-location-btn">
+                <i data-lucide="map-pin"></i> Manual Sync
               </button>
             </div>
           </div>
 
-
-          <!-- NEW: Green IoT Sensor Hub -->
-          <div class="dashboard-layout">
-            <div class="glass-card env-station sensor-grid">
-              <div class="env-stat-item">
-                <small><i data-lucide="thermometer"></i> AIR TEMP</small>
-                <h4 id="live-temp">--°C</h4>
-              </div>
-              <div class="env-stat-item">
-                <small><i data-lucide="droplets"></i> HUMIDITY</small>
-                <h4 id="live-humidity">--%</h4>
-              </div>
-              <div class="env-stat-item">
-                <small><i data-lucide="wind"></i> WIND SPEED</small>
-                <h4 id="live-wind">-- km/h</h4>
-              </div>
-              <div class="env-stat-item">
-                <small><i data-lucide="cloud-rain"></i> PRECIPITATION</small>
-                <h4 id="live-rain">0.0 mm</h4>
-              </div>
-            </div>
-
-            <div class="glass-card iot-hub" style="border-left: 4px solid var(--primary); padding: 1.5rem; background: rgba(16, 185, 129, 0.05);">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <strong style="font-size: 0.8rem; letter-spacing: 1px; color: var(--primary-light);">
-                  <i data-lucide="cpu" size="14"></i> GREEN IOT HUB
-                </strong>
-                <span class="badge-elite" style="font-size: 0.6rem;">READY</span>
-              </div>
-              <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
-                  <span style="color: var(--text-muted);">Soil Moisture:</span>
-                  <strong id="iot-moisture" style="color: var(--primary-light);">42%</strong>
+          <div class="dashboard-grid">
+            <div class="scanner-stack">
+              <div class="glass-card scanner-panel">
+                <div class="metric-header">
+                  <i data-lucide="camera"></i>
+                  <span>Diagnostic Scanner</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
-                  <span style="color: var(--text-muted);">Soil Ph:</span>
-                  <strong id="iot-ph" style="color: var(--accent-gold);">6.8 (Opt)</strong>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
-                  <span style="color: var(--text-muted);">NPK Balance:</span>
-                  <strong id="iot-npk" style="color: #60a5fa;">Optimal</strong>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-          <!-- Left: Scanner -->
-          <div class="dashboard-grid-v2">
-            <div class="glass-card scanner-panel dynamic-glow">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h3>Diagnostic Scanner</h3>
-                <!-- VMS Mode Toggle -->
-                <div class="vms-toggle-mini" style="display: flex; align-items: center; gap: 10px; background: rgba(96, 165, 250, 0.1); padding: 5px 12px; border-radius: 20px; border: 1px solid rgba(96, 165, 250, 0.3);">
-                  <span style="font-size: 0.65rem; font-weight: 800; color: #60a5fa; letter-spacing: 1px;">VMS MODE</span>
-                  <div class="toggle-container">
-                    <input type="checkbox" id="vms-toggle" style="display: none;">
-                    <label for="vms-toggle" class="toggle-slider" style="width: 34px; height: 18px;"></label>
-                  </div>
-                </div>
-              </div>
-              <div class="scanner-container" style="position: relative; aspect-ratio: 4/3; background: #000; border-radius: 20px; overflow: hidden; margin-top: 1rem;">
-                <video id="video-preview" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover; display: none;"></video>
-                <canvas id="vms-canvas" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; display: none; pointer-events: none;"></canvas>
-                <img id="image-preview" style="width: 100%; height: 100%; object-fit: cover; display: none;">
-                <div class="scanner-overlay" id="drop-zone">
-                  <div class="target-corners">
-                    <span></span><span></span><span></span><span></span>
-                  </div>
-                  <i data-lucide="scan" size="48"></i>
-                  <p>PLACE LEAF FOR ANALYSIS</p>
-                  <input type="file" id="file-input" accept="image/*" multiple style="display: none;">
-                </div>
-                <div class="scan-line" id="scan-line"></div>
-                <div id="batch-counter" style="position: absolute; top: 1rem; left: 1rem; background: var(--primary); padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.75rem; font-weight: 800; display: none; z-index: 15;">0 Images Selected</div>
-                <!-- Chain of Thought Visualizer -->
-                <div id="cot-visualizer" class="cot-overlay" style="display: none;">
-                  <div class="cot-content">
-                    <div class="cot-step" id="cot-step-1"><i data-lucide="scan"></i> <span>Isolating Biological Matrix...</span></div>
-                    <div class="cot-step" id="cot-step-2"><i data-lucide="cpu"></i> <span>Dynamic Router: Edge Inference...</span></div>
-                    <div class="cot-step" id="cot-step-3"><i data-lucide="globe"></i> <span>Loading Regional Specialist...</span></div>
-                    <div class="cot-step" id="cot-step-4"><i data-lucide="check-circle"></i> <span>Sovereign Diagnosis Complete</span></div>
-                  </div>
-                </div>
-                <!-- NEW: XAI Heatmap Overlay -->
-                <canvas id="xai-heatmap" style="position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: opacity 0.5s ease; z-index: 10;"></canvas>
-              </div>
-            
-      <button class="btn btn-primary" id="analyze-btn" style="display: none; width: 100%; margin-top: 1rem;">Analyze Sample</button>
-                
-                <!-- Survey Controls -->
-                <div id="survey-controls" style="border-top: 1px solid var(--glass-border); padding-top: 1rem; margin-top: 0.5rem;">
-                  <button class="btn btn-secondary" id="start-survey-btn" style="width: 100%; border-color: var(--accent-gold); color: var(--accent-gold);">
-                    <i data-lucide="map-pin"></i> Start Field Survey
-                  </button>
-                  <div id="survey-active-panel" style="display: none; background: rgba(245, 158, 11, 0.1); padding: 1rem; border-radius: 12px; border: 1px solid var(--accent-gold);">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                      <span style="font-size: 0.75rem; font-weight: 800; color: var(--accent-gold);">SURVEY IN PROGRESS</span>
-                      <span id="survey-count" style="background: var(--accent-gold); color: black; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; font-weight: 900;">0 SCANS</span>
+                <div class="scanner-viewport">
+                  <video id="video-preview" autoplay playsinline></video>
+                  <canvas id="vms-canvas"></canvas>
+                  <img id="image-preview" style="display: none;">
+                  <div class="scanner-overlay" id="drop-zone">
+                    <div class="scan-frame">
+                      <span></span><span></span><span></span><span></span>
                     </div>
-                    <button class="btn btn-primary" id="end-survey-btn" style="width: 100%; font-size: 0.8rem; background: var(--accent-gold); color: black;">
-                      <i data-lucide="file-check"></i> End & Generate Master Report
-                    </button>
-                  </div>
-                </div>
-              </div>
-            
-            <div class="results-column">
-              <!-- Elite: Yield Prediction Card -->
-              <div class="glass-card yield-card dynamic-glow" style="margin-bottom: 1.5rem;">
-                <div class="card-header" style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
-                  <div>
-                    <h3><i data-lucide="trending-down"></i> Yield Risk Assessment</h3>
-                    <p style="font-size: 0.8rem; color: var(--text-muted);">Predictive harvest impact model</p>
-                  </div>
-                  <span class="badge" style="background: rgba(16, 185, 129, 0.1); color: var(--primary); padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.75rem; font-weight: 700;">STABLE</span>
-                </div>
-                
-                <div class="chart-container" style="height: 160px; margin: 1rem 0;">
-                  <canvas id="yieldChart"></canvas>
-                </div>
-
-                <div class="yield-insights" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1rem;">
-                  <div class="insight-item">
-                    <small style="color: var(--text-muted); text-transform: uppercase; font-size: 0.6rem;">Est. Biomass Loss</small>
-                    <strong id="biomass-loss" style="display: block; font-size: 1.1rem; color: var(--accent-gold); margin-top: 0.25rem;">0.0 kg</strong>
-                  </div>
-                  <div class="insight-item">
-                    <small style="color: var(--text-muted); text-transform: uppercase; font-size: 0.6rem;">Value at Risk</small>
-                    <strong id="value-risk" style="display: block; font-size: 1.1rem; color: var(--accent-gold); margin-top: 0.25rem;">$0.00</strong>
-                  </div>
-                </div>
-              </div>
-
-              <div class="glass-card risk-card">
-                <div class="risk-header">
-                  <h3>Environmental Disease Risk</h3>
-                  <i data-lucide="alert-triangle" style="color: var(--accent-gold);"></i>
-                </div>
-                <div class="risk-meter-v2" style="margin: 1rem 0;">
-                  <div class="risk-bar-fill" id="risk-bar"></div>
-                </div>
-                <p id="risk-status" style="color: var(--text-muted); font-size: 0.9rem;">Analyzing environmental data...</p>
-              </div>
-
-              <div id="result-panel" class="glass-card result-card" style="display: none;">
-                <div class="result-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                  <h3 id="disease-name">Scan Results</h3>
-                  <div class="result-actions">
-                    <button class="icon-btn" id="copy-result" title="Copy Results"><i data-lucide="copy"></i></button>
-                    <button class="icon-btn" id="speak-result" title="Listen to Report"><i data-lucide="volume-2"></i></button>
-                    <button class="icon-btn" id="download-pdf" title="Download PDF"><i data-lucide="download"></i></button>
-                  </div>
-                </div>
-
-                <!-- Plot Health Index (New) -->
-                <div id="phi-container" style="margin-bottom: 1.5rem; display: none; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 12px; border: 1px solid var(--glass-border);">
-                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                    <span style="font-size: 0.8rem; font-weight: 600;">Plot Health Index (PHI)</span>
-                    <span id="phi-value" style="color: var(--primary-light); font-weight: 800;">--%</span>
-                  </div>
-                  <div class="risk-meter-v2" style="height: 6px;">
-                    <div class="risk-bar-fill" id="phi-bar" style="width: 0%;"></div>
-                  </div>
-                  <p id="phi-advice" style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.5rem;"></p>
-                </div>
-
-                <!-- Confidence Meter -->
-                <div id="confidence-container" style="margin-bottom: 1.5rem; display: none;">
-                  <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 0.5rem;">
-                    <span id="confidence-text">Diagnostic Confidence: --%</span>
-                  </div>
-                  <div class="risk-meter-v2" style="height: 4px;">
-                    <div class="risk-bar-fill" id="confidence-bar" style="width: 0%;"></div>
-                  </div>
-                </div>
-
-                <!-- VMS Result Panel -->
-                <div id="vms-result-panel" class="vms-result-panel" style="display: none;">
-                  <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <strong style="font-size: 0.7rem; letter-spacing: 2px; color: var(--primary-light);">VMS SPECTRAL SWEEP</strong>
-                    <span id="vms-stress-value" style="font-weight: 800; font-size: 1.2rem;">0%</span>
-                  </div>
-                  <div class="confidence-track" style="height: 6px; margin-top: 10px;">
-                    <div id="vms-stress-bar" class="confidence-fill" style="width: 0%; background: var(--primary);"></div>
-                  </div>
-                  
-                  <div class="vms-spectral-grid">
-                    <div class="vms-data-point">
-                      <div class="vms-label">Signature</div>
-                      <div id="vms-signature" class="vms-value">Optimal</div>
-                    </div>
-                    <div class="vms-data-point">
-                      <div class="vms-label">Reflectance</div>
-                      <div id="vms-reflectance" class="vms-value">Stable</div>
-                    </div>
-                    <div class="vms-data-point">
-                      <div class="vms-label">Absorbance</div>
-                      <div class="vms-value">High</div>
+                    <div class="overlay-prompt">
+                      <i data-lucide="scan" size="48"></i>
+                      <p>ALIGN LEAF IN FRAME</p>
                     </div>
                   </div>
+                  <div class="scan-line"></div>
                 </div>
-
-                <!-- NEW: Economic Impact & Inventory Link -->
-                <div id="economic-panel" class="economic-panel" style="display: none;">
-                  <h3><i data-lucide="trending-down"></i> Economic Intelligence</h3>
-                  
-                  <div class="var-display">
-                    <div style="font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase;">Est. Value at Risk</div>
-                    <div id="var-value" class="var-value">$0.00</div>
-                    <div id="var-rate" class="var-rate">-$0.00/hour depreciation</div>
-                  </div>
-
-                  <div class="inventory-optimization">
-                    <div class="inv-status-pill">
-                      <i data-lucide="package"></i>
-                      <span id="inventory-status-text">Inventory: Checking...</span>
-                    </div>
-                    
-                    <div class="inv-action-box">
-                      <div id="inventory-action" style="font-weight: 700; font-size: 0.8rem;">Ready to Dispense</div>
-                      <div style="font-size: 0.7rem; color: var(--text-muted);">Treatment ROI: <span id="treatment-roi" style="color: var(--primary-light);">+0%</span></div>
-                    </div>
-
-                    <button id="export-mission-btn" class="btn btn-secondary btn-full" style="margin-top: 1rem; background: rgba(96, 165, 250, 0.1); border: 1px dashed rgba(96, 165, 250, 0.4); color: var(--primary-light); font-size: 0.7rem;">
-                      <i data-lucide="navigation"></i> Generate Autonomous Drone Mission
-                    </button>
-                  </div>
+                <div class="scanner-controls">
+                  <button class="btn btn-primary" id="capture-btn">CAPTURE MATRIX</button>
+                  <button class="btn btn-secondary" id="upload-btn">BULK UPLOAD</button>
                 </div>
-
-                <!-- NEW: XAI Biological Reasoning -->
-                <div id="xai-reasoning-panel" style="margin-top: 1.5rem; display: none; background: rgba(16, 185, 129, 0.05); padding: 1rem; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.2);">
-                  <h4 style="color: var(--primary-light); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.75rem;">
-                    <i data-lucide="binary" size="14"></i> BIOLOGICAL REASONING LOG
-                  </h4>
-                  <ul id="reasoning-list" style="list-style: none; padding: 0; margin: 0; font-size: 0.75rem; color: var(--text-muted); line-height: 1.6;">
-                    <!-- Populated by XAIEngine -->
-                  </ul>
-                </div>
-
-                <div id="result-content" class="result-content scrollable" style="max-height: 400px; overflow-y: auto;"></div>
-                <button class="btn btn-primary btn-full" id="set-reminder-btn" style="margin-top: 1.5rem; width: 100%;">
-                  <i data-lucide="calendar"></i> Set Treatment Reminder
-                </button>
               </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Analytics Tab -->
-        <section id="analytics-tab" class="tab-content">
-          <div class="top-bar">
-            <h2>Growth Analytics</h2>
-          </div>
-          <div class="analytics-layout">
-            <div class="glass-card chart-container" style="height: 400px;">
-              <h3>7-Day Disease Risk</h3>
-              <div class="chart-wrapper" style="height: 300px;"><canvas id="riskChart"></canvas></div>
-            </div>
-            <div class="glass-card chart-container" style="height: 400px;">
-              <h3>Air Quality Index</h3>
-              <div class="chart-wrapper" style="height: 300px;"><canvas id="pollutantChart"></canvas></div>
-            </div>
-          </div>
-
-          <!-- Sustainability Score Section -->
-          <div class="sustainability-section glass-card" style="margin-top: 2rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-              <h3>Regenerative Sustainability Score</h3>
-              <div class="score-badge" id="sustainability-score">--</div>
-            </div>
-            <div class="risk-meter-v2" style="height: 12px; margin-bottom: 1rem;">
-              <div class="risk-bar-fill" id="sustainability-bar" style="width: 0%; background: linear-gradient(90deg, #10b981, #6ee7b7);"></div>
-            </div>
-            <p id="sustainability-advice" style="font-size: 0.9rem; color: var(--text-muted);">Perform more scans to calculate your impact.</p>
-          </div>
-        </section>
-
-        <!-- History Tab -->
-        <section id="history-tab" class="tab-content">
-          <div class="top-bar">
-            <h2>Diagnostic History</h2>
-            <button class="btn btn-secondary" id="clear-history">Clear All</button>
-          </div>
-          <div class="history-grid" id="history-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1.5rem;">
-            <div class="empty-history" id="empty-history">
-              <p>No scans recorded yet.</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- Chat Tab -->
-        <section id="chat-tab" class="tab-content">
-          <div class="top-bar">
-            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-              <h2>AI Pathologist Chat</h2>
-              <button id="sync-ai-btn" class="icon-btn" title="Sync AI Models" style="font-size: 0.75rem; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--primary); padding: 5px 12px; border-radius: 8px; display: flex; align-items: center; gap: 8px; color: var(--primary);">
-                <i data-lucide="refresh-cw" style="width: 14px; height: 14px;"></i>
-                Sync AI
-              </button>
-            </div>
-          </div>
-          <div class="chat-container glass-card" style="height: 600px; display: flex; flex-direction: column; margin-top: 2rem;">
-            <div id="chat-messages" class="chat-messages" style="flex: 1; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
-              <div class="message system">How can I help you today? You can ask follow-up questions about your scans.</div>
-            </div>
-            <form id="chat-form" class="chat-input-area" style="padding: 1.5rem; border-top: 1px solid var(--glass-border); display: flex; gap: 1rem; align-items: center;">
-              <button type="button" id="mic-btn" class="icon-btn" style="background: rgba(255,255,255,0.05); border-radius: 12px; height: 50px; width: 50px; display: flex; align-items: center; justify-content: center;"><i data-lucide="mic"></i></button>
-              <input type="text" id="chat-input" placeholder="Ask about your plant's health..." style="flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); padding: 0.85rem 1.25rem; border-radius: 12px; color: white; height: 50px;">
-              <button type="submit" id="send-chat" style="height: 50px; width: 60px; border-radius: 12px; background: var(--primary); border: none; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-              </button>
-            </form>
-          </div>
-        </section>
-
-        <!-- Reminders Tab -->
-        <section id="reminders-tab" class="tab-content">
-          <div class="top-bar">
-            <h2>Treatment Reminders</h2>
-          </div>
-          <div class="reminders-list" id="reminders-list" style="margin-top: 2rem;">
-            <!-- Reminders injected here -->
-          </div>
-        </section>
-
-        <!-- Plots Tab -->
-        <section id="plots-tab" class="tab-content">
-          <div class="top-bar">
-            <div>
-              <h2 style="font-size: 2rem; font-weight: 800;">Farm Plot Management</h2>
-              <p style="color: var(--text-muted); font-size: 0.9rem;">Tactical satellite monitoring & disease heatmaps</p>
-            </div>
-            <button class="btn btn-primary" id="add-plot-btn"><i data-lucide="plus"></i> New Field Plot</button>
-          </div>
-          <div class="plots-layout" style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; margin-top: 2rem;">
-            <div class="plots-grid" id="plots-grid">
-              <!-- Plots injected here -->
-            </div>
-            <div class="glass-card plot-map-container" style="height: 600px; padding: 0; overflow: hidden; position: relative; border: 1px solid var(--primary-light);">
-              <div id="plot-map" style="height: 100%; width: 100%; z-index: 1;"></div>
               
-              <!-- NEW: Tactical Fleet Overlay -->
-              <div id="drone-fleet-command" style="position: absolute; bottom: 1.5rem; left: 1.5rem; z-index: 1000; width: 280px; display: none;">
-                <div class="glass-card" style="background: rgba(13, 21, 18, 0.95); border: 1px solid var(--primary); padding: 1.25rem;">
-                  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
-                    <span style="font-size: 0.7rem; font-weight: 800; color: var(--primary); letter-spacing: 2px;">FLEET COMMAND v3.1</span>
-                    <span class="live-indicator"></span>
+              <div id="result-panel" class="glass-card result-panel" style="display: none; margin-top: 2rem;">
+                <h3 id="disease-name">Results</h3>
+                <div id="result-content" style="margin-top: 1rem; font-size: 0.9rem;"></div>
+              </div>
+            </div>
+
+            <div class="metrics-stack">
+              <div class="glass-card metric-card">
+                <div class="metric-header">
+                  <i data-lucide="cloud-sun"></i>
+                  <span>Live Telemetry</span>
+                </div>
+                <div class="metric-grid">
+                  <div class="metric-item">
+                    <span id="live-temp">--°C</span>
+                    <small>TEMP</small>
                   </div>
-                  <div id="mission-status-text" style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1rem;">Drone-01: Standby</div>
-                  <div class="mission-telemetry" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem;">
-                    <div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 8px;">
-                      <small style="font-size: 0.5rem; color: var(--primary-light);">ALTITUDE</small>
-                      <div id="drone-alt" style="font-weight: 800; font-size: 0.9rem;">-- m</div>
-                    </div>
-                    <div style="background: rgba(0,0,0,0.3); padding: 0.5rem; border-radius: 8px;">
-                      <small style="font-size: 0.5rem; color: var(--primary-light);">VELOCITY</small>
-                      <div id="drone-vel" style="font-weight: 800; font-size: 0.9rem;">-- m/s</div>
-                    </div>
+                  <div class="metric-item">
+                    <span id="live-humidity">--%</span>
+                    <small>HUMID</small>
                   </div>
-                  <button id="download-mission-json" class="btn btn-primary btn-full" style="font-size: 0.75rem; padding: 0.6rem;">
-                    <i data-lucide="download"></i> Export Mission Waypoints
-                  </button>
+                  <div class="metric-item">
+                    <span id="live-wind">-- kmh</span>
+                    <small>WIND</small>
+                  </div>
                 </div>
               </div>
 
-              <div class="map-controls" style="position: absolute; top: 1.5rem; right: 1.5rem; z-index: 1000; display: flex; flex-direction: column; gap: 10px;">
-                <button id="toggle-heatmap" class="map-btn">
-                  <i data-lucide="flame" size="14"></i> Pathogen Heatmap
-                </button>
-                <button id="toggle-spectral" class="map-btn" style="border-color: var(--accent-gold); color: var(--accent-gold);">
-                  <i data-lucide="layers" size="14"></i> Satellite Thermal (NDVI)
-                </button>
+              <div class="glass-card metric-card">
+                <div class="metric-header">
+                  <i data-lucide="cpu"></i>
+                  <span>IoT Hub</span>
+                </div>
+                <div class="iot-list">
+                  <div class="iot-row">
+                    <span>Moisture</span>
+                    <strong id="iot-moisture" style="color: var(--accent-primary);">--%</strong>
+                  </div>
+                  <div class="iot-row">
+                    <span>pH Level</span>
+                    <strong id="iot-ph" style="color: var(--accent-gold);">--</strong>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        <!-- Command Center Tab (New: The Moat) -->
-        <section id="command-tab" class="tab-content">
-          <div class="top-bar">
-            <h2>Sovereign Intelligence Center</h2>
-            <div class="live-indicator"></div>
-          </div>
-          
-          <div class="command-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem;">
-            <div class="glass-card stat-card">
-              <small style="color:var(--text-muted)">ACTIVE SOVEREIGN NODES</small>
-              <div id="sov-nodes" style="font-size: 2rem; font-weight: 800; color: var(--primary-light);">1,284</div>
-              <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.5rem;">[Deep-Edge Synchronization: ACTIVE]</p>
-            </div>
-            <div class="glass-card stat-card">
-              <small style="color:var(--text-muted)">REGIONAL PATHOGEN LOAD</small>
-              <div id="sov-pathogen-load" style="font-size: 2rem; font-weight: 800; color: var(--accent-gold);">12.4%</div>
-              <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.5rem;">[Critical Alerts: 03 (North Sector)]</p>
-            </div>
-            <div class="glass-card stat-card">
-              <small style="color:var(--text-muted)">FLEET AUTONOMY STATUS</small>
-              <div id="sov-autonomy" style="font-size: 2rem; font-weight: 800; color: var(--primary);">98.2%</div>
-              <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.5rem;">[Deterministic Triggering: ENABLED]</p>
-            </div>
-          </div>
+        <!-- Placeholder for other tabs (to be re-bound) -->
+        <section id="analytics-tab" class="tab-content" style="display: none;"><h1>Analytics</h1></section>
+        <section id="history-tab" class="tab-content" style="display: none;"><h1>History</h1></section>
+        <section id="chat-tab" class="tab-content" style="display: none;"><h1>Consult</h1></section>
+        <section id="plots-tab" class="tab-content" style="display: none;"><h1>Plots</h1></section>
 
-          <div class="glass-card" style="margin-top: 1.5rem; height: 350px; position: relative; overflow: hidden; background: rgba(0,0,0,0.4);">
-             <div class="chart-wrapper" style="height: 100%;">
-                <canvas id="globalRiskChart"></canvas>
-             </div>
-             <div style="position: absolute; top: 1.5rem; right: 1.5rem; text-align: right;">
-                <h4 style="font-size: 0.7rem; letter-spacing: 2px; color: var(--primary-light);">GEOSPATIAL RISK STREAM</h4>
-                <p style="font-size: 0.6rem; color: var(--text-muted);">Real-time predictive epidemiology</p>
-             </div>
-          </div>
-
-          <div class="sovereign-log-panel glass-card" style="margin-top: 1.5rem; padding: 1.5rem; border: 1px dashed var(--theme-border);">
-            <h4 style="font-size: 0.75rem; color: var(--accent-gold); margin-bottom: 1rem;">[INTEL] SOVEREIGN ROUTING LOG</h4>
-            <div id="sovereign-logs" style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text-muted); line-height: 1.6; height: 120px; overflow-y: auto;">
-              > Booting Sovereign Data Moat Engine...<br>
-              > Establishing secure handshake with Regional Specialist Models...<br>
-              > GPS Lock: India/Kolkata Cluster...<br>
-              > Priority Path: Jute & Coffee Pathogens...<br>
-              > System Healthy.
-            </div>
-          </div>
-        </section>
-
-        <!-- Account Profile Tab -->
-        <section id="account-tab" class="tab-content">
-          <div class="top-bar">
-            <h2>Operator Profile</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem;">Sovereign identity and biometric authorization management</p>
-          </div>
-
-          <div class="profile-layout" style="display: grid; grid-template-columns: 1fr 2fr; gap: 2rem; margin-top: 2rem;">
-            <!-- Left Column: Avatar & Quick Stats -->
-            <div class="profile-sidebar">
-              <div class="glass-card" style="text-align: center; padding: 2rem;">
-                <div style="position: relative; display: inline-block;">
-                  <img id="profile-avatar-large" src="" style="width: 120px; height: 120px; border-radius: 30px; border: 2px solid var(--primary); padding: 5px; background: var(--bg-dark);">
-                  <button id="edit-avatar" style="position: absolute; bottom: 0; right: 0; background: var(--primary); border: none; border-radius: 50%; width: 32px; height: 32px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-                    <i data-lucide="camera" size="14"></i>
-                  </button>
-                </div>
-                <h3 id="profile-display-name" style="margin-top: 1.5rem; font-size: 1.5rem;">Operator</h3>
-                <p id="profile-display-farm" style="color: var(--primary-light); font-size: 0.8rem; letter-spacing: 1px;">SOVEREIGN ESTATE</p>
-                
-                <div style="margin-top: 2rem; border-top: 1px solid var(--glass-border); padding-top: 2rem;">
-                  <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-                    <span style="color: var(--text-muted); font-size: 0.75rem;">Security Level</span>
-                    <span style="color: var(--accent-gold); font-size: 0.75rem; font-weight: 800;">ELITE</span>
-                  </div>
-                  <div style="display: flex; justify-content: space-between;">
-                    <span style="color: var(--text-muted); font-size: 0.75rem;">Biometrics</span>
-                    <span id="profile-biometric-status" style="color: var(--primary); font-size: 0.75rem; font-weight: 800;">ACTIVE</span>
-                  </div>
-                </div>
-              </div>
-
-              <div class="glass-card" style="margin-top: 1.5rem; padding: 1.5rem;">
-                <h4 style="font-size: 0.7rem; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 1rem;">TECHNICAL METADATA</h4>
-                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--text-muted);">
-                  <div style="margin-bottom: 0.5rem;">IP: <span id="profile-ip" style="color: #fff;">--.---.--.--</span></div>
-                  <div>DEVICE: <span id="profile-device" style="color: #fff;">AUTHORIZED TERMINAL</span></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Right Column: Details Form -->
-            <div class="profile-details">
-              <div class="glass-card" style="padding: 2.5rem;">
-                <form id="profile-form">
-                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
-                    <div class="input-group">
-                      <label>First Name</label>
-                      <input type="text" id="profile-fname" placeholder="Enter first name...">
-                    </div>
-                    <div class="input-group">
-                      <label>Last Name</label>
-                      <input type="text" id="profile-lname" placeholder="Enter last name...">
-                    </div>
-                  </div>
-
-                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
-                    <div class="input-group">
-                      <label>Date of Birth</label>
-                      <input type="date" id="profile-dob">
-                    </div>
-                    <div class="input-group">
-                      <label>Email Address</label>
-                      <input type="email" id="profile-email" placeholder="operator@sovereign.mesh">
-                    </div>
-                  </div>
-
-                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
-                    <div class="input-group">
-                      <label>Mobile Number</label>
-                      <input type="tel" id="profile-mobile" placeholder="+91 XXXX XXX XXX">
-                    </div>
-                    <div class="input-group">
-                      <label>Farm/Estate Name</label>
-                      <input type="text" id="profile-farm" placeholder="Sovereign Estate">
-                    </div>
-                  </div>
-
-                  <div class="input-group" style="margin-bottom: 2rem;">
-                    <label>Physical Address</label>
-                    <textarea id="profile-address" style="width: 100%; padding: 1rem; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 12px; color: white; resize: none; height: 80px;" placeholder="Enter full estate address..."></textarea>
-                  </div>
-
-                  <div style="display: flex; gap: 1rem;">
-                    <button type="submit" class="btn btn-primary" style="flex: 2;">
-                      <i data-lucide="save"></i> Update Sovereign Identity
-                    </button>
-                    <button type="button" id="profile-sync-btn" class="btn" style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);">
-                      <i data-lucide="refresh-cw"></i> Sync Cloud
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Inventory Tab (New) -->
-        <section id="inventory-tab" class="tab-content">
-          <div class="top-bar" style="display: flex; justify-content: space-between; align-items: center;">
-            <h2>Resource Inventory</h2>
-            <button class="btn btn-primary" id="add-item-btn"><i data-lucide="plus"></i> Add Resource</button>
-          </div>
-          
-          <div class="inventory-alerts" id="inventory-alerts" style="margin-top: 1.5rem;"></div>
-
-          <div class="inventory-grid" id="inventory-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
-            <!-- Inventory items injected here -->
-          </div>
-        </section>
       </main>
     </div>
 
-    <!-- Modals -->
-    <div class="modal" id="config-modal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; display: none; align-items: center; justify-content: center;">
-      <div class="modal-content glass-card" style="width: 400px; padding: 2.5rem;">
-        <h2 style="margin-bottom: 2rem;">Configuration</h2>
-        <div class="input-group" style="margin-bottom: 1.5rem;">
-          <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Gemini API Key</label>
-          <input type="password" id="gemini-key" style="width: 100%; padding: 1rem; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 12px; color: white;">
-        </div>
-        <div class="input-group" style="margin-bottom: 1.5rem;">
-          <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">OpenWeather API Key</label>
-          <input type="password" id="weather-key" style="width: 100%; padding: 1rem; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 12px; color: white;">
-        </div>
-        <div class="input-group" style="margin-bottom: 2rem;">
-          <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Preferred Language</label>
-          <select id="pref-lang" style="width: 100%; padding: 1rem; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 12px; color: white;">
-            <option>English</option>
-            <option>Hindi</option>
-            <option>Bengali</option>
-            <option>Spanish</option>
-          </select>
-        </div>
-
-        <!-- NEW: System Diagnostics -->
-        <div class="system-diagnostics glass-card" style="padding: 1rem; margin-bottom: 2rem; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border);">
-          <h4 style="font-size: 0.7rem; letter-spacing: 2px; color: var(--primary-light); margin-bottom: 1rem;">SYSTEM DIAGNOSTICS</h4>
-          <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.75rem;">
-            <div style="display: flex; justify-content: space-between;">
-              <span>Sovereign DB:</span>
-              <span id="diag-db" style="color: var(--primary);">ONLINE</span>
-            </div>
-            <div style="display: flex; justify-content: space-between;">
-              <span>Weather API:</span>
-              <span id="diag-weather" style="color: var(--text-muted);">CHECKING...</span>
-            </div>
-            <div style="display: flex; justify-content: space-between;">
-              <span>Gemini Intel:</span>
-              <span id="diag-gemini" style="color: var(--text-muted);">CHECKING...</span>
-            </div>
-            <div style="display: flex; justify-content: space-between;">
-              <span>Geolocation:</span>
-              <span id="diag-geo" style="color: var(--text-muted);">CHECKING...</span>
-            </div>
-          </div>
-        </div>
-        <div class="modal-actions" style="display: flex; gap: 1rem; flex-wrap: wrap;">
-          <button class="btn btn-secondary" id="test-api" style="flex: 1;">Test Key</button>
-          <button class="btn btn-primary" id="save-config" style="flex: 2;">Save Settings</button>
-          <button class="btn btn-secondary" id="clear-cache-btn" style="width: 100%; margin-top: 0.5rem; color: #ef4444; border-color: #ef444422;">
-            <i data-lucide="refresh-cw"></i> Clean System Cache & Hard Reload
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- AI/ML Libraries -->
-    <script type="module" src="./src/main.js"></script>
-
-    <!-- PWA Registration -->
+    <!-- Scripts -->
+    <script type="module" src="src/main.js"></script>
     <script>
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('Sovereign PWA Locked & Loaded:', reg.scope))
-            .catch(err => console.log('PWA Failed to Initialize:', err));
+      // Initialize Lucide Icons
+      lucide.createIcons();
+      
+      // Simple tab switching logic for the new structure
+      document.querySelectorAll('.nav-links li').forEach(li => {
+        li.addEventListener('click', () => {
+          document.querySelectorAll('.nav-links li').forEach(l => l.classList.remove('active'));
+          li.classList.add('active');
+          const tab = li.getAttribute('data-tab');
+          document.querySelectorAll('.tab-content').forEach(content => {
+            content.style.display = 'none';
+          });
+          const target = document.getElementById(tab + '-tab');
+          if (target) target.style.display = 'block';
         });
-      }
+      });
     </script>
 </body>
 </html>
