@@ -1,4 +1,4 @@
-// LeafScan AI - Main Entry Point
+// LeafScan AI - Main Entry Point (Elite v2.1)
 import { state } from './core/state.js';
 import { db } from './core/db.js';
 import { fetchLocationAndAQI } from './services/weather-geo.js';
@@ -51,7 +51,7 @@ async function bootstrap() {
   window.bootstrap = bootstrap; // Make available for re-init
   const els = initElements();
 
-  // Important: Initialize listeners before async loads so buttons aren't dead during load
+  // Initialize listeners
   setupEventListeners(els);
 
   // Start Services
@@ -61,82 +61,46 @@ async function bootstrap() {
   initTelemetry();
 
   switchTab('dashboard', els);
+  
+  // Refresh icons
+  if (window.lucide) window.lucide.createIcons();
 }
 
-// Landing Logic
-(function initLanding() {
-  const enterBtn = document.getElementById('enter-app-btn');
-  const landingScreen = document.getElementById('landing-screen');
-  const particlesContainer = document.getElementById('landing-particles');
+// Initial entry logic
+document.addEventListener('DOMContentLoaded', () => {
+  const splash = document.getElementById('splash-screen');
+  const authVault = document.getElementById('auth-vault');
+  const app = document.getElementById('app');
 
-  // Generate Particles
-  if (particlesContainer) {
-    for (let i = 0; i < 50; i++) {
-      const p = document.createElement('div');
-      p.className = 'landing-particle';
-      p.style.left = Math.random() * 100 + 'vw';
-      p.style.animationDelay = Math.random() * 8 + 's';
-      p.style.opacity = Math.random() * 0.5 + 0.1;
-      particlesContainer.appendChild(p);
+  // Step 1: Initialize Auth
+  initAuth(async (user) => {
+    // On Success: Hide Auth, Show Splash
+    if (authVault) authVault.style.display = 'none';
+    if (splash) {
+      splash.style.display = 'flex';
+      splash.style.opacity = '1';
     }
-  }
 
-  // Animate Stats (Numeric only)
-  const stats = document.querySelectorAll('.landing-stat-value');
-  stats.forEach(s => {
-    const targetText = s.textContent.replace('+', '');
-    const target = parseInt(targetText);
-    if (isNaN(target)) return; // Skip non-numeric stats like "Fleet"
+    state.currentUser = user;
+    await seedUserData(user.id);
 
-    let current = 0;
-    const interval = setInterval(() => {
-      if (current >= target) {
-        s.textContent = target + (s.textContent.includes('+') ? '+' : '');
-        clearInterval(interval);
-      } else {
-        current += Math.ceil(target / 20);
-        s.textContent = current + (s.textContent.includes('+') ? '+' : '');
-      }
-    }, 50);
+    // Step 2: Show App after splash
+    setTimeout(() => {
+      if (splash) splash.style.opacity = '0';
+      setTimeout(() => {
+        if (splash) splash.style.display = 'none';
+        if (app) app.style.display = 'flex';
+        bootstrap();
+      }, 600);
+    }, 2000);
   });
 
-  if (enterBtn) {
-    enterBtn.addEventListener('click', () => {
-      landingScreen.classList.add('exit');
-      setTimeout(() => {
-        landingScreen.style.display = 'none';
-        const authVault = document.getElementById('auth-vault');
-        if (authVault) {
-          authVault.style.display = 'flex';
-          initAuth(async (user) => {
-            state.currentUser = user;
-            
-            const splash = document.getElementById('splash-screen');
-            if (splash) {
-              splash.style.display = 'flex';
-              splash.style.opacity = '1';
-            }
-            
-            // Seed demo data for new users
-            await seedUserData(user.id);
-            
-            setTimeout(() => {
-              if (splash) splash.style.opacity = '0';
-              setTimeout(() => {
-                if (splash) splash.style.display = 'none';
-                document.getElementById('app').style.display = 'flex';
-                bootstrap();
-              }, 600);
-            }, 2000);
-          });
-        } else {
-          document.getElementById('app').style.display = 'flex';
-          bootstrap();
-        }
-      }, 800);
-    });
-  }
-
-  // Refresh Icons for Landing
-  if (window.lucide) window.lucide.createIcons();
-})();
+  // If already logged in (firebase state check is handled in initAuth)
+  // We just wait for initAuth to trigger the callback
+  
+  // Show login vault initially
+  if (authVault) authVault.style.display = 'flex';
+  
+  // Hide splash if it was visible
+  if (splash) splash.style.display = 'none';
+});

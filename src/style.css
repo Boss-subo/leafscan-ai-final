@@ -634,3 +634,44 @@ body {
   }
 }
 
+/* MODAL SYSTEM */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.config-card {
+  width: 100%;
+  max-width: 500px;
+  background: var(--bg-sidebar);
+}
+
+.config-card h3 {
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.diag-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  font-size: 0.75rem;
+  padding: 1rem;
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+}
+
+.diag-row strong {
+  color: var(--accent-primary);
+}
+
+
