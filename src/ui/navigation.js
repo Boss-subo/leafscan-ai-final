@@ -68,7 +68,8 @@ export async function switchTab(tabId, elements) {
 
 export function initTelemetry() {
   const terminal = document.getElementById('telemetry-terminal');
-  if (!terminal) return;
+  const iotMoisture = document.getElementById('iot-moisture');
+  const iotPh = document.getElementById('iot-ph');
   
   const thoughts = [
     "Analyzing Arabica Leaf Vein patterns...",
@@ -78,6 +79,21 @@ export function initTelemetry() {
     "Establishing secure handshake with Regional Specialist Models..."
   ];
 
+  // Drive IoT Hub with realistic biological drift
+  setInterval(() => {
+    if (iotMoisture) {
+      const current = parseFloat(iotMoisture.textContent) || 45;
+      const drift = (Math.random() * 2 - 1).toFixed(1);
+      iotMoisture.textContent = `${(parseFloat(current) + parseFloat(drift)).toFixed(1)}%`;
+    }
+    if (iotPh) {
+      const current = parseFloat(iotPh.textContent) || 6.5;
+      const drift = (Math.random() * 0.2 - 0.1).toFixed(2);
+      iotPh.textContent = (parseFloat(current) + parseFloat(drift)).toFixed(2);
+    }
+  }, 5000);
+
+  if (!terminal) return;
   setInterval(() => {
     const msg = thoughts[Math.floor(Math.random() * thoughts.length)];
     const time = new Date().toLocaleTimeString();

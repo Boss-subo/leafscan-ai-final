@@ -650,25 +650,68 @@ body {
 
 .config-card {
   width: 100%;
-  max-width: 500px;
+  max-width: 440px;
   background: var(--bg-sidebar);
+  padding: 2rem;
 }
 
 .config-card h3 {
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  font-size: 1.4rem;
+}
+
+.config-card .input-group {
+  margin-bottom: 1rem;
+}
+
+.config-card .input-group label {
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.config-card .btn-full {
+  margin-top: 0.5rem;
+  padding: 0.8rem;
 }
 
 .diag-row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 2rem;
-  font-size: 0.75rem;
-  padding: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.7rem;
+  padding: 0.8rem;
   background: rgba(255,255,255,0.03);
   border-radius: 12px;
+}
+
+/* --- IOT GLOW --- */
+.iot-row strong {
+  text-shadow: 0 0 10px var(--accent-primary-glow);
+}
+
+/* --- PLOTS ENHANCEMENT --- */
+.plots-container {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 2rem;
+  height: calc(100vh - 250px);
+}
+
+.plots-list {
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.map-vault {
+  height: 100%;
+  padding: 0 !important;
+  overflow: hidden;
+  border-radius: var(--card-radius);
+  border: 1px solid var(--glass-border);
 }
 
 .diag-row strong {
