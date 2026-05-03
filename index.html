@@ -117,7 +117,7 @@
               <i data-lucide="map"></i>
               <span>Plots</span>
             </li>
-            <li id="config-btn">
+            <li data-tab="settings" id="nav-settings" style="display: none;">
               <i data-lucide="settings"></i>
               <span>Settings</span>
             </li>
@@ -372,8 +372,19 @@
           document.querySelectorAll('.tab-content').forEach(content => {
             content.style.display = 'none';
           });
-          const target = document.getElementById(tab + '-tab');
-          if (target) target.style.display = 'block';
+          // Sovereign Admin Stealth: Double-click logo to reveal Settings
+          document.querySelector('.sidebar-brand')?.addEventListener('dblclick', () => {
+            const navSettings = document.getElementById('nav-settings');
+            if (navSettings) {
+              navSettings.style.display = 'flex';
+              alert("SOVEREIGN ADMIN MODE: Access Granted.");
+            }
+          });
+
+          const elements = {
+            target: document.getElementById(tab + '-tab')
+          };
+          if (elements.target) elements.target.style.display = 'block';
         });
       });
     </script>
