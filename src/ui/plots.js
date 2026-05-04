@@ -239,11 +239,25 @@ function selectPlot(id) {
 
 // ─── HEATMAP ──────────────────────────────────────────────────────────────────
 function showHeatmap(plot) {
+  if (!PlotsState.map) return;
+  
   if (PlotsState.heatLayer) {
     PlotsState.map.removeLayer(PlotsState.heatLayer);
+    PlotsState.heatLayer = null;
   }
 
-  if (!plot.heatData || plot.heatData.length === 0) return;
+  if (!plot) return;
+
+  if (!plot.heatData || plot.heatData.length === 0) {
+    import('../core/utils.js').then(m => m.showToast("Synthesizing Satellite Risk Data...", "info"));
+    return;
+  }
+
+  if (typeof L.heatLayer !== 'function') {
+    console.error("LeafScan AI: Heatmap Plugin Handshake Failed.");
+    import('../core/utils.js').then(m => m.showToast("Heatmap Engine Offline. Check Connection.", "error"));
+    return;
+  }
 
   PlotsState.heatLayer = L.heatLayer(plot.heatData, {
     radius: 25,
@@ -251,6 +265,12 @@ function showHeatmap(plot) {
     maxZoom: 18,
     gradient: RISK_GRADIENT,
   }).addTo(PlotsState.map);
+}
+
+// Robust ID-based lookup for popup buttons
+function showHeatmapByID(id) {
+  const plot = PlotsState.plots.find(p => p.id === id);
+  if (plot) showHeatmap(plot);
 }
 
 function generateMockHeatData(latlngs) {
@@ -375,7 +395,7 @@ function buildPopupHTML(plot) {
       <div class="popup-row"><span>Crop:</span><span>${plot.cropData.label}</span></div>
       <div class="popup-row"><span>Area:</span><span>${plot.area}</span></div>
       <div class="popup-row"><span>Risk:</span><span style="color:${getRiskColor(plot.riskScore||0.3)}">${Math.round((plot.riskScore||0.3)*100)}%</span></div>
-      <button onclick="window.LeafScanPlots.showHeatmap(window.LeafScanPlots.getPlot('${plot.id}'))" class="popup-btn">View Heatmap</button>
+      <button onclick="window.LeafScanPlots.showHeatmapByID('${plot.id}')" class="popup-btn">View Heatmap</button>
     </div>`;
 }
 
@@ -498,6 +518,7 @@ window.LeafScanPlots = {
   selectPlot,
   deletePlot,
   showHeatmap,
+  showHeatmapByID,
   toggleSatellite,
   getPlot: (id) => PlotsState.plots.find(p => p.id === id),
 };
