@@ -7,7 +7,6 @@ import { switchTab } from './navigation.js';
 import { sendMessage, testGeminiKey, toggleMic, syncAiModel } from './chat.js';
 import { exportToPDF } from '../services/pdf-export.js';
 import { showToast } from '../core/utils.js';
-import { showToast } from '../core/utils.js';
 
 // --- ELITE CHAT ENGINE (Top-Level Global Bridge) ---
 export const handleChat = async () => {
