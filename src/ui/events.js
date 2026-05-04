@@ -7,7 +7,7 @@ import { switchTab } from './navigation.js';
 import { sendMessage, testGeminiKey, toggleMic, syncAiModel } from './chat.js';
 import { exportToPDF } from '../services/pdf-export.js';
 import { showToast } from '../core/utils.js';
-import { addPlot } from './plots.js';
+import { showToast } from '../core/utils.js';
 
 // --- ELITE CHAT ENGINE (Top-Level Global Bridge) ---
 export const handleChat = async () => {
@@ -79,7 +79,6 @@ export function setupEventListeners(elements) {
 
   elements.downloadMissionJson?.addEventListener('click', exportMissionJSON);
   elements.downloadPdf?.addEventListener('click', () => exportToPDF(elements.resultPanel, 'Diagnostic_Report.pdf'));
-  document.getElementById('add-plot-btn')?.addEventListener('click', () => addPlot());
 
   // --- Scanner Interactions ---
   elements.uploadBtn?.addEventListener('click', () => elements.fileInput?.click());
