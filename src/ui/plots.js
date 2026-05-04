@@ -372,9 +372,9 @@ function buildPopupHTML(plot) {
         <span>${plot.cropData.icon}</span>
         <strong>${plot.name}</strong>
       </div>
-      <div class="popup-row"><span>Crop</span><span>${plot.cropData.label}</span></div>
-      <div class="popup-row"><span>Area</span><span>${plot.area}</span></div>
-      <div class="popup-row"><span>Risk</span><span style="color:${getRiskColor(plot.riskScore||0.3)}">${Math.round((plot.riskScore||0.3)*100)}%</span></div>
+      <div class="popup-row"><span>Crop:</span><span>${plot.cropData.label}</span></div>
+      <div class="popup-row"><span>Area:</span><span>${plot.area}</span></div>
+      <div class="popup-row"><span>Risk:</span><span style="color:${getRiskColor(plot.riskScore||0.3)}">${Math.round((plot.riskScore||0.3)*100)}%</span></div>
       <button onclick="window.LeafScanPlots.showHeatmap(window.LeafScanPlots.getPlot('${plot.id}'))" class="popup-btn">View Heatmap</button>
     </div>`;
 }
