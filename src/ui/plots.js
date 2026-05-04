@@ -502,4 +502,4 @@ window.LeafScanPlots = {
   getPlot: (id) => PlotsState.plots.find(p => p.id === id),
 };
 
-export { initPlotsMap, selectPlot, deletePlot, showHeatmap, toggleSatellite };
+export { selectPlot, deletePlot, showHeatmap };
