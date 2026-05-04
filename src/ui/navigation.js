@@ -7,7 +7,7 @@ import { initMap } from './map.js';
 import { loadReminders } from './reminders.js';
 import { initChat } from './chat.js';
 import { initProfile } from './profile.js';
-import { loadPlots } from './plots.js';
+import { initPlotsMap } from './plots.js';
 
 export async function switchTab(tabId, elements) {
   if (!tabId) return;
@@ -39,8 +39,7 @@ export async function switchTab(tabId, elements) {
         await updateCharts();
         break;
       case 'plots':
-        initMap();
-        await loadPlots();
+        initPlotsMap();
         // Double-Handshake: Force Leaflet to refresh twice during DOM transitions
         setTimeout(() => { if (state.map) state.map.invalidateSize(); }, 100);
         setTimeout(() => { if (state.map) state.map.invalidateSize(); }, 500);

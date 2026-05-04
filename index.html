@@ -4,9 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>LeafScan AI | Elite OS</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"/>
     <link rel="stylesheet" href="src/style.css">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
 </head>
 <body>
 
@@ -76,7 +81,42 @@
         <button id="save-config" class="btn btn-primary btn-full">SYNC KEYS</button>
         <button id="test-api" class="btn btn-secondary btn-full">TEST HANDSHAKE</button>
         <button id="clear-cache-btn" class="btn btn-secondary btn-full" style="color: var(--accent-gold);">PURGE CACHE</button>
-        <button onclick="document.getElementById('config-modal').style.display='none'" class="btn btn-secondary btn-full">CLOSE</button>
+        </div>
+    </div>
+
+    <!-- Add Plot Modal -->
+    <div id="add-plot-modal" class="modal-overlay" style="display: none;">
+      <div class="glass-card config-card">
+        <h3><i data-lucide="map-pin"></i> Define New Plot</h3>
+        <p style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 1.5rem;">Securely vaulting field boundaries to Sovereign Mesh</p>
+        
+        <div class="input-group">
+          <label>PLOT NAME</label>
+          <input type="text" id="plot-name-input" placeholder="e.g. North Sector A1">
+        </div>
+        
+        <div class="input-group">
+          <label>CROP CATEGORY</label>
+          <select id="plot-crop-select" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: #fff; padding: 0.8rem; border-radius: 8px;">
+            <option value="wheat">Wheat 🌾</option>
+            <option value="rice">Rice 🌾</option>
+            <option value="cotton">Cotton 🌿</option>
+            <option value="sugarcane">Sugarcane 🎋</option>
+            <option value="maize">Maize 🌽</option>
+            <option value="soybean">Soybean 🫘</option>
+            <option value="tomato">Tomato 🍅</option>
+            <option value="other">Other 🌱</option>
+          </select>
+        </div>
+
+        <div class="diag-row">
+          <span>Detected Area: <strong id="plot-area-display">--</strong></span>
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+          <button id="save-plot-btn" class="btn btn-primary" style="flex: 1;">SAVE PLOT</button>
+          <button id="cancel-plot-btn" class="btn btn-secondary" style="flex: 1;">CANCEL</button>
+        </div>
       </div>
     </div>
 
