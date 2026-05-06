@@ -46,74 +46,76 @@ export function selectCrop(crop, chip) {
 }
 
 /**
- * Initializes the Dynamic Crop Specialist Selector UI
+ * Initializes the Crop Specialist Selector UI
  */
 export function initCropSelector() {
   const container = document.querySelector('.crop-chips');
   if (!container) return;
 
-  // 1. Add Neural Filter (Search Bar)
-  const parent = document.querySelector('.crop-selector-container');
-  if (parent && !document.getElementById('crop-search')) {
-    const searchInput = document.createElement('input');
-    searchInput.type = 'text';
-    searchInput.id = 'crop-search';
-    searchInput.placeholder = '🔍 Search 102 Specialists...';
-    searchInput.className = 'crop-search-input';
-    parent.insertBefore(searchInput, container);
-
-    searchInput.addEventListener('input', (e) => {
-      const term = e.target.value.toLowerCase();
-      const chips = document.querySelectorAll('.crop-chip');
-      chips.forEach(chip => {
-        const crop = chip.dataset.crop.toLowerCase();
-        chip.style.display = crop.includes(term) ? 'flex' : 'none';
-      });
-    });
-  }
-
-  // 2. Clear hardcoded chips
+  // Clear hardcoded chips
   container.innerHTML = '';
 
-  // 3. Generate 102 Elite Chips
-  const crops = Object.keys(CROP_SPECIALISTS).sort();
+  // Get all registered crops from our Elite Registry
+  const crops = Object.keys(CROP_SPECIALISTS || {});
   
-  crops.forEach(cropId => {
-    const spec = CROP_SPECIALISTS[cropId];
-    const chip = document.createElement('div');
-    chip.className = 'crop-chip';
-    chip.dataset.crop = spec.model;
+  // Create search bar if not present
+  if (!document.getElementById('crop-search')) {
+    const searchWrap = document.createElement('div');
+    searchWrap.className = 'input-wrapper';
+    searchWrap.style.marginBottom = '1rem';
+    searchWrap.innerHTML = `
+      <i data-lucide="search" style="position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:#64748b; font-size:14px;"></i>
+      <input type="text" id="crop-search" placeholder="Search 102 Specialists (e.g. Rice, Mango, Amla)..." 
+             style="width:100%; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:0.6rem 1rem 0.6rem 2.8rem; color:white; font-size:0.8rem; outline:none;">
+    `;
+    container.parentNode.insertBefore(searchWrap, container);
     
-    // Add icon based on crop name (simple mapping or default)
-    const icon = getCropEmoji(spec.model);
-    chip.innerHTML = `${icon} ${spec.model}`;
-    
-    if (state.selectedCrop === spec.model) chip.classList.add('active');
-
-    chip.addEventListener('click', () => {
-      selectCrop(spec.model, chip);
+    // Wire up search
+    document.getElementById('crop-search').addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase();
+      document.querySelectorAll('.crop-chip').forEach(chip => {
+        const match = chip.dataset.crop.toLowerCase().includes(term);
+        chip.style.display = match ? 'inline-block' : 'none';
+      });
     });
 
+    if (window.lucide) window.lucide.createIcons();
+  }
+
+  // Render all chips
+  crops.forEach(cropId => {
+    const specialist = CROP_SPECIALISTS[cropId];
+    const chip = document.createElement('div');
+    chip.className = 'crop-chip';
+    if (state.selectedCrop?.toLowerCase() === cropId) chip.classList.add('active');
+    chip.dataset.crop = specialist.model;
+    
+    // Add emoji based on name if possible
+    let icon = '🌱';
+    if (cropId.includes('wheat')) icon = '🌾';
+    if (cropId.includes('tomato')) icon = '🍅';
+    if (cropId.includes('corn')) icon = '🌽';
+    if (cropId.includes('apple')) icon = '🍎';
+    if (cropId.includes('rice')) icon = '🍚';
+    if (cropId.includes('mango')) icon = '🥭';
+    if (cropId.includes('potato')) icon = '🥔';
+    if (cropId.includes('banana')) icon = '🍌';
+    if (cropId.includes('grape')) icon = '🍇';
+
+    chip.textContent = `${icon} ${specialist.model}`;
+    
+    chip.addEventListener('click', () => selectCrop(specialist.model, chip));
     container.appendChild(chip);
   });
 
   if (!state.selectedCrop) {
     state.selectedCrop = 'Wheat';
-    const wheatChip = container.querySelector('[data-crop="Wheat"]');
-    if (wheatChip) wheatChip.classList.add('active');
+    const firstChip = container.querySelector('[data-crop="Wheat"]');
+    if (firstChip) firstChip.classList.add('active');
   }
 
-  // Expose global bridge
+  // Expose global bridge for console testing
   window.LeafScanAnalysis = { selectCrop };
-}
-
-function getCropEmoji(name) {
-  const map = {
-    'Apple': '🍎', 'Banana': '🍌', 'Corn': '🌽', 'Grape': '🍇', 'Rice': '🌾',
-    'Tomato': '🍅', 'Wheat': '🌾', 'Potato': '🥔', 'Orange': '🍊', 'Lemon': '🍋',
-    'Mango': '🥭', 'Strawberry': '🍓', 'Pineapple': '🍍', 'Coffee': '☕', 'Tea': '🍵'
-  };
-  return map[name] || '🌿';
 }
 
 /**
