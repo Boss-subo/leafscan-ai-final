@@ -9,10 +9,10 @@
   "apple": {
     "model": "Apple",
     "classes": [
+      "Apple Scab",
       "Apple Black Rot",
-      "Apple Cedar Rust",
       "Apple Healthy",
-      "Apple Scab"
+      "Apple Cedar Rust"
     ]
   },
   "ash_gourd": {
