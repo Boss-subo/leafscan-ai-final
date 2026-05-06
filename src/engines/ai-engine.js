@@ -117,7 +117,7 @@ export async function runLocalInference(imgData) {
         // ─── NEURAL SECURITY CHECKS ───
         
         // 1. Tier 3: Inconclusive (Reject)
-        if (confidence < 0.70) {
+        if (confidence < 0.40) {
           return { 
             label: 'Inconclusive', 
             confidence, 
@@ -127,7 +127,7 @@ export async function runLocalInference(imgData) {
         }
 
         // 2. Tier 2: Warning (Accept with Caution)
-        if (confidence < 0.85) {
+        if (confidence < 0.65) {
           return { 
             label: state.modelLabels[maxIdx] || 'Unknown Pathogen', 
             confidence, 
