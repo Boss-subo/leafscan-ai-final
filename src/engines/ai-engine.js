@@ -2,12 +2,30 @@ import { state } from '../core/state.js';
 import { showToast } from '../core/utils.js';
 
 const CROP_SPECIALISTS = {
-  'Tomato': { model: 'Tomato', classes: ['Tomato___Bacterial_spot', 'Tomato___Early_blight', 'Tomato___Late_blight', 'Tomato___Leaf_Mold', 'Tomato___Septoria_leaf_spot', 'Tomato___Spider_mites Two-spotted_spider_mite', 'Tomato___Target_Spot', 'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus', 'Tomato___healthy'] },
-  'Wheat': { model: 'Wheat', classes: ['Wheat___Brown_Rust', 'Wheat___Healthy', 'Wheat___Yellow_Rust'] },
-  'Corn': { model: 'Corn', classes: ['Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot', 'Corn_(maize)___Common_rust_', 'Corn_(maize)___Northern_Leaf_Blight', 'Corn_(maize)___healthy'] },
-  'Grape': { model: 'Grape', classes: ['Grape___Black_rot', 'Grape___Esca_(Black_Measles)', 'Grape___Leaf_blight_(Isariopsis_Leaf_Spot)', 'Grape___healthy'] },
-  'Apple': { model: 'Apple', classes: ['Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy'] }
+  'Tomato': { 
+    model: 'Tomato', 
+    classes: ['Tomato Bacterial Spot', 'Tomato Early Blight', 'Tomato Healthy', 'Tomato Late Blight', 'Tomato Leaf Mold', 'Tomato Mosaic Virus', 'Tomato Septoria Leaf Spot', 'Tomato Spider Mites Two Spotted Mite', 'Tomato Target Spot', 'Tomato Yellowleaf Curl Virus'] 
+  },
+  'Wheat': { 
+    model: 'Wheat', 
+    classes: ['Wheat Healthy', 'Wheat Rust'] 
+  },
+  'Corn': { 
+    model: 'Corn', 
+    classes: ['Corn (Maize) Cercospora Leaf Spot Gray', 'Corn (Maize) Common Rust', 'Corn (Maize) Healthy', 'Corn (Maize) Northern Leaf Blight', 'Corn Healthy', 'Corn Smut'] 
+  },
+  'Grape': { 
+    model: 'Grape', 
+    classes: ['Grape Black Rot', 'Grape Esca (Black Measles)', 'Grape Healthy', 'Grape Leaf Blight (Isariopsis Spot)'] 
+  },
+  'Apple': { 
+    model: 'Apple', 
+    classes: ['Apple Black Rot', 'Apple Cedar Rust', 'Apple Healthy', 'Apple Scab'] 
+  }
 };
+
+// Expose to window for diagnostics
+window.CROP_SPECIALISTS = CROP_SPECIALISTS;
 
 const CONFIG = {
   MODELS_BASE: '/model_tfjs/'
@@ -189,9 +207,12 @@ export async function runXAIAnalysis(imgData, targetClassIdx) {
       const canvas = document.createElement('canvas');
       canvas.width = 224;
       canvas.height = 224;
-      await tf.browser.toPixels(heatmap.resizeBilinear([224, 224]), canvas);
+      // Patch: Ensure heatmap is rank 3 [H, W, 1] before resizing
+      const resizedHeatmap = heatmap.expandDims(-1).resizeBilinear([224, 224]);
+      await tf.browser.toPixels(resizedHeatmap, canvas);
       
       heatmap.dispose();
+      resizedHeatmap.dispose();
       resolve(canvas.toDataURL());
     };
     img.src = imgData;
