@@ -115,9 +115,14 @@ export async function updateUserProfile(uid, data) {
 // ─── STORAGE ─────────────────────────────────────────────────────────────────
 
 export async function uploadImage(userId, base64Str) {
-  const storageRef = ref(storage, `scans/${userId}/${Date.now()}.jpg`);
-  await uploadString(storageRef, base64Str, 'data_url');
-  return await getDownloadURL(storageRef);
+  try {
+    const storageRef = ref(storage, `scans/${userId}/${Date.now()}.jpg`);
+    await uploadString(storageRef, base64Str, 'data_url');
+    return await getDownloadURL(storageRef);
+  } catch (error) {
+    console.warn("[Firebase Sovereign Sync] Cloud upload blocked by CORS or Network. Falling back to Local Vault.", error);
+    return null;
+  }
 }
 
 // ─── HISTORY ─────────────────────────────────────────────────────────────────

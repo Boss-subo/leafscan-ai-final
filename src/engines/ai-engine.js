@@ -1,30 +1,10 @@
 import { state } from '../core/state.js';
 import { showToast } from '../core/utils.js';
 
-const CROP_SPECIALISTS = {
-  'Tomato': { 
-    model: 'Tomato', 
-    classes: ['Tomato Bacterial Spot', 'Tomato Early Blight', 'Tomato Healthy', 'Tomato Late Blight', 'Tomato Leaf Mold', 'Tomato Mosaic Virus', 'Tomato Septoria Leaf Spot', 'Tomato Spider Mites Two Spotted Mite', 'Tomato Target Spot', 'Tomato Yellowleaf Curl Virus'] 
-  },
-  'Wheat': { 
-    model: 'Wheat', 
-    classes: ['Wheat Healthy', 'Wheat Rust'] 
-  },
-  'Corn': { 
-    model: 'Corn', 
-    classes: ['Corn (Maize) Cercospora Leaf Spot Gray', 'Corn (Maize) Common Rust', 'Corn (Maize) Healthy', 'Corn (Maize) Northern Leaf Blight', 'Corn Healthy', 'Corn Smut'] 
-  },
-  'Grape': { 
-    model: 'Grape', 
-    classes: ['Grape Black Rot', 'Grape Esca (Black Measles)', 'Grape Healthy', 'Grape Leaf Blight (Isariopsis Spot)'] 
-  },
-  'Apple': { 
-    model: 'Apple', 
-    classes: ['Apple Black Rot', 'Apple Cedar Rust', 'Apple Healthy', 'Apple Scab'] 
-  }
-};
+import specialists from './specialists.json';
 
-// Expose to window for diagnostics
+// ELITE REGISTRY: 102 Specialized Neural Specialists
+export const CROP_SPECIALISTS = specialists;
 window.CROP_SPECIALISTS = CROP_SPECIALISTS;
 
 const CONFIG = {
@@ -59,13 +39,15 @@ export async function loadLocalModel(cropName) {
   }
 
   try {
-    const specialist = CROP_SPECIALISTS[cropName];
+    const specialist = CROP_SPECIALISTS[cropName.toLowerCase()];
+    
     if (!specialist) {
-        console.warn(`No specialist configuration found for ${cropName}`);
+      console.warn(`[AI Engine] No specialist registered for ${cropName}. Falling back to Neural Core.`);
     }
 
-    const modelFolder = specialist ? specialist.model : cropName;
-    const modelUrl = `${CONFIG.MODELS_BASE}${modelFolder}/model.json`;
+    const modelUrl = specialist 
+      ? `${CONFIG.MODELS_BASE}${specialist.model}/model.json`
+      : `${CONFIG.MODELS_BASE}model.json`;
     
     console.log(`[AI Engine] Deploying ${cropName} specialist from ${modelUrl}...`);
     
