@@ -1,0 +1,748 @@
+{
+  "amla": {
+    "model": "Amla",
+    "classes": [
+      "Amla___General_Pathogen",
+      "Amla___Healthy"
+    ]
+  },
+  "apple": {
+    "model": "Apple",
+    "classes": [
+      "Apple Black Rot",
+      "Apple Cedar Rust",
+      "Apple Healthy",
+      "Apple Scab"
+    ]
+  },
+  "ash_gourd": {
+    "model": "Ash_Gourd",
+    "classes": [
+      "Ash_Gourd___General_Pathogen",
+      "Ash_Gourd___Healthy"
+    ]
+  },
+  "banana": {
+    "model": "Banana",
+    "classes": [
+      "Banana Healthy",
+      "Banana Sigatoka"
+    ]
+  },
+  "barley": {
+    "model": "Barley",
+    "classes": [
+      "Barley___General_Pathogen",
+      "Barley___Healthy"
+    ]
+  },
+  "beetroot": {
+    "model": "Beetroot",
+    "classes": [
+      "Beetroot___General_Pathogen",
+      "Beetroot___Healthy"
+    ]
+  },
+  "ber": {
+    "model": "Ber",
+    "classes": [
+      "Ber___General_Pathogen",
+      "Ber___Healthy"
+    ]
+  },
+  "bhindi": {
+    "model": "Bhindi",
+    "classes": [
+      "Bhindi___Healthy",
+      "Bhindi___Yellow_Vein_Mosaic"
+    ]
+  },
+  "bitter_gourd": {
+    "model": "Bitter_Gourd",
+    "classes": [
+      "Bitter_Gourd___General_Pathogen",
+      "Bitter_Gourd___Healthy"
+    ]
+  },
+  "black_gram_urad": {
+    "model": "Black_Gram_Urad",
+    "classes": [
+      "Black_Gram_Urad___General_Pathogen",
+      "Black_Gram_Urad___Healthy"
+    ]
+  },
+  "black_pepper": {
+    "model": "Black_Pepper",
+    "classes": [
+      "Black_Pepper___General_Pathogen",
+      "Black_Pepper___Healthy"
+    ]
+  },
+  "bottle_gourd": {
+    "model": "Bottle_Gourd",
+    "classes": [
+      "Bottle_Gourd___General_Pathogen",
+      "Bottle_Gourd___Healthy"
+    ]
+  },
+  "brinjal": {
+    "model": "Brinjal",
+    "classes": [
+      "Brinjal___Healthy",
+      "Brinjal___Phomopsis_Blight"
+    ]
+  },
+  "broad_beans": {
+    "model": "Broad_Beans",
+    "classes": [
+      "Broad_Beans___General_Pathogen",
+      "Broad_Beans___Healthy"
+    ]
+  },
+  "cardamom": {
+    "model": "Cardamom",
+    "classes": [
+      "Cardamom___General_Pathogen",
+      "Cardamom___Healthy"
+    ]
+  },
+  "carrot": {
+    "model": "Carrot",
+    "classes": [
+      "Carrot___General_Pathogen",
+      "Carrot___Healthy"
+    ]
+  },
+  "castor_seed": {
+    "model": "Castor_Seed",
+    "classes": [
+      "Castor_Seed___General_Pathogen",
+      "Castor_Seed___Healthy"
+    ]
+  },
+  "cherry": {
+    "model": "Cherry",
+    "classes": [
+      "Cherry Healthy",
+      "Cherry Powdery Mildew",
+      "Cherry_(including_sour)___Powdery_mildew",
+      "Cherry_(including_sour)___healthy"
+    ]
+  },
+  "cherry_(including_sour)": {
+    "model": "Cherry_(including_sour)",
+    "classes": [
+      "Cherry_(including_sour)___Powdery_mildew",
+      "Cherry_(including_sour)___healthy"
+    ]
+  },
+  "chickpea": {
+    "model": "Chickpea",
+    "classes": [
+      "Chickpea___Healthy",
+      "Chickpea___Wilt"
+    ]
+  },
+  "cinnamon": {
+    "model": "Cinnamon",
+    "classes": [
+      "Cinnamon___General_Pathogen",
+      "Cinnamon___Healthy"
+    ]
+  },
+  "citrus": {
+    "model": "Citrus",
+    "classes": [
+      "Citrus Greening",
+      "Citrus Healthy"
+    ]
+  },
+  "clove": {
+    "model": "Clove",
+    "classes": [
+      "Clove___General_Pathogen",
+      "Clove___Healthy"
+    ]
+  },
+  "cluster_beans": {
+    "model": "Cluster_Beans",
+    "classes": [
+      "Cluster_Beans___General_Pathogen",
+      "Cluster_Beans___Healthy"
+    ]
+  },
+  "cocoa": {
+    "model": "Cocoa",
+    "classes": [
+      "Cocoa Healthy",
+      "Cocoa Swollen Shoot"
+    ]
+  },
+  "coffee": {
+    "model": "Coffee",
+    "classes": [
+      "Coffee Healthy",
+      "Coffee Leaf Rust"
+    ]
+  },
+  "colocasia_arbi": {
+    "model": "Colocasia_Arbi",
+    "classes": [
+      "Colocasia_Arbi___General_Pathogen",
+      "Colocasia_Arbi___Healthy"
+    ]
+  },
+  "corn": {
+    "model": "Corn",
+    "classes": [
+      "Corn (Maize) Cercospora Leaf Spot Gray",
+      "Corn (Maize) Common Rust",
+      "Corn (Maize) Healthy",
+      "Corn (Maize) Northern Leaf Blight",
+      "Corn Healthy",
+      "Corn Smut"
+    ]
+  },
+  "cotton": {
+    "model": "Cotton",
+    "classes": [
+      "Cotton Boll Rot",
+      "Cotton Healthy"
+    ]
+  },
+  "cowpea": {
+    "model": "Cowpea",
+    "classes": [
+      "Cowpea___General_Pathogen",
+      "Cowpea___Healthy"
+    ]
+  },
+  "cucumber": {
+    "model": "Cucumber",
+    "classes": [
+      "Cucumber___General_Pathogen",
+      "Cucumber___Healthy"
+    ]
+  },
+  "cumin": {
+    "model": "Cumin",
+    "classes": [
+      "Cumin___General_Pathogen",
+      "Cumin___Healthy"
+    ]
+  },
+  "curry_leaves": {
+    "model": "Curry_Leaves",
+    "classes": [
+      "Curry_Leaves___General_Pathogen",
+      "Curry_Leaves___Healthy"
+    ]
+  },
+  "custard_apple": {
+    "model": "Custard_Apple",
+    "classes": [
+      "Custard_Apple___General_Pathogen",
+      "Custard_Apple___Healthy"
+    ]
+  },
+  "dragon_fruit": {
+    "model": "Dragon_Fruit",
+    "classes": [
+      "Dragon_Fruit___General_Pathogen",
+      "Dragon_Fruit___Healthy"
+    ]
+  },
+  "drumstick_moringa": {
+    "model": "Drumstick_Moringa",
+    "classes": [
+      "Drumstick_Moringa___General_Pathogen",
+      "Drumstick_Moringa___Healthy"
+    ]
+  },
+  "fig": {
+    "model": "Fig",
+    "classes": [
+      "Fig___General_Pathogen",
+      "Fig___Healthy"
+    ]
+  },
+  "finger_millet_ragi": {
+    "model": "Finger_Millet_Ragi",
+    "classes": [
+      "Finger_Millet_Ragi___General_Pathogen",
+      "Finger_Millet_Ragi___Healthy"
+    ]
+  },
+  "french_beans": {
+    "model": "French_Beans",
+    "classes": [
+      "French_Beans___General_Pathogen",
+      "French_Beans___Healthy"
+    ]
+  },
+  "garlic": {
+    "model": "Garlic",
+    "classes": [
+      "Garlic___General_Pathogen",
+      "Garlic___Healthy"
+    ]
+  },
+  "ginger": {
+    "model": "Ginger",
+    "classes": [
+      "Ginger___General_Pathogen",
+      "Ginger___Healthy"
+    ]
+  },
+  "grape": {
+    "model": "Grape",
+    "classes": [
+      "Grape Black Rot",
+      "Grape Esca (Black Measles)",
+      "Grape Healthy",
+      "Grape Leaf Blight (Isariopsis Spot)"
+    ]
+  },
+  "green_gram_moong": {
+    "model": "Green_Gram_Moong",
+    "classes": [
+      "Green_Gram_Moong___General_Pathogen",
+      "Green_Gram_Moong___Healthy"
+    ]
+  },
+  "green_peas": {
+    "model": "Green_Peas",
+    "classes": [
+      "Green_Peas___General_Pathogen",
+      "Green_Peas___Healthy"
+    ]
+  },
+  "groundnut_peanut": {
+    "model": "Groundnut_Peanut",
+    "classes": [
+      "Groundnut_Peanut___General_Pathogen",
+      "Groundnut_Peanut___Healthy"
+    ]
+  },
+  "guava": {
+    "model": "Guava",
+    "classes": [
+      "Guava___General_Pathogen",
+      "Guava___Healthy"
+    ]
+  },
+  "jackfruit": {
+    "model": "Jackfruit",
+    "classes": [
+      "Jackfruit___General_Pathogen",
+      "Jackfruit___Healthy"
+    ]
+  },
+  "jamun": {
+    "model": "Jamun",
+    "classes": [
+      "Jamun___General_Pathogen",
+      "Jamun___Healthy"
+    ]
+  },
+  "jute": {
+    "model": "Jute",
+    "classes": [
+      "Jute___General_Pathogen",
+      "Jute___Healthy",
+      "Jute___Stem_Rot"
+    ]
+  },
+  "kidney_bean_rajma": {
+    "model": "Kidney_Bean_Rajma",
+    "classes": [
+      "Kidney_Bean_Rajma___General_Pathogen",
+      "Kidney_Bean_Rajma___Healthy"
+    ]
+  },
+  "kiwi": {
+    "model": "Kiwi",
+    "classes": [
+      "Kiwi___General_Pathogen",
+      "Kiwi___Healthy"
+    ]
+  },
+  "lemon": {
+    "model": "Lemon",
+    "classes": [
+      "Lemon___General_Pathogen",
+      "Lemon___Healthy"
+    ]
+  },
+  "lentil_masoor": {
+    "model": "Lentil_Masoor",
+    "classes": [
+      "Lentil_Masoor___General_Pathogen",
+      "Lentil_Masoor___Healthy"
+    ]
+  },
+  "linseed": {
+    "model": "Linseed",
+    "classes": [
+      "Linseed___General_Pathogen",
+      "Linseed___Healthy"
+    ]
+  },
+  "litchi": {
+    "model": "Litchi",
+    "classes": [
+      "Litchi___General_Pathogen",
+      "Litchi___Healthy",
+      "Litchi___Mites"
+    ]
+  },
+  "lotus_stem": {
+    "model": "Lotus_Stem",
+    "classes": [
+      "Lotus_Stem___General_Pathogen",
+      "Lotus_Stem___Healthy"
+    ]
+  },
+  "mango": {
+    "model": "Mango",
+    "classes": [
+      "Mango Anthracnose",
+      "Mango Healthy"
+    ]
+  },
+  "mulberry": {
+    "model": "Mulberry",
+    "classes": [
+      "Mulberry___General_Pathogen",
+      "Mulberry___Healthy"
+    ]
+  },
+  "mushroom": {
+    "model": "Mushroom",
+    "classes": [
+      "Mushroom___General_Pathogen",
+      "Mushroom___Healthy"
+    ]
+  },
+  "muskmelon": {
+    "model": "Muskmelon",
+    "classes": [
+      "Muskmelon___General_Pathogen",
+      "Muskmelon___Healthy"
+    ]
+  },
+  "oats": {
+    "model": "Oats",
+    "classes": [
+      "Oats___General_Pathogen",
+      "Oats___Healthy"
+    ]
+  },
+  "oil": {
+    "model": "Oil",
+    "classes": [
+      "Oil Palm Ganoderma",
+      "Oil Palm Healthy"
+    ]
+  },
+  "onion": {
+    "model": "Onion",
+    "classes": [
+      "Onion___Healthy",
+      "Onion___Purple_Blotch"
+    ]
+  },
+  "orange": {
+    "model": "Orange",
+    "classes": [
+      "Orange___General_Pathogen",
+      "Orange___Healthy"
+    ]
+  },
+  "papaya": {
+    "model": "Papaya",
+    "classes": [
+      "Papaya___General_Pathogen",
+      "Papaya___Healthy"
+    ]
+  },
+  "peach": {
+    "model": "Peach",
+    "classes": [
+      "Peach Bacterial Spot",
+      "Peach Healthy"
+    ]
+  },
+  "pear": {
+    "model": "Pear",
+    "classes": [
+      "Pear___General_Pathogen",
+      "Pear___Healthy",
+      "Pearl_Millet_Bajra___General_Pathogen",
+      "Pearl_Millet_Bajra___Healthy"
+    ]
+  },
+  "pearl_millet_bajra": {
+    "model": "Pearl_Millet_Bajra",
+    "classes": [
+      "Pearl_Millet_Bajra___General_Pathogen",
+      "Pearl_Millet_Bajra___Healthy"
+    ]
+  },
+  "pepper": {
+    "model": "Pepper",
+    "classes": [
+      "Pepper Bell Bacterial Spot",
+      "Pepper Bell Healthy"
+    ]
+  },
+  "pigeon_pea_arhar": {
+    "model": "Pigeon_Pea_Arhar",
+    "classes": [
+      "Pigeon_Pea_Arhar___General_Pathogen",
+      "Pigeon_Pea_Arhar___Healthy"
+    ]
+  },
+  "pineapple": {
+    "model": "Pineapple",
+    "classes": [
+      "Pineapple___General_Pathogen",
+      "Pineapple___Healthy"
+    ]
+  },
+  "plum": {
+    "model": "Plum",
+    "classes": [
+      "Plum___General_Pathogen",
+      "Plum___Healthy"
+    ]
+  },
+  "pomegranate": {
+    "model": "Pomegranate",
+    "classes": [
+      "Pomegranate___Bacterial_Blight",
+      "Pomegranate___General_Pathogen",
+      "Pomegranate___Healthy"
+    ]
+  },
+  "potato": {
+    "model": "Potato",
+    "classes": [
+      "Potato Early Blight",
+      "Potato Healthy",
+      "Potato Late Blight"
+    ]
+  },
+  "pumpkin": {
+    "model": "Pumpkin",
+    "classes": [
+      "Pumpkin___General_Pathogen",
+      "Pumpkin___Healthy"
+    ]
+  },
+  "radish": {
+    "model": "Radish",
+    "classes": [
+      "Radish___General_Pathogen",
+      "Radish___Healthy"
+    ]
+  },
+  "raw_banana": {
+    "model": "Raw_Banana",
+    "classes": [
+      "Raw_Banana___General_Pathogen",
+      "Raw_Banana___Healthy"
+    ]
+  },
+  "red_chilli": {
+    "model": "Red_Chilli",
+    "classes": [
+      "Red_Chilli___General_Pathogen",
+      "Red_Chilli___Healthy"
+    ]
+  },
+  "rice": {
+    "model": "Rice",
+    "classes": [
+      "Rice Bacterial Leaf Blight",
+      "Rice Blast",
+      "Rice Brown Spot",
+      "Rice Healthy",
+      "Rice Hispa",
+      "Rice Leaf Smut",
+      "Rice Sheath Blight",
+      "Rice Tungro"
+    ]
+  },
+  "ridge_gourd": {
+    "model": "Ridge_Gourd",
+    "classes": [
+      "Ridge_Gourd___General_Pathogen",
+      "Ridge_Gourd___Healthy"
+    ]
+  },
+  "rubber": {
+    "model": "Rubber",
+    "classes": [
+      "Rubber Healthy",
+      "Rubber Leaf Fall"
+    ]
+  },
+  "safflower": {
+    "model": "Safflower",
+    "classes": [
+      "Safflower___General_Pathogen",
+      "Safflower___Healthy"
+    ]
+  },
+  "sapota_chikoo": {
+    "model": "Sapota_Chikoo",
+    "classes": [
+      "Sapota_Chikoo___General_Pathogen",
+      "Sapota_Chikoo___Healthy"
+    ]
+  },
+  "sesame": {
+    "model": "Sesame",
+    "classes": [
+      "Sesame___General_Pathogen",
+      "Sesame___Healthy"
+    ]
+  },
+  "snake_gourd": {
+    "model": "Snake_Gourd",
+    "classes": [
+      "Snake_Gourd___General_Pathogen",
+      "Snake_Gourd___Healthy"
+    ]
+  },
+  "sorghum_jowar": {
+    "model": "Sorghum_Jowar",
+    "classes": [
+      "Sorghum_Jowar___General_Pathogen",
+      "Sorghum_Jowar___Healthy"
+    ]
+  },
+  "soybean": {
+    "model": "Soybean",
+    "classes": [
+      "Soybean Healthy",
+      "Soybean Rust"
+    ]
+  },
+  "sponge_gourd": {
+    "model": "Sponge_Gourd",
+    "classes": [
+      "Sponge_Gourd___General_Pathogen",
+      "Sponge_Gourd___Healthy"
+    ]
+  },
+  "strawberry": {
+    "model": "Strawberry",
+    "classes": [
+      "Strawberry Healthy",
+      "Strawberry Leaf Scorch",
+      "Strawberry Leaf Spot"
+    ]
+  },
+  "sugarcane": {
+    "model": "Sugarcane",
+    "classes": [
+      "Sugarcane Healthy",
+      "Sugarcane Red Rot"
+    ]
+  },
+  "sunflower": {
+    "model": "Sunflower",
+    "classes": [
+      "Sunflower___General_Pathogen",
+      "Sunflower___Healthy"
+    ]
+  },
+  "sweet_lime_mosambi": {
+    "model": "Sweet_Lime_Mosambi",
+    "classes": [
+      "Sweet_Lime_Mosambi___General_Pathogen",
+      "Sweet_Lime_Mosambi___Healthy"
+    ]
+  },
+  "sweet_potato": {
+    "model": "Sweet_Potato",
+    "classes": [
+      "Sweet_Potato___General_Pathogen",
+      "Sweet_Potato___Healthy"
+    ]
+  },
+  "tamarind": {
+    "model": "Tamarind",
+    "classes": [
+      "Tamarind___General_Pathogen",
+      "Tamarind___Healthy"
+    ]
+  },
+  "tea": {
+    "model": "Tea",
+    "classes": [
+      "Tea Blight",
+      "Tea Healthy"
+    ]
+  },
+  "tobacco": {
+    "model": "Tobacco",
+    "classes": [
+      "Tobacco___General_Pathogen",
+      "Tobacco___Healthy"
+    ]
+  },
+  "tomato": {
+    "model": "Tomato",
+    "classes": [
+      "Tomato Bacterial Spot",
+      "Tomato Early Blight",
+      "Tomato Healthy",
+      "Tomato Late Blight",
+      "Tomato Leaf Mold",
+      "Tomato Mosaic Virus",
+      "Tomato Septoria Leaf Spot",
+      "Tomato Spider Mites Two Spotted Mite",
+      "Tomato Target Spot",
+      "Tomato Yellowleaf Curl Virus"
+    ]
+  },
+  "turmeric": {
+    "model": "Turmeric",
+    "classes": [
+      "Turmeric___General_Pathogen",
+      "Turmeric___Healthy",
+      "Turmeric___Leaf_Spot"
+    ]
+  },
+  "turnip": {
+    "model": "Turnip",
+    "classes": [
+      "Turnip___General_Pathogen",
+      "Turnip___Healthy"
+    ]
+  },
+  "watermelon": {
+    "model": "Watermelon",
+    "classes": [
+      "Watermelon___General_Pathogen",
+      "Watermelon___Healthy"
+    ]
+  },
+  "wheat": {
+    "model": "Wheat",
+    "classes": [
+      "Wheat Healthy",
+      "Wheat Rust"
+    ]
+  },
+  "yam": {
+    "model": "Yam",
+    "classes": [
+      "Yam___General_Pathogen",
+      "Yam___Healthy"
+    ]
+  }
+}
