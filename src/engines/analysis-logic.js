@@ -1,5 +1,12 @@
 import { state } from '../core/state.js';
-import { db } from '../core/db.js';
+// History save - safe wrapper
+const saveToHistory = async (data) => {
+  try {
+    if (window.db?.saveToHistory) await window.db.saveToHistory(data);
+    else if (window.addScanToHistory) await window.addScanToHistory(data);
+  } catch(e) { console.warn('History save skipped:', e); }
+};
+
 import { updateTelemetry } from '../ui/navigation.js';
 import { showToast, getTreatment } from '../core/utils.js';
 import { runLocalInference, runVMSAnalysis, runXAIAnalysis } from './ai-engine.js';
@@ -117,7 +124,7 @@ export async function analyzeLeaf(elements) {
         status: localResult.status
       };
 
-      await db.history.add(historyRecord);
+      await saveToHistory(historyRecord);
       try {
         await saveHistoryToCloud(uid, historyRecord);
       } catch(e) { console.warn('Cloud sync delayed:', e); }
