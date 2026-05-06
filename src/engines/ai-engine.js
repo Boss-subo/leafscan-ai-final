@@ -1,6 +1,18 @@
 import { state } from '../core/state.js';
 import { showToast } from '../core/utils.js';
 
+const CROP_SPECIALISTS = {
+  'Tomato': { model: 'Tomato', classes: ['Tomato___Bacterial_spot', 'Tomato___Early_blight', 'Tomato___Late_blight', 'Tomato___Leaf_Mold', 'Tomato___Septoria_leaf_spot', 'Tomato___Spider_mites Two-spotted_spider_mite', 'Tomato___Target_Spot', 'Tomato___Tomato_Yellow_Leaf_Curl_Virus', 'Tomato___Tomato_mosaic_virus', 'Tomato___healthy'] },
+  'Wheat': { model: 'Wheat', classes: ['Wheat___Brown_Rust', 'Wheat___Healthy', 'Wheat___Yellow_Rust'] },
+  'Corn': { model: 'Corn', classes: ['Corn_(maize)___Cercospora_leaf_spot Gray_leaf_spot', 'Corn_(maize)___Common_rust_', 'Corn_(maize)___Northern_Leaf_Blight', 'Corn_(maize)___healthy'] },
+  'Grape': { model: 'Grape', classes: ['Grape___Black_rot', 'Grape___Esca_(Black_Measles)', 'Grape___Leaf_blight_(Isariopsis_Leaf_Spot)', 'Grape___healthy'] },
+  'Apple': { model: 'Apple', classes: ['Apple___Apple_scab', 'Apple___Black_rot', 'Apple___Cedar_apple_rust', 'Apple___healthy'] }
+};
+
+const CONFIG = {
+  MODELS_BASE: '/model_tfjs/'
+};
+
 /**
  * Loads a specialized crop model dynamically based on selection
  * @param {string} cropName - The name of the crop specialist to load
@@ -29,21 +41,24 @@ export async function loadLocalModel(cropName) {
   }
 
   try {
-    const modelUrl = `/model_tfjs/${cropName}/model.json`;
-    console.log(`[AI Engine] Deploying ${cropName} specialist...`);
+    const specialist = CROP_SPECIALISTS[cropName];
+    if (!specialist) {
+        console.warn(`No specialist configuration found for ${cropName}`);
+    }
+
+    const modelFolder = specialist ? specialist.model : cropName;
+    const modelUrl = `${CONFIG.MODELS_BASE}${modelFolder}/model.json`;
+    
+    console.log(`[AI Engine] Deploying ${cropName} specialist from ${modelUrl}...`);
     
     state.localModel = await tf.loadLayersModel(modelUrl);
     state.currentSpecialist = cropName;
     
-    // Note: In hierarchical mode, labels are often baked into the specialist or shared
-    // For now, we assume standard labels or specialist-specific ones
-    const labelResp = await fetch(`/model_tfjs/${cropName}/labels.txt`);
-    if (labelResp.ok) {
-      const text = await labelResp.text();
-      state.modelLabels = text.split('\n').map(l => l.trim()).filter(l => l);
+    // Inject exact classes into state
+    if (specialist && specialist.classes) {
+      state.modelLabels = specialist.classes;
     } else {
-      // Fallback or generic labels if specialist-specific ones are missing
-      console.warn(`No labels.txt found for ${cropName}, using cached metadata.`);
+      console.warn(`No classes defined for ${cropName}, relying on global fallback.`);
     }
     
     showToast(`${cropName} specialist active.`, "success");
