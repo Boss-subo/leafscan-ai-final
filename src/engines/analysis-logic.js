@@ -9,43 +9,111 @@ const saveToHistory = async (data) => {
 
 import { updateTelemetry } from '../ui/navigation.js';
 import { showToast, getTreatment } from '../core/utils.js';
-import { runLocalInference, runVMSAnalysis, runXAIAnalysis } from './ai-engine.js';
+import { runLocalInference, runVMSAnalysis, runXAIAnalysis, CROP_SPECIALISTS } from './ai-engine.js';
 import { saveHistoryToCloud } from '../services/firebase.js';
 
+// Clean label display
+const cleanLabel = (label) => label.replace(/___/g, ' - ').replace(/_/g, ' ');
+
 /**
- * Initializes the Crop Specialist Selector UI
+ * Programmatically selects a crop specialist
+ * @param {string} crop - The crop name (Tomato, Wheat, etc)
+ * @param {HTMLElement} chip - Optional chip element to activate
+ */
+export function selectCrop(crop, chip) {
+  state.selectedCrop = crop;
+  
+  // UI Sync
+  const chips = document.querySelectorAll('.crop-chip');
+  chips.forEach(c => c.classList.remove('active'));
+  
+  if (chip) {
+    chip.classList.add('active');
+  } else {
+    // Find chip by data attribute if element not provided
+    const target = document.querySelector(`.crop-chip[data-crop="${crop}"]`);
+    if (target) target.classList.add('active');
+  }
+
+  const hint = document.getElementById('crop-hint');
+  if (hint) {
+    hint.textContent = `${crop} Specialist activated — Initializing neural weights...`;
+    hint.classList.add('pulse');
+    setTimeout(() => hint.classList.remove('pulse'), 1000);
+  }
+  
+  showToast(`${crop} Specialist Loaded`, "info");
+}
+
+/**
+ * Initializes the Dynamic Crop Specialist Selector UI
  */
 export function initCropSelector() {
-  const chips = document.querySelectorAll('.crop-chip');
-  const hint = document.getElementById('crop-hint');
-  
-  if (!state.selectedCrop) state.selectedCrop = 'Wheat'; // Default specialist
+  const container = document.querySelector('.crop-chips');
+  if (!container) return;
 
-  // Expose global bridge for console testing
-  window.LeafScanAnalysis = {
-    selectCrop: (crop) => {
-      state.selectedCrop = crop;
-      showToast(`${crop} Specialist Loaded via Console`, "info");
-    }
-  };
+  // 1. Add Neural Filter (Search Bar)
+  const parent = document.querySelector('.crop-selector-container');
+  if (parent && !document.getElementById('crop-search')) {
+    const searchInput = document.createElement('input');
+    searchInput.type = 'text';
+    searchInput.id = 'crop-search';
+    searchInput.placeholder = '🔍 Search 102 Specialists...';
+    searchInput.className = 'crop-search-input';
+    parent.insertBefore(searchInput, container);
 
-  chips.forEach(chip => {
-    chip.addEventListener('click', () => {
-      chips.forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      
-      const crop = chip.dataset.crop;
-      state.selectedCrop = crop;
-      
-      if (hint) {
-        hint.textContent = `${crop} Specialist activated — Initializing neural weights...`;
-        hint.classList.add('pulse');
-        setTimeout(() => hint.classList.remove('pulse'), 1000);
-      }
-      
-      showToast(`${crop} Specialist Loaded`, "info");
+    searchInput.addEventListener('input', (e) => {
+      const term = e.target.value.toLowerCase();
+      const chips = document.querySelectorAll('.crop-chip');
+      chips.forEach(chip => {
+        const crop = chip.dataset.crop.toLowerCase();
+        chip.style.display = crop.includes(term) ? 'flex' : 'none';
+      });
     });
+  }
+
+  // 2. Clear hardcoded chips
+  container.innerHTML = '';
+
+  // 3. Generate 102 Elite Chips
+  const crops = Object.keys(CROP_SPECIALISTS).sort();
+  
+  crops.forEach(cropId => {
+    const spec = CROP_SPECIALISTS[cropId];
+    const chip = document.createElement('div');
+    chip.className = 'crop-chip';
+    chip.dataset.crop = spec.model;
+    
+    // Add icon based on crop name (simple mapping or default)
+    const icon = getCropEmoji(spec.model);
+    chip.innerHTML = `${icon} ${spec.model}`;
+    
+    if (state.selectedCrop === spec.model) chip.classList.add('active');
+
+    chip.addEventListener('click', () => {
+      selectCrop(spec.model, chip);
+    });
+
+    container.appendChild(chip);
   });
+
+  if (!state.selectedCrop) {
+    state.selectedCrop = 'Wheat';
+    const wheatChip = container.querySelector('[data-crop="Wheat"]');
+    if (wheatChip) wheatChip.classList.add('active');
+  }
+
+  // Expose global bridge
+  window.LeafScanAnalysis = { selectCrop };
+}
+
+function getCropEmoji(name) {
+  const map = {
+    'Apple': '🍎', 'Banana': '🍌', 'Corn': '🌽', 'Grape': '🍇', 'Rice': '🌾',
+    'Tomato': '🍅', 'Wheat': '🌾', 'Potato': '🥔', 'Orange': '🍊', 'Lemon': '🍋',
+    'Mango': '🥭', 'Strawberry': '🍓', 'Pineapple': '🍍', 'Coffee': '☕', 'Tea': '🍵'
+  };
+  return map[name] || '🌿';
 }
 
 /**
@@ -129,7 +197,7 @@ export async function analyzeLeaf(elements) {
         await saveHistoryToCloud(uid, historyRecord);
       } catch(e) { console.warn('Cloud sync delayed:', e); }
 
-      showToast(`Diagnosis Complete: ${localResult.label}`, "success");
+      showToast(`Diagnosis Complete: ${cleanLabel(localResult.label)}`, "success");
     }
   } catch (err) {
     console.error("Diagnostic Failure", err);
@@ -142,7 +210,7 @@ function renderResults(result, confidence, vms, treatment) {
   const resultContent = document.getElementById('result-content');
   const diseaseTitle = document.getElementById('disease-name');
   
-  if (diseaseTitle) diseaseTitle.textContent = result.label;
+  if (diseaseTitle) diseaseTitle.textContent = cleanLabel(result.label);
 
   if (resultContent) {
     resultContent.innerHTML = `
