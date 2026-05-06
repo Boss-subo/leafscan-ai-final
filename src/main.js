@@ -5,6 +5,7 @@ import { fetchLocationAndAQI } from './services/weather-geo.js';
 import { initCharts } from './ui/charts.js';
 import { initTelemetry, switchTab } from './ui/navigation.js';
 import { loadLocalModel } from './engines/ai-engine.js';
+import { initCropSelector } from './engines/analysis-logic.js';
 import { setupEventListeners } from './ui/events.js';
 import { initAuth } from './ui/auth.js';
 import { seedUserData } from './core/seed-data.js';
@@ -59,6 +60,7 @@ async function bootstrap() {
   loadLocalModel();
   initCharts();
   initTelemetry();
+  initCropSelector();
 
   switchTab('dashboard', els);
   

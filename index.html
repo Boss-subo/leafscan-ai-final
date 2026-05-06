@@ -246,6 +246,19 @@
                   <div class="scan-line"></div>
                 </div>
                 <div class="scanner-controls">
+                  <!-- ELITE CROP SELECTOR -->
+                  <div class="crop-selector-container">
+                    <label class="selector-label">SELECT CROP SPECIALIST</label>
+                    <div class="crop-chips">
+                      <div class="crop-chip active" data-crop="Wheat">🌾 Wheat</div>
+                      <div class="crop-chip" data-crop="Tomato">🍅 Tomato</div>
+                      <div class="crop-chip" data-crop="Corn">🌽 Corn</div>
+                      <div class="crop-chip" data-crop="Grape">🍇 Grape</div>
+                      <div class="crop-chip" data-crop="Apple">🍎 Apple</div>
+                    </div>
+                    <p id="crop-hint" class="crop-hint">Wheat Specialist active — detecting 3 major pathogens</p>
+                  </div>
+
                   <input type="file" id="file-input" accept="image/*" style="display: none;">
                   <button class="btn btn-primary" id="capture-btn">CAPTURE MATRIX</button>
                   <button class="btn btn-secondary" id="upload-btn">BULK UPLOAD</button>

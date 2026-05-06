@@ -1533,3 +1533,320 @@ nav,
 .input-wrapper:focus-within i {
   color: var(--accent-primary) !important;
 }
+
+/* ================================================================
+   LEAFSCAN AI — ELITE SCANNER & SPECIALIST STYLES
+   ================================================================ */
+
+.crop-selector-wrapper {
+  margin-bottom: 1.5rem;
+}
+
+.section-label {
+  display: block;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #64748b;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.crop-selector-container {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: none;
+}
+
+.crop-selector-container::-webkit-scrollbar {
+  display: none;
+}
+
+.crop-chip {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 100px;
+  padding: 0.5rem 1rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.crop-chip:hover {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+  color: #f1f5f9;
+}
+
+.crop-chip.active {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(16, 185, 129, 0.1));
+  border-color: var(--accent-primary);
+  color: var(--accent-primary);
+  box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
+}
+
+.scanner-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 0.75rem;
+}
+
+.control-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.result-panel {
+  border-left: 4px solid var(--accent-primary);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.result-panel.status-warning { border-left-color: #f59e0b; }
+.result-panel.status-rejected { border-left-color: #ef4444; }
+
+.result-grid {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.progress-bar {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 100px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--accent-primary);
+  box-shadow: 0 0 10px var(--accent-glow-strong);
+}
+
+.progress-bar.stress .progress-fill {
+  background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444);
+}
+
+.heatmap-overlay {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 0.5rem;
+}
+
+.heatmap-layer {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  mix-blend-mode: screen;
+  opacity: 0.8;
+}
+
+.alert {
+  padding: 1rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.alert-warning { background: rgba(245, 158, 11, 0.1); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.2); }
+.alert-danger { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); }
+
+.heatmap-container label {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #94a3b8;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.heatmap-container .caption {
+  font-size: 0.7rem;
+  color: #475569;
+  margin-top: 0.5rem;
+}
+
+/* ================================================================
+   LEAFSCAN AI — SCANNER & SPECIALIST UI v3.0
+   ================================================================ */
+
+.crop-selector-container {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.selector-label {
+  display: block;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: #64748b;
+  margin-bottom: 1rem;
+}
+
+.crop-chips {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: none;
+}
+
+.crop-chips::-webkit-scrollbar { display: none; }
+
+.crop-chip {
+  flex: 0 0 auto;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.crop-chip:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(16,185,129,0.2);
+  color: #f1f5f9;
+}
+
+.crop-chip.active {
+  background: rgba(16,185,129,0.12);
+  border-color: var(--accent-primary);
+  color: #fff;
+  box-shadow: 0 0 16px rgba(16,185,129,0.15);
+}
+
+.crop-hint {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+.crop-hint.pulse {
+  animation: hint-pulse 1s ease;
+}
+
+@keyframes hint-pulse {
+  0% { color: #64748b; }
+  50% { color: var(--accent-primary); transform: translateX(5px); }
+  100% { color: #64748b; }
+}
+
+/* Result Cards */
+.result-card {
+  background: rgba(255,255,255,0.03);
+  border-radius: 20px;
+  padding: 1.5rem;
+  border-left: 4px solid var(--accent-primary);
+}
+
+.result-card.warning { border-left-color: #f59e0b; }
+.result-card.rejected { border-left-color: #ef4444; }
+
+.status-badge {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  background: rgba(16,185,129,0.15);
+  color: var(--accent-primary);
+  margin-bottom: 1rem;
+}
+
+.result-card.warning .status-badge { background: rgba(245,158,11,0.15); color: #fbbf24; }
+.result-card.rejected .status-badge { background: rgba(239,68,68,0.15); color: #f87171; }
+
+.warning-msg {
+  font-size: 0.8rem;
+  color: #fbbf24;
+  margin-top: 0.5rem;
+}
+
+.stat-item {
+  margin-bottom: 1.25rem;
+}
+
+.stat-item label {
+  display: block;
+  font-size: 0.6rem;
+  color: #64748b;
+  margin-bottom: 0.5rem;
+  letter-spacing: 1px;
+}
+
+.progress-bar {
+  height: 6px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 0.4rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-fill.stress {
+  background: linear-gradient(90deg, #fbbf24, #ef4444);
+}
+
+.heatmap-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  mix-blend-mode: screen;
+  opacity: 0.6;
+  pointer-events: none;
+  border-radius: inherit;
+  z-index: 5;
+}
+
+.treatment-box {
+  background: rgba(255,255,255,0.04);
+  border-radius: 14px;
+  padding: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.treatment-box h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.75rem;
+  color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.treatment-box p {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  line-height: 1.5;
+}

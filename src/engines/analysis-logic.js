@@ -2,11 +2,40 @@ import { state } from '../core/state.js';
 import { db } from '../core/db.js';
 import { updateTelemetry } from '../ui/navigation.js';
 import { showToast, getTreatment } from '../core/utils.js';
-import { runLocalInference, runVMSAnalysis } from './ai-engine.js';
-import { XAIEngine } from './xai-engine.js';
-import { EconomicEngine } from './economic-engine.js';
+import { runLocalInference, runVMSAnalysis, runXAIAnalysis } from './ai-engine.js';
 import { saveHistoryToCloud } from '../services/firebase.js';
 
+/**
+ * Initializes the Crop Specialist Selector UI
+ */
+export function initCropSelector() {
+  const chips = document.querySelectorAll('.crop-chip');
+  const hint = document.getElementById('crop-hint');
+  
+  if (!state.selectedCrop) state.selectedCrop = 'Wheat'; // Default specialist
+
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      
+      const crop = chip.dataset.crop;
+      state.selectedCrop = crop;
+      
+      if (hint) {
+        hint.textContent = `${crop} Specialist activated — Initializing neural weights...`;
+        hint.classList.add('pulse');
+        setTimeout(() => hint.classList.remove('pulse'), 1000);
+      }
+      
+      showToast(`${crop} Specialist Loaded`, "info");
+    });
+  });
+}
+
+/**
+ * Executes the Multi-Tier Diagnostic Protocol
+ */
 export async function analyzeLeaf(elements) {
   const image = state.currentImage;
   if (!image) {
@@ -14,108 +43,138 @@ export async function analyzeLeaf(elements) {
     return;
   }
 
-  // UI Setup
+  // UI Handshake
   elements.resultPanel.style.display = 'block';
   elements.analyzeBtn.style.display = 'none';
   const cotOverlay = document.getElementById('cot-visualizer');
   if (cotOverlay) cotOverlay.style.display = 'flex';
   
   try {
-    const steps = [
-      document.getElementById('cot-step-1'),
-      document.getElementById('cot-step-2'),
-      document.getElementById('cot-step-3'),
-      document.getElementById('cot-step-4')
-    ];
+    // 1. Neural Matrix Isolation
+    updateTelemetry("Isolating Biological Matrix...");
+    await new Promise(r => setTimeout(r, 600));
     
-    steps.forEach(s => s?.classList.remove('active'));
-    
-    // Step 1: Matrix Isolation
-    updateTelemetry("Sovereign Routing: Isolating Biological Matrix...");
-    steps[0]?.classList.add('active');
-    await new Promise(r => setTimeout(r, 800));
-    
-    // Step 2: Edge Inference
-    updateTelemetry("Deep-Edge AI: Running Local Inference...");
-    steps[1]?.classList.add('active');
+    // 2. High-Precision Specialist Inference
+    updateTelemetry(`Specialist Inference: Analyzing ${state.selectedCrop}...`);
     const localResult = await runLocalInference(image);
-    await new Promise(r => setTimeout(r, 800));
     
-    // Step 3: VMS Sweep (if enabled)
-    let vmsData = null;
-    if (state.vmsEnabled) {
-      updateTelemetry("Initiating Virtual Multi-Spectral Sweep...");
-      steps[2]?.classList.add('active');
-      vmsData = await runVMSAnalysis(image);
-    }
-    await new Promise(r => setTimeout(r, 800));
+    // 3. VMS Stress Sweep
+    updateTelemetry("Initiating Multi-Spectral Stress Sweep...");
+    const vmsData = await runVMSAnalysis(image);
     
-    // Step 4: Finalize
-    steps[3]?.classList.add('active');
-    await new Promise(r => setTimeout(r, 500));
     if (cotOverlay) cotOverlay.style.display = 'none';
 
     if (localResult) {
+      // ─── NEURAL SECURITY HANDLING ───
+      
+      if (localResult.status === 'rejected') {
+        renderInconclusive(localResult.message);
+        return;
+      }
+
       const confidence = Math.round(localResult.confidence * 100);
       const treatment = getTreatment(localResult.label);
       
-      // Render Results
-      const resultContent = document.getElementById('result-content');
-      if (resultContent) {
-        resultContent.innerHTML = `
-          <div class="glass-card" style="border-left: 4px solid var(--primary); padding: 1.5rem;">
-            <h3 style="color:var(--primary); margin-bottom:1rem;">${localResult.label}</h3>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1rem;">
-              <div class="stat-card">
-                <small>CONFIDENCE</small>
-                <div style="font-size:1.5rem; font-weight:800;">${confidence}%</div>
-              </div>
-              <div class="stat-card">
-                <small>HEALTH INDEX</small>
-                <div style="font-size:1.5rem; font-weight:800;">${100 - (vmsData?.stress || 0)}%</div>
-              </div>
-            </div>
-            <div style="margin-top:1.5rem;">
-              <h4 style="font-size:0.75rem; color:var(--text-muted); margin-bottom:0.5rem;">RECOMMENDED TREATMENT</h4>
-              <p>${treatment?.action || "No specific treatment required."}</p>
-            </div>
-          </div>
-        `;
+      // Render Elite Results
+      renderResults(localResult, confidence, vmsData, treatment);
+
+      // 4. XAI Heatmap Generation
+      updateTelemetry("Generating Explainable AI Heatmap...");
+      const heatmapData = await runXAIAnalysis(image, localResult.classIdx);
+      if (heatmapData) {
+        const heatmapImg = document.getElementById('xai-heatmap-img') || document.createElement('img');
+        heatmapImg.id = 'xai-heatmap-img';
+        heatmapImg.src = heatmapData;
+        heatmapImg.className = 'heatmap-overlay';
+        
+        const container = document.querySelector('.scanner-viewport');
+        if (container) {
+            // Remove old heatmap if exists
+            const old = document.getElementById('xai-heatmap-img');
+            if (old) old.remove();
+            container.appendChild(heatmapImg);
+        }
       }
 
-      // XAI Heatmap
-      const heatmapCanvas = document.getElementById('xai-heatmap');
-      if (heatmapCanvas) {
-        heatmapCanvas.style.opacity = '1';
-        XAIEngine.generateHeatmap(elements.imagePreview, heatmapCanvas, localResult.classIdx);
-      }
-
-      // Save to Local DB
+      // 5. Data Persistence
       const uid = state.currentUser?.id || state.currentUser?.uid;
-      await db.history.add({
+      const historyRecord = {
         userId: uid,
         timestamp: new Date(),
         image: image,
+        crop: state.selectedCrop,
         diseaseName: localResult.label,
         confidence: confidence,
-        vms: vmsData
-      });
+        vms: vmsData,
+        status: localResult.status
+      };
 
-      // Save to Cloud (cross-device sync)
+      await db.history.add(historyRecord);
       try {
-        await saveHistoryToCloud(uid, {
-          userId: uid,
-          diseaseName: localResult.label,
-          confidence: confidence,
-          vms: vmsData
-        });
-      } catch(e) { console.warn('Cloud history save failed:', e); }
+        await saveHistoryToCloud(uid, historyRecord);
+      } catch(e) { console.warn('Cloud sync delayed:', e); }
 
-      showToast(`Sovereign Diagnosis Complete: ${localResult.label}`, "success");
+      showToast(`Diagnosis Complete: ${localResult.label}`, "success");
     }
   } catch (err) {
-    console.error("Analysis failed", err);
-    showToast("Diagnostic Error: See Console", "error");
+    console.error("Diagnostic Failure", err);
+    showToast("Error: System Malfunction", "error");
     if (cotOverlay) cotOverlay.style.display = 'none';
+  }
+}
+
+function renderResults(result, confidence, vms, treatment) {
+  const resultContent = document.getElementById('result-content');
+  const diseaseTitle = document.getElementById('disease-name');
+  
+  if (diseaseTitle) diseaseTitle.textContent = result.label;
+
+  if (resultContent) {
+    resultContent.innerHTML = `
+      <div class="result-card ${result.status}">
+        <div class="result-header">
+          <span class="status-badge">${result.status.toUpperCase()}</span>
+          ${result.status === 'warning' ? `<p class="warning-msg">${result.message}</p>` : ''}
+        </div>
+        
+        <div class="result-stats">
+          <div class="stat-item">
+            <label>AI CONFIDENCE</label>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${confidence}%"></div>
+            </div>
+            <span>${confidence}%</span>
+          </div>
+          <div class="stat-item">
+            <label>VMS STRESS</label>
+            <div class="progress-bar">
+              <div class="progress-fill stress" style="width: ${vms.stress}%"></div>
+            </div>
+            <span>${vms.stress}%</span>
+          </div>
+        </div>
+
+        <div class="treatment-box">
+          <h4><i data-lucide="shield-check"></i> RECOMMENDED ACTION</h4>
+          <p>${treatment?.action || "No immediate action required. Maintain monitoring."}</p>
+        </div>
+      </div>
+    `;
+    if (window.lucide) lucide.createIcons();
+  }
+}
+
+function renderInconclusive(message) {
+  const resultContent = document.getElementById('result-content');
+  if (resultContent) {
+    resultContent.innerHTML = `
+      <div class="result-card rejected">
+        <div class="rejected-icon"><i data-lucide="alert-triangle"></i></div>
+        <h3>INCONCLUSIVE SCAN</h3>
+        <p>${message}</p>
+        <button class="btn btn-secondary" onclick="location.reload()" style="margin-top:1rem; width:100%;">RETRY SCAN</button>
+      </div>
+    `;
+    if (window.lucide) lucide.createIcons();
   }
 }
