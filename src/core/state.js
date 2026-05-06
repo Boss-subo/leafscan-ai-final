@@ -3,6 +3,7 @@ export const state = {
   weatherKey: localStorage.getItem('weather_key') || (import.meta.env && import.meta.env.VITE_WEATHER_KEY) || '',
   prefLang: localStorage.getItem('pref_lang') || 'English',
   version: '3.1.2-ELITE',
+  selectedCrop: null,
   currentImage: null,
   location: null,
   isScanning: false,

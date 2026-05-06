@@ -57,7 +57,6 @@ async function bootstrap() {
 
   // Start Services
   fetchLocationAndAQI(els);
-  loadLocalModel();
   initCharts();
   initTelemetry();
   initCropSelector();

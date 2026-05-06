@@ -14,6 +14,14 @@ export function initCropSelector() {
   
   if (!state.selectedCrop) state.selectedCrop = 'Wheat'; // Default specialist
 
+  // Expose global bridge for console testing
+  window.LeafScanAnalysis = {
+    selectCrop: (crop) => {
+      state.selectedCrop = crop;
+      showToast(`${crop} Specialist Loaded via Console`, "info");
+    }
+  };
+
   chips.forEach(chip => {
     chip.addEventListener('click', () => {
       chips.forEach(c => c.classList.remove('active'));
