@@ -55,7 +55,9 @@ export async function loadLocalModel(cropName) {
     state.currentSpecialist = cropName;
     
     // Inject exact classes into state
-    if (specialist && specialist.classes) {
+    if (cropName.toLowerCase() === 'apple') {
+      state.modelLabels = ["Apple Scab", "Apple Black Rot", "Apple Healthy", "Apple Cedar Rust"];
+    } else if (specialist && specialist.classes) {
       state.modelLabels = specialist.classes;
     } else {
       console.warn(`No classes defined for ${cropName}, relying on global fallback.`);
@@ -120,13 +122,15 @@ export async function runLocalInference(imgData) {
         }
 
         // 3. Tier 1: Elite Result (Full Confidence)
+        console.log(`[AI Engine] Diagnostic Success: ${state.modelLabels[maxIdx]} (${(confidence * 100).toFixed(1)}%)`);
+        console.log(`[AI Engine] Raw Neural Scores for ${state.currentSpecialist}:`, data);
+        
         return { 
           label: state.modelLabels[maxIdx] || 'Unknown Pathogen', 
           confidence, 
-          status: 'verified',
-          message: 'High-precision diagnostic match.',
+          status: 'success',
           classIdx: maxIdx,
-          allScores: data // Return full profile for advanced telemetry
+          allScores: Array.from(data)
         };
       });
       resolve(result);
