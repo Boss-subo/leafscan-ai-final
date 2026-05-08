@@ -282,8 +282,9 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: rgba(0,0,0,0.4);
-  z-index: 10;
+  background: rgba(0,0,0,0.3);
+  z-index: 100 !important;
+  pointer-events: none;
 }
 
 .scan-frame {
@@ -295,10 +296,10 @@ body {
 
 .scan-frame span {
   position: absolute;
-  width: 30px;
-  height: 30px;
-  border: 2px solid var(--accent-primary);
-  filter: drop-shadow(0 0 10px var(--accent-primary-glow));
+  width: 45px;
+  height: 45px;
+  border: 4px solid var(--accent-primary);
+  filter: drop-shadow(0 0 15px var(--accent-primary));
   animation: bracket-pulse 2s infinite ease-in-out;
 }
 
@@ -1403,9 +1404,9 @@ h1, h2, h3, .view-header h1, .section-title {
 #drop-zone,
 .drop-zone,
 [id*="drop"] {
-  border: 2px dashed rgba(16, 185, 129, 0.25) !important;
+  border: none !important;
   border-radius: 16px !important;
-  background: rgba(16, 185, 129, 0.03) !important;
+  background: transparent !important;
   transition: var(--transition) !important;
 }
 
@@ -2212,4 +2213,6 @@ nav,
   color: var(--accent-primary) !important;
   z-index: 10 !important;
 }
+
+
 
