@@ -179,6 +179,12 @@ body {
   margin-left: var(--sidebar-width);
   padding: 3rem;
   max-width: 1400px;
+  /* Sidebar is position:fixed (out of flex flow), so we must set width explicitly
+     otherwise content-area = 100vw + margin-left = overflow off right edge */
+  width: calc(100% - var(--sidebar-width));
+  min-width: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .view-header {
