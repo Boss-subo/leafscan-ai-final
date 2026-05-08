@@ -440,6 +440,7 @@ body {
 
 /* --- MOBILE RESPONSIVENESS --- */
 @media (max-width: 1024px) {
+  .content-area { margin-left: 0 !important; }
   .dashboard-grid {
     grid-template-columns: 1fr;
   }
@@ -830,12 +831,6 @@ body {
 
 /* --- MOBILE OVERRIDES (CONT.) --- */
 @media (max-width: 768px) {
-  .analytics-grid, .plots-container, .dashboard-grid {
-    grid-template-columns: 1fr !important;
-    max-height: none !important;
-    height: auto !important;
-  }
-  
   .scanner-viewport {
     max-height: 400px !important; /* Prevent infinite scaling loop on mobile */
     aspect-ratio: auto !important;
@@ -847,7 +842,6 @@ body {
     margin-top: 1rem;
   }
 
-  
   .chat-interface {
     height: calc(100vh - 250px);
   }
