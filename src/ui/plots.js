@@ -424,7 +424,12 @@ function setupPlotsUI() {
 
   // Satellite toggle
   const satBtn = document.getElementById('satellite-toggle-btn');
-  if (satBtn) satBtn.onclick = toggleSatellite;
+  if (satBtn) {
+    satBtn.onclick = () => {
+      toggleSatellite();
+      import('../core/utils.js').then(m => m.showToast("Satellite Layer Toggled", "info"));
+    };
+  }
 
   // Heatmap toggle
   const heatBtn = document.getElementById('heatmap-toggle-btn');
@@ -438,15 +443,6 @@ function setupPlotsUI() {
         const plot = PlotsState.plots.find(p => p.id === PlotsState.selectedPlotId);
         if (plot) { showHeatmap(plot); heatBtn.classList.add('active'); }
       }
-    };
-  }
-
-  // Satellite Toggle
-  const satBtn = document.getElementById('satellite-toggle-btn');
-  if (satBtn) {
-    satBtn.onclick = () => {
-      toggleSatellite();
-      import('../core/utils.js').then(m => m.showToast("Satellite Layer Toggled", "info"));
     };
   }
 
