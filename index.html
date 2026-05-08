@@ -404,10 +404,14 @@
           </header>
 
           <div class="plots-container">
-            <div id="plots-grid" class="plots-list"></div>
             <div class="glass-card map-vault">
               <div id="plot-map"></div>
+              <div class="map-controls-overlay">
+                <button id="locate-me-btn" class="map-ctrl-btn" title="Center on Me"><i data-lucide="crosshair"></i></button>
+                <button id="satellite-toggle-btn" class="map-ctrl-btn" title="Toggle Satellite"><i data-lucide="layers"></i></button>
+              </div>
             </div>
+            <div id="plots-grid" class="plots-list"></div>
           </div>
         </section>
 

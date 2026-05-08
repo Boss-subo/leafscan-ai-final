@@ -732,6 +732,201 @@ body {
 .map-vault {
   height: 100%;
   padding: 0 !important;
+  margin-top: 1.5rem;
+  height: 120px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%);
+}
+
+/* HISTORY GRID */
+.history-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem;
+  color: var(--text-muted);
+}
+
+.empty-state i {
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+/* CHAT INTERFACE */
+.chat-interface {
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.chat-viewport {
+  flex: 1;
+  padding: 2rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.message {
+  max-width: 80%;
+  padding: 1rem 1.5rem;
+  border-radius: 18px;
+  font-size: 0.95rem;
+}
+
+.message.system {
+  align-self: center;
+  background: rgba(255,255,255,0.05);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.chat-input-row {
+  padding: 1.5rem;
+  background: rgba(0,0,0,0.2);
+  border-top: 1px solid var(--glass-border);
+  display: flex;
+  gap: 1rem;
+}
+
+.chat-input-row input {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 0.75rem 1.25rem;
+  color: white;
+  outline: none;
+}
+
+/* PLOTS & MAP */
+.plots-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+}
+
+.map-vault {
+  height: 600px;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+#plot-map {
+  height: 100%;
+  width: 100%;
+}
+
+/* --- MOBILE OVERRIDES (CONT.) --- */
+@media (max-width: 768px) {
+  .analytics-grid, .plots-container, .dashboard-grid {
+    grid-template-columns: 1fr !important;
+    max-height: none !important;
+    height: auto !important;
+  }
+  
+  .scanner-viewport {
+    max-height: 400px !important; /* Prevent infinite scaling loop on mobile */
+    aspect-ratio: auto !important;
+    height: 300px !important;
+  }
+  
+  .map-vault {
+    height: 350px !important;
+    margin-top: 1rem;
+  }
+
+  
+  .chat-interface {
+    height: calc(100vh - 250px);
+  }
+}
+
+/* MODAL SYSTEM */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.config-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--bg-sidebar);
+  padding: 2rem;
+}
+
+.config-card h3 {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.4rem;
+}
+
+.config-card .input-group {
+  margin-bottom: 1rem;
+}
+
+.config-card .input-group label {
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.config-card .btn-full {
+  margin-top: 0.5rem;
+  padding: 0.8rem;
+}
+
+.diag-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  font-size: 0.7rem;
+  padding: 0.8rem;
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+}
+
+/* --- IOT GLOW --- */
+.iot-row strong {
+  text-shadow: 0 0 10px var(--accent-primary-glow);
+}
+
+/* --- PLOTS ENHANCEMENT --- */
+.plots-container {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 2rem;
+  height: calc(100vh - 250px);
+}
+
+.plots-list {
+  overflow-y: auto;
+  padding-right: 1rem;
+}
+
+.map-vault {
+  height: 100%;
+  padding: 0 !important;
   overflow: hidden;
   border-radius: var(--card-radius);
   border: 1px solid var(--glass-border);
@@ -739,6 +934,35 @@ body {
 
 .diag-row strong {
   color: var(--accent-primary);
+}
+
+.map-controls-overlay {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  z-index: 1000;
+}
+
+.map-ctrl-btn {
+  width: 40px;
+  height: 40px;
+  background: var(--bg-sidebar);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.map-ctrl-btn:hover {
+  background: var(--accent-primary);
+  border-color: var(--accent-primary);
 }
 
 /* --- ELITE AUTH VAULT --- */

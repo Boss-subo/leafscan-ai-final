@@ -441,10 +441,22 @@ function setupPlotsUI() {
     };
   }
 
+  // Satellite Toggle
+  const satBtn = document.getElementById('satellite-toggle-btn');
+  if (satBtn) {
+    satBtn.onclick = () => {
+      toggleSatellite();
+      import('../core/utils.js').then(m => m.showToast("Satellite Layer Toggled", "info"));
+    };
+  }
+
   // Locate me
   const locBtn = document.getElementById('locate-me-btn');
   if (locBtn) {
-    locBtn.onclick = () => PlotsState.map?.locate({ setView: true, maxZoom: 14 });
+    locBtn.onclick = () => {
+      import('../core/utils.js').then(m => m.showToast("Synchronizing GPS with Satellite...", "info"));
+      PlotsState.map?.locate({ setView: true, maxZoom: 14 });
+    };
   }
 }
 

@@ -40,9 +40,16 @@ export async function switchTab(tabId, elements) {
         break;
       case 'plots':
         initPlotsMap();
-        // Double-Handshake: Force Leaflet to refresh twice during DOM transitions
-        setTimeout(() => { if (state.map) state.map.invalidateSize(); }, 100);
-        setTimeout(() => { if (state.map) state.map.invalidateSize(); }, 500);
+        // Triple-Handshake: Extremely aggressive refresh for mobile browsers
+        const forceRefresh = () => {
+          if (state.map) {
+            state.map.invalidateSize();
+            console.log("Plots Map Refreshed.");
+          }
+        };
+        setTimeout(forceRefresh, 100);
+        setTimeout(forceRefresh, 500);
+        setTimeout(forceRefresh, 1500);
         break;
       case 'reminders':
         await loadReminders();
