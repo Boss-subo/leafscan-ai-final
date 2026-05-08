@@ -635,10 +635,16 @@ body {
 
 /* --- MOBILE OVERRIDES (CONT.) --- */
 @media (max-width: 768px) {
-  .analytics-grid, .plots-container {
-    grid-template-columns: 1fr;
+  .analytics-grid, .plots-container, .dashboard-grid {
+    grid-template-columns: 1fr !important;
     max-height: none !important;
     height: auto !important;
+  }
+  
+  .scanner-viewport {
+    max-height: 400px !important; /* Prevent infinite scaling loop on mobile */
+    aspect-ratio: auto !important;
+    height: 300px !important;
   }
   
   .map-vault {
