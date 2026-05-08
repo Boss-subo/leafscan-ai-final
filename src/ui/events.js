@@ -79,6 +79,24 @@ export function setupEventListeners(elements) {
   elements.downloadMissionJson?.addEventListener('click', exportMissionJSON);
   elements.downloadPdf?.addEventListener('click', () => exportToPDF(elements.resultPanel, 'Diagnostic_Report.pdf'));
 
+  // --- Neural Reset ---
+  document.getElementById('reset-scan-btn')?.addEventListener('click', () => {
+    state.currentImage = null;
+    elements.resultPanel.style.display = 'none';
+    elements.imagePreview.style.display = 'none';
+    elements.video.style.display = 'none';
+    elements.analyzeBtn.style.display = 'none';
+    elements.dropZone.style.display = 'flex';
+    elements.captureBtn.innerHTML = '<i data-lucide="camera"></i> CAPTURE MATRIX';
+    
+    // Clear heatmap if exists
+    const heatmap = document.getElementById('xai-heatmap-img');
+    if (heatmap) heatmap.remove();
+
+    showToast("Neural Matrix Reset. Ready for new sample.", "info");
+    if (window.lucide) lucide.createIcons();
+  });
+
   // --- Scanner Interactions ---
   elements.uploadBtn?.addEventListener('click', () => elements.fileInput?.click());
   elements.dropZone?.addEventListener('click', () => elements.fileInput?.click());

@@ -5,6 +5,8 @@
  */
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
+import { state } from '../core/state.js';
+
 const PlotsState = {
   map: null,
   plots: [],          // { id, name, crop, polygon, heatData, createdAt }
@@ -133,6 +135,7 @@ export function initPlotsMap() {
   map.locate({ setView: true, maxZoom: 13 });
 
   PlotsState.map = map;
+  state.map = map; // Sync with global state for navigation invalidation
   PlotsState.drawnItems = drawnItems;
   PlotsState.drawControl = drawControl;
 
@@ -405,8 +408,17 @@ function setupPlotsUI() {
   const addBtn = document.getElementById('add-plot-btn');
   if (addBtn) {
     addBtn.onclick = () => {
+      if (!PlotsState.map) {
+        console.warn("Map not initialized yet.");
+        return;
+      }
       // Trigger Leaflet.draw polygon tool
-      new L.Draw.Polygon(PlotsState.map, PlotsState.drawControl.options.draw.polygon).enable();
+      try {
+        new L.Draw.Polygon(PlotsState.map, PlotsState.drawControl.options.draw.polygon).enable();
+      } catch (e) {
+        console.error("Leaflet Draw Error:", e);
+        import('../core/utils.js').then(m => m.showToast("Draw tool error. Refreshing...", "error"));
+      }
     };
   }
 

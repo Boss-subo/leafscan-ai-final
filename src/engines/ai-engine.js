@@ -55,9 +55,7 @@ export async function loadLocalModel(cropName) {
     state.currentSpecialist = cropName;
     
     // Inject exact classes into state
-    if (cropName.toLowerCase() === 'apple') {
-      state.modelLabels = ["Apple Scab", "Apple Black Rot", "Apple Healthy", "Apple Cedar Rust"];
-    } else if (specialist && specialist.classes) {
+    if (specialist && specialist.classes) {
       state.modelLabels = specialist.classes;
     } else {
       console.warn(`No classes defined for ${cropName}, relying on global fallback.`);

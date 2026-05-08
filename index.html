@@ -274,6 +274,9 @@
                   <button id="download-pdf" class="icon-btn" title="Download Report"><i data-lucide="download"></i></button>
                 </div>
                 <div id="result-content" style="margin-top: 1rem; font-size: 0.9rem;"></div>
+                <button id="reset-scan-btn" class="btn btn-secondary" style="width: 100%; margin-top: 1.5rem; border: 1px dashed var(--accent-primary);">
+                  <i data-lucide="refresh-cw"></i> NEW SCAN
+                </button>
               </div>
             </div>
 
@@ -415,31 +418,15 @@
     <script type="module" src="/src/main.js"></script>
     <script>
       // Initialize Lucide Icons
-      lucide.createIcons();
+      if (window.lucide) lucide.createIcons();
       
-      // Simple tab switching logic for the new structure
-      document.querySelectorAll('.nav-links li').forEach(li => {
-        li.addEventListener('click', () => {
-          document.querySelectorAll('.nav-links li').forEach(l => l.classList.remove('active'));
-          li.classList.add('active');
-          const tab = li.getAttribute('data-tab');
-          document.querySelectorAll('.tab-content').forEach(content => {
-            content.style.display = 'none';
-          });
-          // Sovereign Admin Stealth: Double-click logo to reveal Settings
-          document.querySelector('.sidebar-brand')?.addEventListener('dblclick', () => {
-            const navSettings = document.getElementById('nav-settings');
-            if (navSettings) {
-              navSettings.style.display = 'flex';
-              alert("SOVEREIGN ADMIN MODE: Access Granted.");
-            }
-          });
-
-          const elements = {
-            target: document.getElementById(tab + '-tab')
-          };
-          if (elements.target) elements.target.style.display = 'block';
-        });
+      // Sovereign Admin Stealth: Double-click logo to reveal Settings
+      document.querySelector('.sidebar-brand')?.addEventListener('dblclick', () => {
+        const navSettings = document.getElementById('nav-settings');
+        if (navSettings) {
+          navSettings.style.display = 'flex';
+          alert("SOVEREIGN ADMIN MODE: Access Granted.");
+        }
       });
     </script>
 </body>

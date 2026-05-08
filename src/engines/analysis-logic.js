@@ -61,23 +61,33 @@ export function initCropSelector() {
   // Create search bar if not present
   if (!document.getElementById('crop-search')) {
     const searchWrap = document.createElement('div');
-    searchWrap.className = 'input-wrapper';
-    searchWrap.style.marginBottom = '1rem';
+    searchWrap.className = 'input-wrapper crop-search-wrapper';
+    searchWrap.style.marginBottom = '1.5rem';
     searchWrap.innerHTML = `
-      <i data-lucide="search" style="position:absolute; left:1rem; top:50%; transform:translateY(-50%); color:#64748b; font-size:14px;"></i>
+      <i data-lucide="search" class="search-icon"></i>
       <input type="text" id="crop-search" placeholder="Search 102 Specialists (e.g. Rice, Mango, Amla)..." 
-             style="width:100%; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:0.6rem 1rem 0.6rem 2.8rem; color:white; font-size:0.8rem; outline:none;">
+             style="width:100%; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:0.8rem 3rem 0.8rem 2.8rem; color:white; font-size:0.9rem; outline:none;">
+      <button id="execute-crop-search" class="icon-btn search-trigger" style="position:absolute; right:0.5rem; top:50%; transform:translateY(-50%); background:var(--accent-primary); border-radius:8px; padding:0.4rem; color:white;">
+        <i data-lucide="arrow-right"></i>
+      </button>
     `;
     container.parentNode.insertBefore(searchWrap, container);
     
-    // Wire up search
-    document.getElementById('crop-search').addEventListener('input', (e) => {
-      const term = e.target.value.toLowerCase();
+    const performSearch = () => {
+      const term = document.getElementById('crop-search').value.toLowerCase();
       document.querySelectorAll('.crop-chip').forEach(chip => {
         const match = chip.dataset.crop.toLowerCase().includes(term);
-        chip.style.display = match ? 'inline-block' : 'none';
+        chip.style.display = match ? 'flex' : 'none';
       });
+      showToast(term ? `Filtering for "${term}"` : "Showing all specialists", "info");
+    };
+
+    // Wire up search
+    document.getElementById('crop-search').addEventListener('input', performSearch);
+    document.getElementById('crop-search').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') performSearch();
     });
+    document.getElementById('execute-crop-search').addEventListener('click', performSearch);
 
     if (window.lucide) window.lucide.createIcons();
   }
