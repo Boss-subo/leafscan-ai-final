@@ -1388,15 +1388,11 @@ h1, h2, h3, .view-header h1, .section-title {
   100% { top: 85%; opacity: 0; }
 }
 
-#drop-zone,
-.drop-zone,
-[id*="drop"] {
-  border: none !important;
-  border-radius: 16px !important;
-  background: transparent !important;
-  transition: var(--transition) !important;
+/* #drop-zone IS the .scanner-overlay element in the HTML.
+   Never reset its background/border here or the overlay vanishes. */
+#drop-zone.dragover {
+  box-shadow: inset 0 0 50px rgba(16,185,129,0.25) !important;
 }
-
 .btn-primary,
 button[class*="primary"],
 #analyze-btn {
