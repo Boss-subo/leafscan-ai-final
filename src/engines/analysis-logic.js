@@ -8,7 +8,8 @@ const saveToHistory = async (data) => {
 };
 
 import { updateTelemetry } from '../ui/navigation.js';
-import { showToast, getTreatment } from '../core/utils.js';
+import { showToast } from '../core/utils.js';
+import { buildTreatmentHTML } from '../core/treatments.js';
 import { runLocalInference, runVMSAnalysis, runXAIAnalysis, CROP_SPECIALISTS } from './ai-engine.js';
 import { saveHistoryToCloud } from '../services/firebase.js';
 
@@ -168,10 +169,9 @@ export async function analyzeLeaf(elements) {
       }
 
       const confidence = Math.round(localResult.confidence * 100);
-      const treatment = getTreatment(localResult.label);
       
       // Render Elite Results
-      renderResults(localResult, confidence, vmsData, treatment);
+      renderResults(localResult, confidence, vmsData);
 
       // 4. XAI Heatmap Generation
       updateTelemetry("Generating Explainable AI Heatmap...");
@@ -218,7 +218,7 @@ export async function analyzeLeaf(elements) {
   }
 }
 
-function renderResults(result, confidence, vms, treatment) {
+function renderResults(result, confidence, vms) {
   const resultContent = document.getElementById('result-content');
   const diseaseTitle = document.getElementById('disease-name');
   
@@ -248,11 +248,10 @@ function renderResults(result, confidence, vms, treatment) {
             <span>${vms.stress}%</span>
           </div>
         </div>
-
-        <div class="treatment-box">
-          <h4><i data-lucide="shield-check"></i> RECOMMENDED ACTION</h4>
-          <p>${treatment?.action || "No immediate action required. Maintain monitoring."}</p>
         </div>
+
+        <!-- Treatment Recommendation -->
+        ${buildTreatmentHTML(state.selectedCrop, result.label)}
       </div>
     `;
     if (window.lucide) lucide.createIcons();
