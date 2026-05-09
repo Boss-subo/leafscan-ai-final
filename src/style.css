@@ -2279,3 +2279,200 @@ nav,
   0%, 100% { opacity: 1; }
   50%       { opacity: 0.6; }
 }
+
+/* ================================================================
+   LEAFSCAN — SCANNER TAB LAYOUT FIX
+   ================================================================ */
+
+#scanner-tab,
+[id*="scanner"].tab-content {
+  padding: 1.5rem !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  overflow: hidden !important;
+}
+
+.scanner-grid,
+.scanner-layout,
+.scanner-main {
+  display: grid !important;
+  grid-template-columns: 1fr 340px !important;
+  gap: 1.5rem !important;
+  align-items: start !important;
+}
+
+#scanner-tab > .content-wrapper,
+#scanner-tab > .scanner-section {
+  display: grid !important;
+  grid-template-columns: 1fr 340px !important;
+  gap: 1.5rem !important;
+}
+
+.scanner-viewport {
+  position: relative !important;
+  width: 100% !important;
+  height: 420px !important;
+  background: #020c07 !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(16,185,129,0.2) !important;
+  overflow: hidden !important;
+  flex-shrink: 0 !important;
+}
+
+.scanner-viewport video,
+.scanner-viewport canvas,
+.scanner-viewport img#image-preview {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 20px !important;
+}
+
+.scanner-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 100 !important;
+  pointer-events: none !important;
+}
+
+.scan-frame {
+  position: absolute !important;
+  top: 30px !important;
+  left: 30px !important;
+  right: 30px !important;
+  bottom: 30px !important;
+  z-index: 110 !important;
+  pointer-events: none !important;
+}
+
+.scan-frame span {
+  position: absolute !important;
+  width: 44px !important;
+  height: 44px !important;
+  display: block !important;
+  z-index: 111 !important;
+}
+
+.scan-frame span:nth-child(1) {
+  top: 0 !important; left: 0 !important;
+  border-top: 3px solid #10b981 !important;
+  border-left: 3px solid #10b981 !important;
+  border-right: none !important;
+  border-bottom: none !important;
+  border-radius: 6px 0 0 0 !important;
+  box-shadow: -2px -2px 8px rgba(16,185,129,0.4) !important;
+}
+
+.scan-frame span:nth-child(2) {
+  top: 0 !important; right: 0 !important; left: auto !important;
+  border-top: 3px solid #10b981 !important;
+  border-right: 3px solid #10b981 !important;
+  border-left: none !important;
+  border-bottom: none !important;
+  border-radius: 0 6px 0 0 !important;
+  box-shadow: 2px -2px 8px rgba(16,185,129,0.4) !important;
+}
+
+.scan-frame span:nth-child(3) {
+  bottom: 0 !important; left: 0 !important; top: auto !important;
+  border-bottom: 3px solid #10b981 !important;
+  border-left: 3px solid #10b981 !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-radius: 0 0 0 6px !important;
+  box-shadow: -2px 2px 8px rgba(16,185,129,0.4) !important;
+}
+
+.scan-frame span:nth-child(4) {
+  bottom: 0 !important; right: 0 !important; top: auto !important; left: auto !important;
+  border-bottom: 3px solid #10b981 !important;
+  border-right: 3px solid #10b981 !important;
+  border-top: none !important;
+  border-left: none !important;
+  border-radius: 0 0 6px 0 !important;
+  box-shadow: 2px 2px 8px rgba(16,185,129,0.4) !important;
+}
+
+.scan-line {
+  position: absolute !important;
+  left: 30px !important;
+  right: 30px !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent, #10b981, transparent) !important;
+  box-shadow: 0 0 12px rgba(16,185,129,0.8) !important;
+  z-index: 112 !important;
+  pointer-events: none !important;
+  animation: scanMove 2.5s ease-in-out infinite !important;
+  display: block !important;
+}
+
+@keyframes scanMove {
+  0%   { top: 30px;  opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { top: calc(100% - 30px); opacity: 0; }
+}
+
+.scanner-sidebar,
+.scanner-right,
+.telemetry-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+}
+
+#live-telemetry,
+[id*="telemetry"],
+[id*="iot"],
+.iot-card,
+.weather-card {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.telemetry-values,
+.weather-stats {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 0.75rem !important;
+  margin-top: 0.75rem !important;
+}
+
+.telemetry-stat .value,
+.telemetry-value {
+  font-family: 'Syne', sans-serif !important;
+  font-size: 1.6rem !important;
+  font-weight: 700 !important;
+  color: #10b981 !important;
+  line-height: 1 !important;
+}
+
+.telemetry-stat .unit {
+  font-size: 0.7rem !important;
+  color: #475569 !important;
+}
+
+.telemetry-stat .label,
+.telemetry-label {
+  font-size: 0.6rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  color: #475569 !important;
+}
+
+@media (max-width: 900px) {
+  .scanner-grid,
+  .scanner-layout,
+  .scanner-main,
+  #scanner-tab > .content-wrapper {
+    grid-template-columns: 1fr !important;
+  }
+
+  .scanner-viewport {
+    height: 320px !important;
+  }
+}
