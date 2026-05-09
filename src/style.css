@@ -2183,129 +2183,42 @@ nav,
 
 
 
-/* ================================================================
-   LEAFSCAN — SCANNER CORNER FIX
-   ================================================================ */
-
-.scan-frame {
-  position: absolute !important;
-  top: 40px !important;
-  left: 40px !important;
-  right: 40px !important;
-  bottom: 40px !important;
-  pointer-events: none;
-  z-index: 110;
-}
-
-.scan-frame span {
-  position: absolute !important;
-  width: 50px !important;
-  height: 50px !important;
-  border: none !important;
-  z-index: 110 !important;
-  display: block !important;
-}
-
-.scan-frame span:nth-child(1) {
-  top: 0 !important;
-  left: 0 !important;
-  border-top: 4px solid #10b981 !important;
-  border-left: 4px solid #10b981 !important;
-  border-radius: 4px 0 0 0 !important;
-}
-
-.scan-frame span:nth-child(2) {
-  top: 0 !important;
-  right: 0 !important;
-  left: auto !important;
-  border-top: 4px solid #10b981 !important;
-  border-right: 4px solid #10b981 !important;
-  border-radius: 0 4px 0 0 !important;
-}
-
-.scan-frame span:nth-child(3) {
-  bottom: 0 !important;
-  top: auto !important;
-  left: 0 !important;
-  border-bottom: 4px solid #10b981 !important;
-  border-left: 4px solid #10b981 !important;
-  border-radius: 0 0 0 4px !important;
-}
-
-.scan-frame span:nth-child(4) {
-  bottom: 0 !important;
-  top: auto !important;
-  right: 0 !important;
-  left: auto !important;
-  border-bottom: 4px solid #10b981 !important;
-  border-right: 4px solid #10b981 !important;
-  border-radius: 0 0 4px 0 !important;
-}
-
-.scan-line,
-#scan-line {
-  position: absolute !important;
-  left: 40px !important;
-  right: 40px !important;
-  height: 2px !important;
-  background: linear-gradient(90deg, transparent, #10b981, transparent) !important;
-  box-shadow: 0 0 12px #10b981 !important;
-  animation: scanMove 2.5s ease-in-out infinite !important;
-  display: block !important;
-  z-index: 115 !important;
-  pointer-events: none;
-}
-
-@keyframes scanMove {
-  0%   { top: 40px;  opacity: 0; }
-  5%   { opacity: 1; }
-  95%  { opacity: 1; }
-  100% { top: calc(100% - 40px); opacity: 0; }
-}
-
-.scan-frame span:nth-child(1),
-.scan-frame span:nth-child(2),
-.scan-frame span:nth-child(3),
-.scan-frame span:nth-child(4) {
-  filter: drop-shadow(0 0 6px #10b981) !important;
-  animation: cornerPulse 2.5s ease-in-out infinite !important;
-}
-
-.scan-frame span:nth-child(2) { animation-delay: 0.1s !important; }
-.scan-frame span:nth-child(3) { animation-delay: 0.2s !important; }
-.scan-frame span:nth-child(4) { animation-delay: 0.3s !important; }
-
-@keyframes cornerPulse {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.6; }
-}
 
 /* ================================================================
-   LEAFSCAN — SCANNER TAB LAYOUT FIX
+   LEAFSCAN — DASHBOARD LAYOUT FIX (CORRECT SELECTORS)
    ================================================================ */
 
-#scanner-tab,
-[id*="scanner"].tab-content {
-  padding: 1.5rem !important;
-  box-sizing: border-box !important;
-  width: 100% !important;
-  overflow: hidden !important;
-}
-
-.scanner-grid,
-.scanner-layout,
-.scanner-main {
+.dashboard-grid {
   display: grid !important;
-  grid-template-columns: 1fr 340px !important;
+  grid-template-columns: 1.8fr 1fr !important;
   gap: 1.5rem !important;
   align-items: start !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
 }
 
-#scanner-tab > .content-wrapper,
-#scanner-tab > .scanner-section {
-  display: grid !important;
-  grid-template-columns: 1fr 340px !important;
-  gap: 1.5rem !important;
+.scanner-stack {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+  min-width: 0 !important;
+}
+
+.metrics-stack {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem !important;
+  min-width: 0 !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.metric-card {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  padding: 1.25rem !important;
+  border-radius: 20px !important;
 }
 
 .scanner-viewport {
@@ -2313,10 +2226,9 @@ nav,
   width: 100% !important;
   height: 420px !important;
   background: #020c07 !important;
-  border-radius: 20px !important;
+  border-radius: 16px !important;
   border: 1px solid rgba(16,185,129,0.2) !important;
   overflow: hidden !important;
-  flex-shrink: 0 !important;
 }
 
 .scanner-viewport video,
@@ -2327,7 +2239,7 @@ nav,
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
-  border-radius: 20px !important;
+  z-index: 2 !important;
 }
 
 .scanner-overlay {
@@ -2353,46 +2265,39 @@ nav,
   height: 44px !important;
   display: block !important;
   z-index: 111 !important;
+  border: none !important;
 }
 
 .scan-frame span:nth-child(1) {
   top: 0 !important; left: 0 !important;
   border-top: 3px solid #10b981 !important;
   border-left: 3px solid #10b981 !important;
-  border-right: none !important;
-  border-bottom: none !important;
   border-radius: 6px 0 0 0 !important;
-  box-shadow: -2px -2px 8px rgba(16,185,129,0.4) !important;
+  box-shadow: -2px -2px 8px rgba(16,185,129,0.3) !important;
 }
 
 .scan-frame span:nth-child(2) {
   top: 0 !important; right: 0 !important; left: auto !important;
   border-top: 3px solid #10b981 !important;
   border-right: 3px solid #10b981 !important;
-  border-left: none !important;
-  border-bottom: none !important;
   border-radius: 0 6px 0 0 !important;
-  box-shadow: 2px -2px 8px rgba(16,185,129,0.4) !important;
+  box-shadow: 2px -2px 8px rgba(16,185,129,0.3) !important;
 }
 
 .scan-frame span:nth-child(3) {
   bottom: 0 !important; left: 0 !important; top: auto !important;
   border-bottom: 3px solid #10b981 !important;
   border-left: 3px solid #10b981 !important;
-  border-top: none !important;
-  border-right: none !important;
   border-radius: 0 0 0 6px !important;
-  box-shadow: -2px 2px 8px rgba(16,185,129,0.4) !important;
+  box-shadow: -2px 2px 8px rgba(16,185,129,0.3) !important;
 }
 
 .scan-frame span:nth-child(4) {
   bottom: 0 !important; right: 0 !important; top: auto !important; left: auto !important;
   border-bottom: 3px solid #10b981 !important;
   border-right: 3px solid #10b981 !important;
-  border-top: none !important;
-  border-left: none !important;
   border-radius: 0 0 6px 0 !important;
-  box-shadow: 2px 2px 8px rgba(16,185,129,0.4) !important;
+  box-shadow: 2px 2px 8px rgba(16,185,129,0.3) !important;
 }
 
 .scan-line {
@@ -2409,70 +2314,25 @@ nav,
 }
 
 @keyframes scanMove {
-  0%   { top: 30px;  opacity: 0; }
+  0%   { top: 30px; opacity: 0; }
   8%   { opacity: 1; }
   92%  { opacity: 1; }
   100% { top: calc(100% - 30px); opacity: 0; }
 }
 
-.scanner-sidebar,
-.scanner-right,
-.telemetry-panel {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 1rem !important;
-}
-
-#live-telemetry,
-[id*="telemetry"],
-[id*="iot"],
-.iot-card,
-.weather-card {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-.telemetry-values,
-.weather-stats {
-  display: grid !important;
-  grid-template-columns: repeat(3, 1fr) !important;
-  gap: 0.75rem !important;
-  margin-top: 0.75rem !important;
-}
-
-.telemetry-stat .value,
-.telemetry-value {
-  font-family: 'Syne', sans-serif !important;
-  font-size: 1.6rem !important;
-  font-weight: 700 !important;
-  color: #10b981 !important;
-  line-height: 1 !important;
-}
-
-.telemetry-stat .unit {
-  font-size: 0.7rem !important;
-  color: #475569 !important;
-}
-
-.telemetry-stat .label,
-.telemetry-label {
-  font-size: 0.6rem !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 1px !important;
-  color: #475569 !important;
-}
-
 @media (max-width: 900px) {
-  .scanner-grid,
-  .scanner-layout,
-  .scanner-main,
-  #scanner-tab > .content-wrapper {
+  .dashboard-grid {
     grid-template-columns: 1fr !important;
   }
-
+  .metrics-stack {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+  }
+  .metric-card {
+    flex: 1 !important;
+    min-width: 280px !important;
+  }
   .scanner-viewport {
-    height: 320px !important;
+    height: 300px !important;
   }
 }
