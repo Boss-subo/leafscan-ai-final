@@ -7,6 +7,8 @@ import { switchTab } from './navigation.js';
 import { sendMessage, testGeminiKey, toggleMic, syncAiModel } from './chat.js';
 import { exportToPDF } from '../services/pdf-export.js';
 import { showToast } from '../core/utils.js';
+import { setupImageListeners, setSpecialistLoading, setSpecialistReady, setSpecialistError } from './ui_fixes.js';
+
 
 // --- ELITE CHAT ENGINE (Top-Level Global Bridge) ---
 export const handleChat = async () => {
@@ -271,6 +273,9 @@ export function setupEventListeners(elements) {
       location.reload(true);
     }, 1000);
   });
+
+  // Image load + analyze button listeners
+  setupImageListeners();
 
   // Final Refresh
   if (window.lucide) lucide.createIcons();
