@@ -1,7 +1,7 @@
 import { state } from '../core/state.js';
 import { db } from '../core/db.js';
 import { initGlobalRiskChart, updateCharts } from './charts.js';
-import { loadHistory } from './history.js';
+import { initHistoryTab } from './history.js';
 import { loadInventory } from './inventory.js';
 import { initMap } from './map.js';
 import { loadReminders } from './reminders.js';
@@ -30,7 +30,7 @@ export async function switchTab(tabId, elements) {
         // Dashboard is default, but we can refresh weather here if needed
         break;
       case 'history':
-        await loadHistory();
+        await initHistoryTab();
         break;
       case 'inventory':
         await loadInventory();
