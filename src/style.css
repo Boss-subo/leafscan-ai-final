@@ -2182,3 +2182,100 @@ nav,
 
 
 
+
+/* ================================================================
+   LEAFSCAN — SCANNER CORNER FIX
+   ================================================================ */
+
+.scan-frame {
+  position: absolute !important;
+  top: 40px !important;
+  left: 40px !important;
+  right: 40px !important;
+  bottom: 40px !important;
+  pointer-events: none;
+  z-index: 110;
+}
+
+.scan-frame span {
+  position: absolute !important;
+  width: 50px !important;
+  height: 50px !important;
+  border: none !important;
+  z-index: 110 !important;
+  display: block !important;
+}
+
+.scan-frame span:nth-child(1) {
+  top: 0 !important;
+  left: 0 !important;
+  border-top: 4px solid #10b981 !important;
+  border-left: 4px solid #10b981 !important;
+  border-radius: 4px 0 0 0 !important;
+}
+
+.scan-frame span:nth-child(2) {
+  top: 0 !important;
+  right: 0 !important;
+  left: auto !important;
+  border-top: 4px solid #10b981 !important;
+  border-right: 4px solid #10b981 !important;
+  border-radius: 0 4px 0 0 !important;
+}
+
+.scan-frame span:nth-child(3) {
+  bottom: 0 !important;
+  top: auto !important;
+  left: 0 !important;
+  border-bottom: 4px solid #10b981 !important;
+  border-left: 4px solid #10b981 !important;
+  border-radius: 0 0 0 4px !important;
+}
+
+.scan-frame span:nth-child(4) {
+  bottom: 0 !important;
+  top: auto !important;
+  right: 0 !important;
+  left: auto !important;
+  border-bottom: 4px solid #10b981 !important;
+  border-right: 4px solid #10b981 !important;
+  border-radius: 0 0 4px 0 !important;
+}
+
+.scan-line,
+#scan-line {
+  position: absolute !important;
+  left: 40px !important;
+  right: 40px !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent, #10b981, transparent) !important;
+  box-shadow: 0 0 12px #10b981 !important;
+  animation: scanMove 2.5s ease-in-out infinite !important;
+  display: block !important;
+  z-index: 115 !important;
+  pointer-events: none;
+}
+
+@keyframes scanMove {
+  0%   { top: 40px;  opacity: 0; }
+  5%   { opacity: 1; }
+  95%  { opacity: 1; }
+  100% { top: calc(100% - 40px); opacity: 0; }
+}
+
+.scan-frame span:nth-child(1),
+.scan-frame span:nth-child(2),
+.scan-frame span:nth-child(3),
+.scan-frame span:nth-child(4) {
+  filter: drop-shadow(0 0 6px #10b981) !important;
+  animation: cornerPulse 2.5s ease-in-out infinite !important;
+}
+
+.scan-frame span:nth-child(2) { animation-delay: 0.1s !important; }
+.scan-frame span:nth-child(3) { animation-delay: 0.2s !important; }
+.scan-frame span:nth-child(4) { animation-delay: 0.3s !important; }
+
+@keyframes cornerPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.6; }
+}
