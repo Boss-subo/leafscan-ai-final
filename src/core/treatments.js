@@ -706,3 +706,71 @@ export function getSeverityLabel(severity) {
   };
   return labels[severity] || labels.unknown;
 }
+
+// ── BUILD HTML ────────────────────────────────────────────────────
+export function buildTreatmentHTML(cropName, diseaseLabel) {
+  const t = getTreatment(cropName, diseaseLabel);
+  const color = getSeverityColor(t.severity);
+  const badge = getSeverityLabel(t.severity);
+
+  if (t.severity === 'none') {
+    return `
+      <div class="treatment-box" style="border-left-color: ${color}; background: rgba(16, 185, 129, 0.05); border-left: 4px solid ${color}; padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+        <h4 style="color: ${color}; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem;">
+          <i data-lucide="shield-check"></i> ${badge}
+        </h4>
+        <p style="margin-bottom: 0.75rem; font-size: 0.9rem;">${t.description}</p>
+        <div style="font-size: 0.85rem; color: #cbd5e1;">
+          <strong style="color: #fff;">Preventive Care:</strong>
+          <ul style="margin-top: 4px; padding-left: 1.2rem; margin-bottom: 0;">
+            ${t.prevention.map(p => `<li>${p}</li>`).join('')}
+          </ul>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="treatment-box" style="border-left-color: ${color}; border-left: 4px solid ${color}; padding: 1rem; border-radius: 8px; background: rgba(255,255,255,0.02); margin-top: 1rem;">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.8rem;">
+        <h4 style="color: ${color}; margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+          <i data-lucide="activity"></i> ${badge}
+        </h4>
+        <span style="font-size: 0.7rem; font-weight: bold; background: rgba(255,255,255,0.1); padding: 4px 8px; border-radius: 6px; letter-spacing: 0.5px;">
+          ${t.urgency.toUpperCase()}
+        </span>
+      </div>
+      
+      <p style="font-size: 0.9rem; margin-bottom: 1.2rem; line-height: 1.4;">${t.description}</p>
+      
+      <div style="display: grid; gap: 1rem;">
+        <div class="treatment-section">
+          <h5 style="color: #34d399; margin-bottom: 6px; font-size: 0.85rem; display: flex; align-items: center; gap: 0.4rem;">
+            🌿 Organic Protocol
+          </h5>
+          <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.85rem; color: #cbd5e1;">
+            ${t.organic.map(o => `<li>${o}</li>`).join('')}
+          </ul>
+        </div>
+        
+        <div class="treatment-section">
+          <h5 style="color: #f87171; margin-bottom: 6px; font-size: 0.85rem; display: flex; align-items: center; gap: 0.4rem;">
+            🧪 Chemical Protocol
+          </h5>
+          <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.85rem; color: #cbd5e1;">
+            ${t.chemical.map(c => `<li>${c}</li>`).join('')}
+          </ul>
+        </div>
+        
+        <div class="treatment-section">
+          <h5 style="color: #60a5fa; margin-bottom: 6px; font-size: 0.85rem; display: flex; align-items: center; gap: 0.4rem;">
+            🛡️ Prevention
+          </h5>
+          <ul style="margin: 0; padding-left: 1.2rem; font-size: 0.85rem; color: #cbd5e1;">
+            ${t.prevention.map(p => `<li>${p}</li>`).join('')}
+          </ul>
+        </div>
+      </div>
+    </div>
+  `;
+}
