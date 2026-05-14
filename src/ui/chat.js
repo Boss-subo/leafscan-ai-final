@@ -31,10 +31,10 @@ export async function syncAiModel(keyOverride = null) {
       if (res.ok && data.models) {
         const validModel = data.models.find(m => m.supportedGenerationMethods.includes('generateContent'));
         if (validModel) {
-          const modelId = validModel.name.split('/').pop();
           state.activeGeminiModel = modelId;
-          localStorage.setItem('leafscan_active_model', modelId);
-          console.log(`[AI Sync] Found working model: ${modelId} via ${endpoint}`);
+          const uid = localStorage.getItem('leafscan_uid') || 'anonymous';
+          localStorage.setItem(`leafscan_active_model_${uid}`, modelId);
+          console.log(`[AI Sync] Found working model: ${modelId}`);
           return modelId;
         }
       }
@@ -75,7 +75,10 @@ export async function sendMessage(text, containerId) {
   // Candidate Models (Priority Order for May 2026)
   const candidates = [
     state.activeGeminiModel,
-    localStorage.getItem('leafscan_active_model'),
+    (() => {
+      const uid = localStorage.getItem('leafscan_uid') || 'anonymous';
+      return localStorage.getItem(`leafscan_active_model_${uid}`);
+    })(),
     'gemini-2.5-flash',
     'gemini-2.5-pro',
     'gemini-2.0-flash',
@@ -116,8 +119,8 @@ export async function sendMessage(text, containerId) {
         container.appendChild(aiMsg);
         
         state.activeGeminiModel = model;
-        localStorage.setItem('leafscan_active_model', model);
-        
+        const uid = localStorage.getItem('leafscan_uid') || 'anonymous';
+        localStorage.setItem(`leafscan_active_model_${uid}`, model);
         setTimeout(() => container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' }), 100);
         success = true;
         break; 

@@ -203,8 +203,9 @@ export function setupEventListeners(elements) {
     
     state.geminiKey = gKey;
     state.weatherKey = wKey;
-    localStorage.setItem('gemini_key', gKey);
-    localStorage.setItem('weather_key', wKey);
+    const uid = localStorage.getItem('leafscan_uid') || 'anonymous';
+    localStorage.setItem(`gemini_key_${uid}`, gKey);
+    localStorage.setItem(`weather_key_${uid}`, wKey);
     
     // Tiny delay to ensure localStorage and state are locked
     await new Promise(r => setTimeout(r, 500));

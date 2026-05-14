@@ -1,7 +1,9 @@
+const uid = localStorage.getItem('leafscan_uid') || 'anonymous';
+
 export const state = {
-  geminiKey: localStorage.getItem('gemini_key') || (import.meta.env && import.meta.env.VITE_GEMINI_KEY) || '',
-  weatherKey: localStorage.getItem('weather_key') || (import.meta.env && import.meta.env.VITE_WEATHER_KEY) || '',
-  prefLang: localStorage.getItem('pref_lang') || 'English',
+  geminiKey: localStorage.getItem(`gemini_key_${uid}`) || localStorage.getItem('gemini_key') || (import.meta.env && import.meta.env.VITE_GEMINI_KEY) || '',
+  weatherKey: localStorage.getItem(`weather_key_${uid}`) || localStorage.getItem('weather_key') || (import.meta.env && import.meta.env.VITE_WEATHER_KEY) || '',
+  prefLang: localStorage.getItem(`pref_lang_${uid}`) || localStorage.getItem('pref_lang') || 'English',
   version: '3.1.2-ELITE',
   selectedCrop: null,
   currentImage: null,

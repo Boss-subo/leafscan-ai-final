@@ -69,14 +69,20 @@ function buildHistoryCard(record) {
     .replace(/___/g, ' - ')
     .replace(/_/g, ' ');
 
-  const thumbnail = record.thumbnail
-    ? `<img src="${record.thumbnail}" 
-           style="width:56px;height:56px;border-radius:10px;object-fit:cover;
-                  border:1px solid rgba(255,255,255,0.08);flex-shrink:0;">`
-    : `<div style="width:56px;height:56px;border-radius:10px;
-                   background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.15);
-                   display:flex;align-items:center;justify-content:center;
-                   font-size:1.5rem;flex-shrink:0;">🌿</div>`;
+  const thumbnail = record.imageUrl 
+    ? `<img src="${record.imageUrl}" 
+            onclick="window.open('${record.imageUrl}', '_blank')"
+            style="width:56px;height:56px;border-radius:10px;object-fit:cover;
+                   border:1px solid rgba(255,255,255,0.08);flex-shrink:0;cursor:pointer;"
+            title="Click to view full resolution">`
+    : record.thumbnail
+      ? `<img src="${record.thumbnail}" 
+             style="width:56px;height:56px;border-radius:10px;object-fit:cover;
+                    border:1px solid rgba(255,255,255,0.08);flex-shrink:0;">`
+      : `<div style="width:56px;height:56px;border-radius:10px;
+                     background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.15);
+                     display:flex;align-items:center;justify-content:center;
+                     font-size:1.5rem;flex-shrink:0;">🌿</div>`;
 
   return `
     <div class="history-item glass-card" style="position:relative;">

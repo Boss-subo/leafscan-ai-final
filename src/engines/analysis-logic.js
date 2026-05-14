@@ -13,6 +13,7 @@ import { buildTreatmentHTML } from '../core/treatments.js';
 import { runLocalInference, runVMSAnalysis, runXAIAnalysis, CROP_SPECIALISTS } from './ai-engine.js';
 import { saveHistoryToCloud } from '../services/firebase.js';
 import { captureScan } from '../services/analytics.js';
+import { uploadToCloudinary } from '../services/cloudinary.js';
 
 // Clean label display
 const cleanLabel = (label) => label.replace(/___/g, ' - ').replace(/_/g, ' ');
@@ -192,8 +193,16 @@ export async function analyzeLeaf(elements) {
         }
       }
 
-      // 5. Data Persistence (Optimized: Metadata Only)
+      // 5. Data Persistence (Optimized: Metadata Only + Free Cloudinary Image)
       const uid = state.currentUser?.id || state.currentUser?.uid;
+      
+      // Async upload - don't block the UI refresh
+      let cloudinaryUrl = null;
+      try {
+        updateTelemetry("Vaulting Scan Image to Sovereign Cloud...");
+        cloudinaryUrl = await uploadToCloudinary(image);
+      } catch (e) { console.warn("Cloudinary fallback triggered"); }
+
       const historyRecord = {
         userId: uid,
         timestamp: new Date(),
@@ -202,7 +211,8 @@ export async function analyzeLeaf(elements) {
         confidence: confidence,
         vms: vmsData,
         gps: state.location, // Dynamic Satellite Telemetry
-        status: localResult.status
+        status: localResult.status,
+        imageUrl: cloudinaryUrl // Safe, free URL
       };
 
       await saveToHistory(historyRecord);

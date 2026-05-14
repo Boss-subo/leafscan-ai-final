@@ -18,6 +18,7 @@ const PlotsState = {
   satelliteMode: false,
   baseLayers: {},
   selectedPlotId: null,
+  currentUid: null,
 };
 
 // ─── CROP OPTIONS ─────────────────────────────────────────────────────────────
@@ -41,9 +42,17 @@ const RISK_GRADIENT = {
   1.0: 'rgba(185,28,28,1.0)',
 };
 
-// ─── INIT MAP ─────────────────────────────────────────────────────────────────
 export function initPlotsMap() {
-  if (PlotsState.map) return; // already initialized
+  const currentUid = localStorage.getItem('leafscan_uid') || 'anonymous';
+  if (PlotsState.map) {
+    if (PlotsState.currentUid === currentUid) return;
+    // UID changed: full reset
+    resetPlots();
+    loadPlotsFromStorage();
+    renderPlotsList();
+    return;
+  }
+  PlotsState.currentUid = currentUid;
 
   const container = document.getElementById('plot-map');
   if (!container) return;
@@ -338,6 +347,17 @@ function deletePlot(id, removeLayer = true) {
     PlotsState.heatLayer = null;
   }
 }
+function resetPlots() {
+  if (PlotsState.drawnItems) {
+    PlotsState.drawnItems.clearLayers();
+  }
+  if (PlotsState.heatLayer && PlotsState.map) {
+    PlotsState.map.removeLayer(PlotsState.heatLayer);
+  }
+  PlotsState.plots = [];
+  PlotsState.selectedPlotId = null;
+  PlotsState.heatLayer = null;
+}
 
 // ─── RENDER PLOTS LIST ────────────────────────────────────────────────────────
 function renderPlotsList() {
@@ -469,12 +489,14 @@ function savePlotsToStorage() {
     riskScore: p.riskScore || 0.3,
     createdAt: p.createdAt,
   }));
-  try { localStorage.setItem('leafscan_plots', JSON.stringify(data)); } catch(e) {}
+  const uid = localStorage.getItem('leafscan_uid') || 'anonymous';
+  try { localStorage.setItem(`leafscan_plots_${uid}`, JSON.stringify(data)); } catch(e) {}
 }
 
 function loadPlotsFromStorage() {
   try {
-    const raw = localStorage.getItem('leafscan_plots');
+    const uid = localStorage.getItem('leafscan_uid') || 'anonymous';
+    const raw = localStorage.getItem(`leafscan_plots_${uid}`);
     if (!raw) return;
     const data = JSON.parse(raw);
 
