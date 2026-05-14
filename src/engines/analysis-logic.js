@@ -12,6 +12,7 @@ import { showToast } from '../core/utils.js';
 import { buildTreatmentHTML } from '../core/treatments.js';
 import { runLocalInference, runVMSAnalysis, runXAIAnalysis, CROP_SPECIALISTS } from './ai-engine.js';
 import { saveHistoryToCloud } from '../services/firebase.js';
+import { captureScan } from '../services/analytics.js';
 
 // Clean label display
 const cleanLabel = (label) => label.replace(/___/g, ' - ').replace(/_/g, ' ');
@@ -191,23 +192,29 @@ export async function analyzeLeaf(elements) {
         }
       }
 
-      // 5. Data Persistence
+      // 5. Data Persistence (Optimized: Metadata Only)
       const uid = state.currentUser?.id || state.currentUser?.uid;
       const historyRecord = {
         userId: uid,
         timestamp: new Date(),
-        image: image,
         crop: state.selectedCrop,
         diseaseName: localResult.label,
         confidence: confidence,
         vms: vmsData,
+        gps: state.location, // Dynamic Satellite Telemetry
         status: localResult.status
       };
 
       await saveToHistory(historyRecord);
-      try {
-        await saveHistoryToCloud(uid, historyRecord);
-      } catch(e) { console.warn('Cloud sync delayed:', e); }
+      
+      // Only sync to cloud if NOT a guest
+      if (uid && !uid.startsWith('guest_')) {
+        try {
+          await saveHistoryToCloud(uid, historyRecord);
+        } catch(e) { console.warn('Cloud sync delayed:', e); }
+      }
+
+      captureScan(historyRecord);
 
       showToast(`Diagnosis Complete: ${cleanLabel(localResult.label)}`, "success");
     }

@@ -8,7 +8,8 @@ export const CROP_SPECIALISTS = specialists;
 window.CROP_SPECIALISTS = CROP_SPECIALISTS;
 
 const CONFIG = {
-  MODELS_BASE: '/model_tfjs/'
+  MODELS_BASE: '/model_tfjs/',
+  CORE_MODEL: '/models/model_sharded/model.json'
 };
 
 /**
@@ -45,9 +46,9 @@ export async function loadLocalModel(cropName) {
       console.warn(`[AI Engine] No specialist registered for ${cropName}. Falling back to Neural Core.`);
     }
 
-    const modelUrl = specialist 
+    const modelUrl = (specialist && specialist.model)
       ? `${CONFIG.MODELS_BASE}${specialist.model}/model.json`
-      : `${CONFIG.MODELS_BASE}model.json`;
+      : CONFIG.CORE_MODEL;
     
     console.log(`[AI Engine] Deploying ${cropName} specialist from ${modelUrl}...`);
     

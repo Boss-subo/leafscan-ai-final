@@ -128,20 +128,9 @@ export async function uploadImage(userId, base64Str) {
 // ─── HISTORY ─────────────────────────────────────────────────────────────────
 
 export async function saveHistoryToCloud(userId, record) {
-  let finalImageUrl = null;
-  
-  if (record.image && record.image.startsWith('data:image')) {
-    try {
-      finalImageUrl = await uploadImage(userId, record.image);
-    } catch (e) {
-      console.error("Image upload failed:", e);
-    }
-  }
-
-  const { image, ...safeRecord } = record;
+  // Image storage removed as per Sovereign Privacy/Performance Protocol
   await addDoc(collection(db, 'users', userId, 'history'), {
-    ...safeRecord,
-    image: finalImageUrl || record.image,
+    ...record,
     timestamp: serverTimestamp()
   });
 }

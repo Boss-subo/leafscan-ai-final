@@ -9,6 +9,7 @@ import { initCropSelector } from './engines/analysis-logic.js';
 import { setupEventListeners } from './ui/events.js';
 import { initAuth } from './ui/auth.js';
 import { seedUserData } from './core/seed-data.js';
+import { initAnalytics } from './services/analytics.js';
 
 let elements = {};
 
@@ -60,6 +61,7 @@ async function bootstrap() {
   initCharts();
   initTelemetry();
   initCropSelector();
+  initAnalytics();
 
   switchTab('dashboard', els);
   

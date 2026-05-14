@@ -13,3 +13,5 @@ scratch/
 temp/
 tmp/
 leafscan_env/
+tfjs_env/
+temp_extracted/

@@ -11,6 +11,7 @@ import {
   loadHistoryFromCloud,
   cloudGoogleLogin
 } from '../services/firebase.js';
+import { captureAuth } from '../services/analytics.js';
 
 let isRegisterMode = false;
 
@@ -18,6 +19,7 @@ export function initAuth(onSuccess) {
   const authVault = document.getElementById('auth-vault');
   const loginBtn = document.getElementById('login-btn');
   const googleBtn = document.getElementById('google-login');
+  const guestBtn = document.getElementById('guest-login');
   const biometricBtn = document.getElementById('biometric-btn');
   const usernameInput = document.getElementById('login-username');
   const passwordInput = document.getElementById('login-password');
@@ -112,6 +114,17 @@ export function initAuth(onSuccess) {
       googleBtn.disabled = false;
     }
   });
+  
+  guestBtn?.addEventListener('click', () => {
+    const guestUser = {
+      id: 'guest_' + Math.random().toString(36).substr(2, 9),
+      username: 'Guest Operator',
+      farmName: 'Public Field',
+      isGuest: true
+    };
+    showToast("Entering Guest Mode: Data will not be synced.", "warning");
+    finalizeAuth(guestUser);
+  });
 
   // Biometric Login
   biometricBtn?.addEventListener('click', async () => {
@@ -153,13 +166,17 @@ export function initAuth(onSuccess) {
 
   function finalizeAuth(userObj) {
     state.currentUser = userObj;
-    localStorage.setItem('leafscan_uid', userObj.id || userObj.uid);
+    const uid = userObj.id || userObj.uid;
+    localStorage.setItem('leafscan_uid', uid);
     authVault.style.display = 'none';
     updateUIWithProfile(userObj);
     onSuccess(userObj);
 
+    // Analytics: Identify and Capture
+    captureAuth(isRegisterMode ? 'registration' : 'login', uid, userObj.isGuest);
+
     // Offer biometrics after login
-    setTimeout(() => checkBiometricEnrollment(userObj.id || userObj.uid), 2500);
+    setTimeout(() => checkBiometricEnrollment(uid), 2500);
   }
 }
 
