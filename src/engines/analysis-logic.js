@@ -225,6 +225,34 @@ export async function analyzeLeaf(elements) {
       }
 
       captureScan(historyRecord);
+      
+      // 6. Master Consensus Offering (New)
+      const masterZone = document.getElementById('master-consensus-zone');
+      if (masterZone) {
+        masterZone.style.display = confidence < 85 ? 'block' : 'none';
+        const masterBtn = document.getElementById('request-master-btn');
+        if (masterBtn) {
+          masterBtn.onclick = async () => {
+            masterBtn.disabled = true;
+            masterBtn.innerHTML = '<i class="spinning" data-lucide="refresh-cw"></i> SYNCHRONIZING WITH GPU CLOUD...';
+            if (window.lucide) window.lucide.createIcons();
+            
+            const { requestMasterConsensus } = await import('./master-ai.js');
+            const consensus = await requestMasterConsensus(image);
+            
+            if (consensus) {
+              showToast("Master Consensus Received", "success");
+              renderResults(consensus, Math.round(consensus.confidence * 100), vmsData, true);
+              masterZone.style.display = 'none';
+            } else {
+              showToast("Master Node Unavailable", "error");
+              masterBtn.disabled = false;
+              masterBtn.innerHTML = '<i data-lucide="brain-circuit"></i> RETRY MASTER CONSENSUS';
+              if (window.lucide) window.lucide.createIcons();
+            }
+          };
+        }
+      }
 
       showToast(`Diagnosis Complete: ${cleanLabel(localResult.label)}`, "success");
     }
@@ -235,12 +263,18 @@ export async function analyzeLeaf(elements) {
   }
 }
 
-function renderResults(result, confidence, vms) {
+function renderResults(result, confidence, vms, isMaster = false) {
   const resultContent = document.getElementById('result-content');
   const diseaseTitle = document.getElementById('disease-name');
   
-  if (diseaseTitle) diseaseTitle.textContent = cleanLabel(result.label);
-
+  if (isMaster) {
+    diseaseTitle.innerHTML = `<i data-lucide="award" style="color:var(--accent-gold)"></i> MASTER CONSENSUS: ${cleanLabel(result.label)}`;
+    diseaseTitle.style.color = "var(--accent-gold)";
+  } else {
+    diseaseTitle.textContent = cleanLabel(result.label);
+    diseaseTitle.style.color = "white";
+  }
+  
   if (resultContent) {
     resultContent.innerHTML = `
       <div class="result-card ${result.status}">
