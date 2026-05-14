@@ -107,3 +107,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Hide splash if it was visible
   if (splash) splash.style.display = 'none';
 });
+
+// PWA: Service Worker Registration
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('[PWA] Service Worker Active:', reg.scope))
+      .catch(err => console.warn('[PWA] Registration Failed:', err));
+  });
+}

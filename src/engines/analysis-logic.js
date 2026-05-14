@@ -270,6 +270,7 @@ function renderResults(result, confidence, vms, isMaster = false) {
   if (isMaster) {
     diseaseTitle.innerHTML = `<i data-lucide="award" style="color:var(--accent-gold)"></i> MASTER CONSENSUS: ${cleanLabel(result.label)}`;
     diseaseTitle.style.color = "var(--accent-gold)";
+    if (window.lucide) window.lucide.createIcons();
   } else {
     diseaseTitle.textContent = cleanLabel(result.label);
     diseaseTitle.style.color = "white";
